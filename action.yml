@@ -1,0 +1,28 @@
+name: SafeAgentEval gate
+description: Run SafeAgentEval black-box scenarios and fail the job if any scenario fails.
+inputs:
+  agent:
+    description: "'session-reference', 'session-unsafe', or a SessionAgent 'package.module:ClassName'"
+    required: false
+    default: session-reference
+  domain:
+    description: "Scenario domain (retail ships black-box scenarios today)"
+    required: false
+    default: retail
+  python-version:
+    description: Python version to use
+    required: false
+    default: "3.12"
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+    - shell: bash
+      run: pip install .
+    - shell: bash
+      run: >-
+        safeagenteval run --agent "${{ inputs.agent }}"
+        --domain "${{ inputs.domain }}"
+        --out artifacts/cli_runs

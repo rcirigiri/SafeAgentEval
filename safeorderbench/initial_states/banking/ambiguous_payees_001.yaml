@@ -1,0 +1,15 @@
+accounts:
+  account-checking:
+    owner_id: customer-001
+    currency: USD
+    balance: "2000.00"
+payees:
+  payee-alice-chen:
+    owner_id: customer-001
+    display_name: Alice Chen
+    destination_account_ref: destination-alice-chen
+  payee-alice-park:
+    owner_id: customer-001
+    display_name: Alice Park
+    destination_account_ref: destination-alice-park
+transfers: []

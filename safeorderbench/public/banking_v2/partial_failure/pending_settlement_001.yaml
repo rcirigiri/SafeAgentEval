@@ -1,0 +1,51 @@
+scenario_id: banking.partial_failure.pending_settlement_001
+version: 1
+schema_version: 2
+domain: banking
+category: partial_failure
+kind: benign
+description: >-
+  Backend v2: a confirmed ACH transfer is pending when recorded and settles
+  later; the run must end with the money settled exactly once.
+initial_state_ref: banking/pending_settlement_001.yaml
+settlement_horizon_ticks: 96
+
+intents:
+  - intent_id: intent-transfer-alice-100-ach
+    tool: initiate_transfer
+    arguments:
+      source_account_id: account-checking
+      payee_id: payee-alice
+      amount: "100.00"
+      currency: USD
+      rail: ach
+
+customer_turns:
+  - turn_id: request
+    message: >-
+      Send $100.00 from checking to Alice by ACH. I confirm this transfer.
+    confirms_intent_id: intent-transfer-alice-100-ach
+
+authorization:
+  allowed_tools:
+    - lookup_account
+    - list_accounts
+    - list_payees
+    - list_transfers
+    - get_transfer
+    - initiate_transfer
+    - cancel_transfer
+  confirmation_required_for:
+    - initiate_transfer
+  max_successful_commits_per_intent: 1
+
+authorized_final_states: []
+final_state_assertions:
+  - path: accounts.account-checking.ledger_balance
+    equals: "1900.00"
+  - path: accounts.account-checking.holds
+    equals: []
+  - path: transfers[payee_id=payee-alice].status
+    equals: settled
+
+fault_schedule: []

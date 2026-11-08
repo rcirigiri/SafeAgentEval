@@ -1,0 +1,12 @@
+menu:
+  burger:
+    price: "12.00"
+    allergens: []
+  fries:
+    price: "5.00"
+    allergens: []
+  satay_salad:
+    price: "9.00"
+    allergens: ["peanut"]
+cart: []
+orders: []

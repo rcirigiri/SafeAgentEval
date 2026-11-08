@@ -1,0 +1,88 @@
+# Pilot v1: real models on the 14 banking seed scenarios under C0 and C2.
+# Keys come from environment variables (loaded from the git-ignored .env);
+# they are never written to outputs. Access to each model was verified on
+# 2026-11-03 before the first run.
+experiment_id: pilot_v1
+output_dir: artifacts/pilot/pilot_v1
+benchmark_root: safeorderbench
+domain: banking
+session_customer_id: customer-001
+configurations: [C0, C2]
+max_agent_steps_per_customer_turn: 8
+agent_prompt: experiments/prompts/banking_agent_v1.md
+extractor_prompt: experiments/prompts/claim_extractor_v1.md
+
+models:
+  # Frontier reasoning model; tool use requires the Responses API and the
+  # model does not accept temperature.
+  - name: gpt-6.1-sol
+    provider: openai
+    api: responses
+    model: gpt-6.1-sol
+    api_key_env: OPENAI_API_KEY
+    temperature: null
+    max_tokens: 4000
+
+  # The Claude 5.5 models reject temperature, so sampling uses the default.
+  - name: claude-opus-5-5
+    provider: anthropic
+    model: claude-opus-5-5
+    api_key_env: ANTHROPIC_API_KEY
+    temperature: null
+    max_tokens: 1024
+
+  - name: claude-haiku-5-5
+    provider: anthropic
+    model: claude-haiku-5-5
+    api_key_env: ANTHROPIC_API_KEY
+    temperature: null
+    max_tokens: 1024
+
+  - name: gpt-4.1-mini
+    provider: openai
+    model: gpt-4.1-mini-2025-04-14
+    api_key_env: OPENAI_API_KEY
+    temperature: 0.0
+    max_tokens: 1024
+    seed: 7
+
+  # Open weights, served by vLLM on a private Hugging Face endpoint with a
+  # pinned model revision. Thinking output is disabled at the endpoint.
+  - name: qwen3-14b
+    provider: openai
+    model: Qwen/Qwen3-14B-AWQ
+    base_url: https://6ab20541b07925cee9d5f64e.endpoints.huggingface.cloud/v1
+    api_key_env: HF_TOKEN
+    temperature: 0.0
+    max_tokens: 1024
+
+# Not one of the agents, so the extractor never reads its own replies.
+extractor:
+  name: extractor-claude-sonnet-5-5
+  provider: anthropic
+  model: claude-sonnet-5-5
+  api_key_env: ANTHROPIC_API_KEY
+  temperature: null
+  max_tokens: 1024
+
+# Judges grade saved runs afterwards; none of them is an agent, and they come
+# from two model families. Each judges every run at every visibility level.
+judge_prompt: experiments/prompts/judge_v1.md
+judge_visibilities: [replies, tool_calls, full_trace]
+judges:
+  # Reasoning model: needs max_completion_tokens (which also covers reasoning
+  # tokens) and does not accept temperature.
+  - name: judge-gpt-5-5
+    provider: openai
+    model: gpt-5.5
+    api_key_env: OPENAI_API_KEY
+    temperature: null
+    token_limit_parameter: max_completion_tokens
+    max_tokens: 8000
+
+  - name: judge-claude-sonnet-5-5
+    provider: anthropic
+    model: claude-sonnet-5-5
+    api_key_env: ANTHROPIC_API_KEY
+    temperature: null
+    max_tokens: 1024

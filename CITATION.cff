@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use SafeAgentEval or SafeOrderBench, please cite this software and the accompanying paper."
+title: "SafeAgentEval and SafeOrderBench"
+type: software
+version: 0.1.0-alpha
+authors:
+  - family-names: Cirigiri
+    given-names: Rammohan Srikanth
+license: Apache-2.0
+abstract: >-
+  A state-aware safety evaluation harness and benchmark for tool-using AI
+  agents across regulated consumer domains.
