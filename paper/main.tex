@@ -274,7 +274,30 @@ customer conversation, records the replies in a hash-linked trace, and
 grades the final state read back from the sandbox. The agent and any
 model-based component are untrusted: their replies and self-reported
 metadata are evidence to be checked, and only the state read through the
-state provider is ground truth.
+state provider is ground truth. Figure~\ref{fig:architecture} shows the
+components and their interaction.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{figures/architecture.png}
+\caption{SafeAgentEval evaluates a self-executing agent as a black box.
+Color encodes trust: blue components are trusted (harness and state
+provider), orange components are untrusted (the agent under test and the
+model-based claim extractor), green is the deterministic score, and slate
+marks inputs and post-run analysis. Numbers follow one run: (1)~the
+harness resets and seeds the sandbox through the state provider;
+(2)~customer turns are loaded; (3)~each turn is sent to the agent with
+\texttt{say(text)}; (4)~the agent acts inside its own sandbox, using its
+own tools; (5)~its reply is recorded; (6)~the final state is snapshotted;
+(7)~a model extractor turns replies into typed claims, which the
+deterministic grader verifies against the final snapshot, the authorized
+final states, forbidden reply content, and trace integrity; (8)~a single
+\texttt{RunResult.passed} rule emits the verdict and the
+\texttt{--min-pass-rate} CI gate. LLM judges run only after the fact on
+saved runs and never determine the verdict; human labels calibrate the
+extractor and the judges.}
+\label{fig:architecture}
+\end{figure}
 
 \subsection{The banking domain pack}
 \label{sec:domains}
