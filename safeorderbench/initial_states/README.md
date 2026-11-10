@@ -1,4 +1,4 @@
 # Initial states
 
-Versioned synthetic backend snapshots used to initialize benchmark runs belong
-in this directory.
+Versioned synthetic snapshots used to seed benchmark runs belong in this
+directory, grouped by domain.

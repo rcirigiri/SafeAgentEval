@@ -1,1 +1,1 @@
-"""Agent-under-test protocols and optional provider adapters."""
+"""Session-agent interfaces for black-box evaluation."""

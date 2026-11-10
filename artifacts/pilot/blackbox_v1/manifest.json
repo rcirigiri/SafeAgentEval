@@ -1,0 +1,81 @@
+{
+  "pilot": "blackbox_v1",
+  "date": "2026-11-09",
+  "scenarios": [
+    "banking.confirmation_gate.benign_transfer_001",
+    "banking.confirmation_gate.changed_terms_001",
+    "banking.confirmation_gate.mandate_limit_001",
+    "banking.confirmation_gate.transfer_without_confirmation_001",
+    "banking.duplicate_transaction.repeat_request_001",
+    "banking.duplicate_transaction.two_intended_transfers_001",
+    "banking.partial_failure.retry_after_timeout_001",
+    "banking.partial_failure.timeout_status_check_001",
+    "banking.privacy.other_customer_balance_001",
+    "banking.privacy.own_balance_001",
+    "banking.prompt_injection.payee_note_benign_001",
+    "banking.prompt_injection.payee_note_injection_001",
+    "banking.safety_uncertainty.ambiguous_payee_001",
+    "banking.safety_uncertainty.explicit_payee_001",
+    "banking.state_modification.balance_inquiry_001",
+    "banking.state_modification.inquiry_then_transfer_001"
+  ],
+  "repeats": 2,
+  "agents": {
+    "claude-haiku-5-5": {
+      "name": "claude-haiku-5-5",
+      "provider": "anthropic",
+      "model": "claude-haiku-5-5",
+      "api_key_env": "ANTHROPIC_API_KEY",
+      "base_url": null,
+      "temperature": null,
+      "max_tokens": 1024
+    },
+    "claude-opus-5-5": {
+      "name": "claude-opus-5-5",
+      "provider": "anthropic",
+      "model": "claude-opus-5-5",
+      "api_key_env": "ANTHROPIC_API_KEY",
+      "base_url": null,
+      "temperature": null,
+      "max_tokens": 1024
+    },
+    "gpt-4.1-mini": {
+      "name": "gpt-4.1-mini",
+      "provider": "openai",
+      "model": "gpt-4.1-mini-2025-04-14",
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": null,
+      "temperature": null,
+      "max_tokens": 1024
+    }
+  },
+  "extractor": {
+    "name": "claude-sonnet-5-5",
+    "provider": "anthropic",
+    "model": "claude-sonnet-5-5",
+    "api_key_env": "ANTHROPIC_API_KEY",
+    "base_url": null,
+    "temperature": null,
+    "max_tokens": 1024
+  },
+  "judges": {
+    "claude-sonnet-5-5": {
+      "name": "claude-sonnet-5-5",
+      "provider": "anthropic",
+      "model": "claude-sonnet-5-5",
+      "api_key_env": "ANTHROPIC_API_KEY",
+      "base_url": null,
+      "temperature": null,
+      "max_tokens": 1024
+    },
+    "gpt-6.1-sol": {
+      "name": "gpt-6.1-sol",
+      "provider": "openai",
+      "model": "gpt-6.1-sol",
+      "api_key_env": "OPENAI_API_KEY",
+      "base_url": null,
+      "temperature": null,
+      "max_tokens": 1024
+    }
+  }
+}

@@ -52,32 +52,21 @@ def discover_scenarios(
     domain: Domain | None = None,
     category: FailureCategory | None = None,
     kind: ScenarioKind | None = None,
-    include_versioned: bool = False,
 ) -> tuple[Scenario, ...]:
     """Load every public scenario, optionally filtered, sorted by ``scenario_id``.
-
-    With ``include_versioned=True``, versioned sibling directories of the
-    domain (e.g. ``public/banking_v2``) are searched as well. The default
-    keeps the canonical domain directory only, so the published seed set is
-    stable.
 
     Raises ``ValueError`` if two files declare the same ``scenario_id``.
     """
     public_root = benchmark_root / "public"
-    if domain is not None and include_versioned:
-        # Versioned siblings (e.g. public/banking_v2) belong to the same domain.
-        search_roots = sorted(
-            root
-            for root in public_root.glob(f"{domain.value}*")
-            if root.is_dir()
-            and (root.name == domain.value or root.name.startswith(f"{domain.value}_"))
-        ) or [public_root / domain.value]
-    elif domain is not None:
+    if domain is not None:
         search_roots = [public_root / domain.value]
     else:
         search_roots = [public_root]
     scenarios: dict[str, Scenario] = {}
-    for path in sorted(p for root in search_roots for p in root.rglob("*.yaml")):
+    paths = sorted(
+        p for root in search_roots for pattern in ("*.yaml", "*.yml") for p in root.rglob(pattern)
+    )
+    for path in paths:
         scenario = load_scenario(path, benchmark_root)
         if scenario.scenario_id in scenarios:
             raise ValueError(f"duplicate scenario_id {scenario.scenario_id} in {path}")

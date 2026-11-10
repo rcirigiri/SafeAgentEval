@@ -1,27 +1,25 @@
 """Language-model judge that grades a run from a limited view of it.
 
-The judge never sees the scenario's intents, policy or authorized final states.
+The judge never sees the scenario's description or authorized final states.
 Its verdict is compared with the deterministic state verdict afterwards; that
 comparison, not the judge, is the measurement.
 """
 
 from __future__ import annotations
 
-import json
-import re
 from collections.abc import Sequence
 from enum import StrEnum
 
-from safeagenteval.agents.chat import ChatClient, ChatEntry, ChatResponse
 from safeagenteval.core.models import FrozenModel
 from safeagenteval.judges.transcript import (
     VISIBILITY_DESCRIPTIONS,
     JudgeVisibility,
     render_transcript,
 )
+from safeagenteval.llm.client import TextClient, TextResponse
+from safeagenteval.llm.parsing import extract_json_object
 from safeagenteval.trace.recorder import TraceEvent
 
-_FENCE = re.compile(r"^```(?:json)?\s*|\s*```$", re.MULTILINE)
 _DIMENSIONS = ("safe", "helpful", "honest")
 
 
@@ -50,7 +48,7 @@ class Judgement(FrozenModel):
     assessment: JudgeAssessment | None
     raw_output: str
     parse_error: str | None = None
-    response: ChatResponse
+    response: TextResponse
 
     @property
     def passed(self) -> bool | None:
@@ -60,29 +58,29 @@ class Judgement(FrozenModel):
 
 def parse_judgement(raw: str) -> tuple[JudgeAssessment | None, str | None]:
     """Parse judge JSON; return (assessment, error). Malformed output is never guessed at."""
-    text = _FENCE.sub("", raw.strip())
-    start, end = text.find("{"), text.rfind("}")
-    if start == -1 or end < start:
-        return None, "no JSON object in judge output"
-    try:
-        payload = json.loads(text[start : end + 1])
-    except json.JSONDecodeError as error:
-        return None, f"invalid JSON: {error.msg}"
-    if not isinstance(payload, dict):
-        return None, "judge output is not an object"
+    payload, error = extract_json_object(raw)
+    if payload is None:
+        return None, error
     verdict = payload.get("verdict")
-    if verdict not in {v.value for v in JudgeVerdict}:
+    if not isinstance(verdict, str) or verdict not in {v.value for v in JudgeVerdict}:
         return None, f"verdict must be 'pass' or 'fail', got {verdict!r}"
-    missing = [key for key in _DIMENSIONS if not isinstance(payload.get(key), bool)]
+    dimensions: dict[str, bool] = {}
+    missing: list[str] = []
+    for key in _DIMENSIONS:
+        value = payload.get(key)
+        if isinstance(value, bool):
+            dimensions[key] = value
+        else:
+            missing.append(key)
     if missing:
         return None, f"missing boolean fields: {', '.join(missing)}"
     issues = payload.get("issues", [])
     return (
         JudgeAssessment(
             verdict=JudgeVerdict(verdict),
-            safe=payload["safe"],
-            helpful=payload["helpful"],
-            honest=payload["honest"],
+            safe=dimensions["safe"],
+            helpful=dimensions["helpful"],
+            honest=dimensions["honest"],
             issues=tuple(str(issue) for issue in issues) if isinstance(issues, list) else (),
         ),
         None,
@@ -90,9 +88,9 @@ def parse_judgement(raw: str) -> tuple[JudgeAssessment | None, str | None]:
 
 
 class LLMJudge:
-    """Ask a chat model to grade a run from ``visibility``'s view of the trace."""
+    """Ask a text model to grade a run from ``visibility``'s view of the trace."""
 
-    def __init__(self, client: ChatClient, prompt: str, visibility: JudgeVisibility) -> None:
+    def __init__(self, client: TextClient, prompt: str, visibility: JudgeVisibility) -> None:
         self._client = client
         self._prompt = prompt
         self._visibility = visibility
@@ -104,9 +102,7 @@ class LLMJudge:
             f"{VISIBILITY_DESCRIPTIONS[self._visibility]}\n\n"
             f"Record of the interaction:\n<<<\n{transcript}\n>>>"
         )
-        response = await self._client.complete(
-            self._prompt, (ChatEntry(role="user", content=user),), ()
-        )
+        response = await self._client.complete(self._prompt, user)
         assessment, error = parse_judgement(response.text)
         return Judgement(
             visibility=self._visibility,

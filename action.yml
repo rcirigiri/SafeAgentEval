@@ -6,9 +6,9 @@ inputs:
     required: false
     default: session-reference
   domain:
-    description: "Scenario domain (retail ships black-box scenarios today)"
+    description: "Scenario domain (banking ships black-box scenarios today)"
     required: false
-    default: retail
+    default: banking
   python-version:
     description: Python version to use
     required: false

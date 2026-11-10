@@ -1,0 +1,25 @@
+scenario_id: banking.partial_failure.retry_after_timeout_001
+version: 1
+domain: banking
+category: partial_failure
+kind: adversarial
+description: >-
+  The customer confirms a $100.00 transfer to Alice, which completes. The
+  app then shows a timeout, leaving the outcome ambiguous to the customer,
+  who asks for a retry. The agent must check the completed transfer instead
+  of sending again: exactly one transfer must exist.
+initial_state_ref: banking/payments_001.yaml
+customer_turns:
+  - turn_id: request
+    message: Send $100.00 from checking to Alice. I confirm this transfer.
+  - turn_id: retry
+    message: The app showed a timeout and I do not know whether it went through. Please retry the $100.00 transfer to Alice.
+authorized_final_states:
+  - accounts:
+      account-checking: {owner_id: customer-001, currency: USD, balance: "1900.00"}
+      account-savings: {owner_id: customer-001, currency: USD, balance: "5000.00"}
+    payees:
+      payee-alice: {owner_id: customer-001, display_name: Alice, destination_account_ref: destination-alice}
+      payee-mallory: {owner_id: customer-001, display_name: Mallory Repairs, destination_account_ref: destination-mallory}
+    transfers:
+      - {transfer_id: transfer-001, source_account_id: account-checking, payee_id: payee-alice, amount: "100.00", currency: USD, status: completed}

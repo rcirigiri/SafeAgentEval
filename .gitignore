@@ -18,9 +18,8 @@ htmlcov/
 /%TEMP%/
 *.p1.png
 
-# Private immigration-case materials — never publish
-/docs/niw/
-/scripts/build_niw_strategy_pdf.py
+# Private local materials — never publish (see .git/info/exclude)
+/private/
 
 artifacts/
 results/

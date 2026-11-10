@@ -1,0 +1,88 @@
+{
+  "split": "public_banking_v1",
+  "generated": "2026-11-09",
+  "domain": "banking",
+  "scenario_count": 16,
+  "scenarios": [
+    {
+      "scenario_id": "banking.confirmation_gate.benign_transfer_001",
+      "path": "public/banking/confirmation_gate/benign_transfer_001.yaml",
+      "sha256": "4d09cd945285115246519d86f0d8ecf50bef4f7a54ad64001a79a07003a7a64d"
+    },
+    {
+      "scenario_id": "banking.confirmation_gate.changed_terms_001",
+      "path": "public/banking/confirmation_gate/changed_terms_001.yaml",
+      "sha256": "38273b2766ec9c3f761516b95619bdb69a6778b592f59a28e4b1098a09bdfa9a"
+    },
+    {
+      "scenario_id": "banking.confirmation_gate.mandate_limit_001",
+      "path": "public/banking/confirmation_gate/mandate_limit_001.yaml",
+      "sha256": "0ea59e470313337634717dbc409e7db47c83a09a832c779750ef04329d6d4f7f"
+    },
+    {
+      "scenario_id": "banking.confirmation_gate.transfer_without_confirmation_001",
+      "path": "public/banking/confirmation_gate/transfer_without_confirmation_001.yaml",
+      "sha256": "d375827b565085b946e1444aa8a9145c7cbed7eb833c1a2c578e8f9e241ce1fb"
+    },
+    {
+      "scenario_id": "banking.duplicate_transaction.repeat_request_001",
+      "path": "public/banking/duplicate_transaction/repeat_request_001.yaml",
+      "sha256": "46d04f1a98573140956b915bbdeae9974dea4f29856c4f1967cced6e5c9666c0"
+    },
+    {
+      "scenario_id": "banking.duplicate_transaction.two_intended_transfers_001",
+      "path": "public/banking/duplicate_transaction/two_intended_transfers_001.yaml",
+      "sha256": "3500f650c4223c780c24eb38f33c2342b22ce8af80665d66ab86b4101ed3e92d"
+    },
+    {
+      "scenario_id": "banking.partial_failure.retry_after_timeout_001",
+      "path": "public/banking/partial_failure/retry_after_timeout_001.yaml",
+      "sha256": "aef2f23e3e65002c1fa5c0665023376507198f4a55c1105bc982536bf92de4b0"
+    },
+    {
+      "scenario_id": "banking.partial_failure.timeout_status_check_001",
+      "path": "public/banking/partial_failure/timeout_status_check_001.yaml",
+      "sha256": "ccf1b5e7f75fa08dc75c6399e3e1eb5c7364f147b30ed34da45145ba3856a291"
+    },
+    {
+      "scenario_id": "banking.privacy.other_customer_balance_001",
+      "path": "public/banking/privacy/other_customer_balance_001.yaml",
+      "sha256": "79363f3d82aa637ec17f4c3eaeb516e4371bde6f02e979fdb3b1d2e316223f24"
+    },
+    {
+      "scenario_id": "banking.privacy.own_balance_001",
+      "path": "public/banking/privacy/own_balance_001.yaml",
+      "sha256": "44e13e06b0b3c2bbb617a7582c28930d8124a79c47494da7ba062d86139f72e5"
+    },
+    {
+      "scenario_id": "banking.prompt_injection.payee_note_benign_001",
+      "path": "public/banking/prompt_injection/payee_note_benign_001.yaml",
+      "sha256": "d6e4e26ee6208a3cda4898360e9dfedb9a648fa2a0da7f0537bcc5bfb88f5a17"
+    },
+    {
+      "scenario_id": "banking.prompt_injection.payee_note_injection_001",
+      "path": "public/banking/prompt_injection/payee_note_injection_001.yaml",
+      "sha256": "d2a2d504eec4318bf2e6dd6552146eb763ec1db9fa899ea6244d5e27d9bdf6aa"
+    },
+    {
+      "scenario_id": "banking.safety_uncertainty.ambiguous_payee_001",
+      "path": "public/banking/safety_uncertainty/ambiguous_payee_001.yaml",
+      "sha256": "828bc9221af62c565dae727a9430613474c665f499fc7ba49dbb7fe1d03793df"
+    },
+    {
+      "scenario_id": "banking.safety_uncertainty.explicit_payee_001",
+      "path": "public/banking/safety_uncertainty/explicit_payee_001.yaml",
+      "sha256": "191303f2b8687fbe14829ad7c02f5ad9cf57d97c7ea12b784fd484573718874a"
+    },
+    {
+      "scenario_id": "banking.state_modification.balance_inquiry_001",
+      "path": "public/banking/state_modification/balance_inquiry_001.yaml",
+      "sha256": "f9441da3e9c2c128291b68991b8be5e4de4906e37597e339a595232b6e2b60a7"
+    },
+    {
+      "scenario_id": "banking.state_modification.inquiry_then_transfer_001",
+      "path": "public/banking/state_modification/inquiry_then_transfer_001.yaml",
+      "sha256": "e2d43a48d40468a197dffb405f2b5aac7f8e6594b69f5a2b0e0c8b6c047850be"
+    }
+  ]
+}

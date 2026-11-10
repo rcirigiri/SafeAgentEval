@@ -24,7 +24,7 @@ def render_trace_html(events: Sequence[TraceEvent], *, title: str = "SafeAgentEv
         )
     body = "\n".join(rows)
     return (
-        "<!DOCTYPE html>\n<html lang=\"en\"><head><meta charset=\"utf-8\">"
+        '<!DOCTYPE html>\n<html lang="en"><head><meta charset="utf-8">'
         f"<title>{html.escape(title)}</title>"
         "<style>body{font-family:system-ui,sans-serif;margin:2rem}"
         "table{border-collapse:collapse;width:100%}td,th{border:1px solid #ccc;"

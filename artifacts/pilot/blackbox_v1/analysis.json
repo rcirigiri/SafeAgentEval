@@ -1,0 +1,175 @@
+{
+  "pilot": "blackbox_v1",
+  "agents": {
+    "claude-haiku-5-5": {
+      "runs": 32,
+      "pass_rate": 0.6562,
+      "benign_pass_rate": 0.5,
+      "adversarial_pass_rate": 0.7778,
+      "claims": 54,
+      "claims_contradicted": 13,
+      "reply_violations": 0,
+      "per_category": {
+        "confirmation_gate": {
+          "runs": 8,
+          "pass_rate": 0.75
+        },
+        "duplicate_transaction": {
+          "runs": 4,
+          "pass_rate": 1.0
+        },
+        "partial_failure": {
+          "runs": 4,
+          "pass_rate": 0.75
+        },
+        "privacy": {
+          "runs": 4,
+          "pass_rate": 0.5
+        },
+        "prompt_injection": {
+          "runs": 4,
+          "pass_rate": 0.5
+        },
+        "safety_uncertainty": {
+          "runs": 4,
+          "pass_rate": 1.0
+        },
+        "state_modification": {
+          "runs": 4,
+          "pass_rate": 0.0
+        }
+      }
+    },
+    "claude-opus-5-5": {
+      "runs": 32,
+      "pass_rate": 0.7188,
+      "benign_pass_rate": 0.6429,
+      "adversarial_pass_rate": 0.7778,
+      "claims": 53,
+      "claims_contradicted": 10,
+      "reply_violations": 0,
+      "per_category": {
+        "confirmation_gate": {
+          "runs": 8,
+          "pass_rate": 1.0
+        },
+        "duplicate_transaction": {
+          "runs": 4,
+          "pass_rate": 0.75
+        },
+        "partial_failure": {
+          "runs": 4,
+          "pass_rate": 0.75
+        },
+        "privacy": {
+          "runs": 4,
+          "pass_rate": 0.5
+        },
+        "prompt_injection": {
+          "runs": 4,
+          "pass_rate": 0.75
+        },
+        "safety_uncertainty": {
+          "runs": 4,
+          "pass_rate": 1.0
+        },
+        "state_modification": {
+          "runs": 4,
+          "pass_rate": 0.0
+        }
+      }
+    },
+    "gpt-4.1-mini": {
+      "runs": 32,
+      "pass_rate": 0.5938,
+      "benign_pass_rate": 0.8571,
+      "adversarial_pass_rate": 0.3889,
+      "claims": 46,
+      "claims_contradicted": 4,
+      "reply_violations": 0,
+      "per_category": {
+        "confirmation_gate": {
+          "runs": 8,
+          "pass_rate": 0.75
+        },
+        "duplicate_transaction": {
+          "runs": 4,
+          "pass_rate": 0.5
+        },
+        "partial_failure": {
+          "runs": 4,
+          "pass_rate": 0.75
+        },
+        "privacy": {
+          "runs": 4,
+          "pass_rate": 1.0
+        },
+        "prompt_injection": {
+          "runs": 4,
+          "pass_rate": 0.5
+        },
+        "safety_uncertainty": {
+          "runs": 4,
+          "pass_rate": 0.5
+        },
+        "state_modification": {
+          "runs": 4,
+          "pass_rate": 0.0
+        }
+      }
+    }
+  },
+  "judge_vs_deterministic": {
+    "claude-sonnet-5-5|replies": {
+      "n": 96,
+      "agreement": 0.6875,
+      "kappa": 0.1474
+    },
+    "claude-sonnet-5-5|with_state": {
+      "n": 96,
+      "agreement": 0.7292,
+      "kappa": 0.2864
+    },
+    "gpt-6.1-sol|replies": {
+      "n": 96,
+      "agreement": 0.6875,
+      "kappa": 0.132
+    },
+    "gpt-6.1-sol|with_state": {
+      "n": 96,
+      "agreement": 0.7396,
+      "kappa": 0.308
+    }
+  },
+  "labels": {
+    "claims_total": 153,
+    "extraction_labeled": 0,
+    "extraction_accuracy": null,
+    "verdict_labeled": 0,
+    "verdict_accuracy": null,
+    "contradictions_confirmed": 0,
+    "contradictions_rejected": 0,
+    "contradictions_unlabeled": 27,
+    "replies_total": 137,
+    "replies_with_missed_claims_labeled": 0,
+    "runs_total": 96,
+    "runs_labeled": 0,
+    "human_vs_deterministic": {
+      "n": 0,
+      "agreement": null,
+      "kappa": null
+    },
+    "inter_annotator": {
+      "claims": {
+        "n": 0,
+        "agreement": null,
+        "kappa": null
+      },
+      "runs": {
+        "n": 0,
+        "agreement": null,
+        "kappa": null
+      }
+    }
+  }
+}

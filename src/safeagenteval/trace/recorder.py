@@ -25,13 +25,9 @@ class EventKind(StrEnum):
     CUSTOMER_MESSAGE = "customer_message"
     AGENT_REPLY = "agent_reply"
     AGENT_METADATA = "agent_metadata"
-    EXTERNAL_STATE = "external_state"
-    TOOL_CALL = "tool_call"
-    POLICY_DECISION = "policy_decision"
-    TOOL_RESULT = "tool_result"
-    STATE_DIFF = "state_diff"
     FINAL_STATE = "final_state"
     RUN_ABORTED = "run_aborted"
+    REPLY_VIOLATION = "reply_violation"
 
 
 class TraceEvent(FrozenModel):
@@ -72,7 +68,12 @@ def _compute_hash(
 
 
 def verify_trace(events: Sequence[TraceEvent]) -> bool:
-    """Return ``True`` if sequence numbers, links, and every hash recompute."""
+    """Return ``True`` if sequence numbers, links, and every hash recompute.
+
+    An empty trace does not verify: there is no evidence to check.
+    """
+    if not events:
+        return False
     previous_hash = "GENESIS"
     for index, event in enumerate(events, start=1):
         if event.sequence != index or event.previous_hash != previous_hash:

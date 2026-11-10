@@ -1,16 +1,14 @@
 # Paper 1 source
 
-LaTeX source for *SafeAgentEval and SafeOrderBench: State-Aware Safety
-Evaluation for Tool-Using AI Agents Across Regulated Consumer Domains*,
-version 0.3 (harness, seed benchmark, validation, and a five-model pilot with
-judges).
+LaTeX source for *SafeAgentEval and SafeOrderBench: State-Verified Safety
+Evaluation for Transactional AI Agents*, version 0.5 (banking-only
+black-box release, validation, and a black-box pilot with judges).
 
 ```text
 paper/
 ├── main.tex                          Manuscript (single file, inline bibliography)
 ├── figures/architecture.png          Figure 1
-├── results/harness_validation.json   Data behind the validation tables (Section 6)
-├── results/pilot_v1.json             Per-run and per-cell pilot results (Section 7)
+├── results/harness_validation.json   Data behind the prototype validation tables
 └── build/                            Local build output (not committed)
 ```
 
@@ -24,38 +22,48 @@ pdflatex main.tex && pdflatex main.tex
 ```
 
 The bibliography is inline (`thebibliography`), so no BibTeX pass or `.bbl`
-file is needed.
+file is needed. Note: the PDF under `paper/build/` predates the version
+0.5 text and must be rebuilt before it is circulated; no TeX distribution
+was available on the machine where 0.5 was edited.
 
-## Regenerate the results
+## What the numbers rest on
 
-From the repository root:
+- The released black-box demonstration (Section on black-box execution) is
+  regenerated deterministically from the repo root:
 
-```bash
-pytest
-python scripts/export_validation_results.py paper/results/harness_validation.json
-python scripts/export_pilot_results.py experiments/configs/pilot_v1.yaml paper/results/pilot_v1.json
-```
+  ```bash
+  python -m safeagenteval run --domain banking --agent session-reference
+  python -m safeagenteval run --domain banking --agent session-unsafe
+  pytest
+  ```
 
-The first two commands regenerate every number in Section 6. The third
-regenerates `pilot_v1.json` from the saved pilot runs in
-`artifacts/pilot/pilot_v1/` (not committed). Re-running the pilot itself needs
-API access and will not reproduce it exactly; see `experiments/pilot/README.md`.
-If a number changes, update the matching table in `main.tex`.
+- The black-box pilot (three agents under test, claim extractor, two
+  judges) was run with `scripts/run_blackbox_pilot.py`; its artifacts are
+  preserved in `artifacts/pilot/blackbox_v1/` (runs, judgements, labeling
+  sheets, `manifest.json`, `analysis.json`). Hosted models sample
+  non-deterministically, so a re-run will not reproduce it exactly.
+- The mediated validation was produced by a research prototype that has
+  been retired; it cannot be re-run. Its data is
+  `results/harness_validation.json`.
 
 ## Before the next version
 
-The claim results in Section 7.3 and the judge results in Section 7.5 are
-preliminary until `claims.csv`, `replies.csv` and `runs.csv` in
-`artifacts/pilot/pilot_v1/labels/` are hand-labeled and
-`python -m safeagenteval.pilot analyze experiments/configs/pilot_v1.yaml` is
-re-run. Then update Sections 7.3 and 7.5 (Table 11 gains a human-κ column),
-the abstract and the conclusion with the confirmed counts, the extractor's
+The claim and judge results carry `[STEP 2 PLACEHOLDER]` markers until
+`claims.csv`, `replies.csv` and `runs.csv` in
+`artifacts/pilot/blackbox_v1/labels/` are hand-labeled (with a second
+annotator's `*_second.csv` sheets for Cohen's kappa). Then run:
+
+```bash
+python scripts/pilot_analyze.py
+```
+
+and replace the placeholders with the confirmed counts, the extractor's
 precision and recall, and each judge's agreement with the human labels.
 
 ## arXiv submission
 
-Upload a tarball containing only `main.tex` and `figures/architecture.png`. Do
-not include a PDF; arXiv compiles from source. Paste the abstract into the
-metadata form as plain text (it is about 1,840 characters; the limit is
-1,920).
-Suggested categories: primary `cs.AI`, cross-list `cs.CL` and `cs.CR`.
+Upload a tarball containing only `main.tex` and `figures/architecture.png`.
+Do not include a PDF; arXiv compiles from source. Paste the abstract into
+the metadata form as plain text (the version 0.5 abstract is 1,909
+characters, within the 1,920 limit; re-count after any edit). Suggested
+categories: primary `cs.AI`, cross-list `cs.CL` and `cs.CR`.

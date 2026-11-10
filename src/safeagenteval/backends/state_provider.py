@@ -16,7 +16,15 @@ from safeagenteval.core.models import JsonObject
 
 
 class StateProvider(Protocol):
-    """Seed, read, and reset an external system's state for one scenario."""
+    """Seed, read, and reset an external system's state for one scenario.
+
+    One provider instance serves one run at a time and owns one isolated
+    world: if several runs execute concurrently against the same backend,
+    each provider instance must address its own partition of that backend
+    (tenant, schema, sandbox account set). Providers that need the run's
+    identity to do so may implement ``set_run_context(run_id)``; the
+    harness calls it before ``reset()`` when present.
+    """
 
     def seed(self, initial_state: JsonObject) -> None:
         """Load ``initial_state`` into the external system."""
@@ -27,6 +35,28 @@ class StateProvider(Protocol):
         ...
 
     def reset(self) -> None:
+        """Remove all run residue so the next seed starts clean."""
+        ...
+
+
+class AsyncStateProvider(Protocol):
+    """Asynchronous variant for providers backed by network sandbox APIs.
+
+    The harness detects awaitable ``seed``/``snapshot``/``reset`` results
+    and awaits them, so a provider may implement either protocol (or mix:
+    the detection is per call). Synchronous providers remain the default
+    and need no changes.
+    """
+
+    async def seed(self, initial_state: JsonObject) -> None:
+        """Load ``initial_state`` into the external system."""
+        ...
+
+    async def snapshot(self) -> JsonObject:
+        """Return an isolated JSON-compatible snapshot of the current state."""
+        ...
+
+    async def reset(self) -> None:
         """Remove all run residue so the next seed starts clean."""
         ...
 

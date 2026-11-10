@@ -4,15 +4,15 @@ build-backend = "hatchling.build"
 
 [project]
 name = "safeagenteval"
-version = "0.1.0a0"
-description = "State-aware safety evaluation for tool-using AI agents."
+version = "0.2.0"
+description = "State-aware safety evaluation for black-box session AI agents."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
 authors = [
   { name = "Rammohan Srikanth Cirigiri" },
 ]
-keywords = ["ai-agents", "evaluation", "safety", "tool-use"]
+keywords = ["ai-agents", "evaluation", "safety", "black-box"]
 classifiers = [
   "Development Status :: 2 - Pre-Alpha",
   "License :: OSI Approved :: Apache Software License",
@@ -38,6 +38,7 @@ analysis = [
 models = [
   "anthropic>=0.40,<1",
   "openai>=1.50,<3",
+  "python-dotenv>=1,<2",
 ]
 dev = [
   "mypy>=1.11,<2",
@@ -49,10 +50,6 @@ dev = [
 
 [project.scripts]
 safeagenteval = "safeagenteval.cli:app"
-
-[project.entry-points."safeagenteval.backends"]
-banking = "safeagenteval.backends.banking.backend:BankingBackend"
-banking-v2 = "safeagenteval.backends.banking.backend_v2:BankingBackendV2"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/safeagenteval"]

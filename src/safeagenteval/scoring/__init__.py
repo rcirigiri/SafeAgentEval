@@ -1,1 +1,1 @@
-"""Deterministic state, authorization, and consistency metrics."""
+"""Deterministic final-state scoring."""

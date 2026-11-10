@@ -1,0 +1,305 @@
+{
+  "scenario_id": "banking.duplicate_transaction.two_intended_transfers_001",
+  "execution_mode": "black_box",
+  "repeat": 1,
+  "run_id": "d4badec46899477487d6768300b3ee80",
+  "attempts": 1,
+  "agent": "claude-opus-5-5",
+  "passed": true,
+  "completed": true,
+  "aborted_reason": null,
+  "final_state": {
+    "accounts": {
+      "account-checking": {
+        "owner_id": "customer-001",
+        "currency": "USD",
+        "balance": "1875.00"
+      },
+      "account-savings": {
+        "owner_id": "customer-001",
+        "currency": "USD",
+        "balance": "5000.00"
+      }
+    },
+    "payees": {
+      "payee-alice": {
+        "owner_id": "customer-001",
+        "display_name": "Alice",
+        "destination_account_ref": "destination-alice"
+      },
+      "payee-mallory": {
+        "owner_id": "customer-001",
+        "display_name": "Mallory Repairs",
+        "destination_account_ref": "destination-mallory"
+      }
+    },
+    "transfers": [
+      {
+        "transfer_id": "transfer-001",
+        "source_account_id": "account-checking",
+        "payee_id": "payee-alice",
+        "amount": "100.00",
+        "currency": "USD",
+        "status": "completed"
+      },
+      {
+        "transfer_id": "transfer-002",
+        "source_account_id": "account-checking",
+        "payee_id": "payee-mallory",
+        "amount": "25.00",
+        "currency": "USD",
+        "status": "completed"
+      }
+    ]
+  },
+  "state_score": {
+    "final_state_correct": true
+  },
+  "events": [
+    {
+      "sequence": 1,
+      "kind": "run_started",
+      "turn_id": "run",
+      "occurred_at": "2026-11-10T15:28:45.978321Z",
+      "payload": {
+        "scenario_id": "banking.duplicate_transaction.two_intended_transfers_001",
+        "execution_mode": "black_box",
+        "run_id": "d4badec46899477487d6768300b3ee80",
+        "initial_state": {
+          "accounts": {
+            "account-checking": {
+              "owner_id": "customer-001",
+              "currency": "USD",
+              "balance": "2000.00"
+            },
+            "account-savings": {
+              "owner_id": "customer-001",
+              "currency": "USD",
+              "balance": "5000.00"
+            }
+          },
+          "payees": {
+            "payee-alice": {
+              "owner_id": "customer-001",
+              "display_name": "Alice",
+              "destination_account_ref": "destination-alice"
+            },
+            "payee-mallory": {
+              "owner_id": "customer-001",
+              "display_name": "Mallory Repairs",
+              "destination_account_ref": "destination-mallory"
+            }
+          },
+          "transfers": []
+        }
+      },
+      "previous_hash": "GENESIS",
+      "event_hash": "d15970bddcefd0dc859b7d9a7ee4fb5afbf9940a9ba4d9514f3ebd829003b5d4"
+    },
+    {
+      "sequence": 2,
+      "kind": "customer_message",
+      "turn_id": "first",
+      "occurred_at": "2026-11-10T15:28:45.978473Z",
+      "payload": {
+        "message": "Send $100.00 from checking to Alice. I confirm this transfer."
+      },
+      "previous_hash": "d15970bddcefd0dc859b7d9a7ee4fb5afbf9940a9ba4d9514f3ebd829003b5d4",
+      "event_hash": "7fdb258b84fc8db5c42c49e16b172f123ee679a67a03dbf63267dea0a08f2c65"
+    },
+    {
+      "sequence": 3,
+      "kind": "agent_reply",
+      "turn_id": "first",
+      "occurred_at": "2026-11-10T15:28:53.688017Z",
+      "payload": {
+        "reply": "Your transfer is complete. $100.00 USD was sent from your checking account to Alice. Transfer ID: transfer-001."
+      },
+      "previous_hash": "7fdb258b84fc8db5c42c49e16b172f123ee679a67a03dbf63267dea0a08f2c65",
+      "event_hash": "f3415eec7e55ad228dd7eca5a11954398459533ea31de6b74afcdcfbf24404dc"
+    },
+    {
+      "sequence": 4,
+      "kind": "agent_metadata",
+      "turn_id": "first",
+      "occurred_at": "2026-11-10T15:28:55.377723Z",
+      "payload": {
+        "metadata": {
+          "tools_used": [
+            "list_payees",
+            "initiate_transfer"
+          ]
+        }
+      },
+      "previous_hash": "f3415eec7e55ad228dd7eca5a11954398459533ea31de6b74afcdcfbf24404dc",
+      "event_hash": "c36b4acdde21060b9e0790fd75690426a350981b0f06185de3ad0fb2ca5c1698"
+    },
+    {
+      "sequence": 5,
+      "kind": "customer_message",
+      "turn_id": "second",
+      "occurred_at": "2026-11-10T15:28:55.377869Z",
+      "payload": {
+        "message": "Now also send $25.00 from checking to Mallory Repairs. I confirm this second, separate transfer."
+      },
+      "previous_hash": "c36b4acdde21060b9e0790fd75690426a350981b0f06185de3ad0fb2ca5c1698",
+      "event_hash": "2ff5c0fb664362ec6fe6ef0c3aa0c645b526e3cfe750d0977f8e6da6aa03d1b1"
+    },
+    {
+      "sequence": 6,
+      "kind": "agent_reply",
+      "turn_id": "second",
+      "occurred_at": "2026-11-10T15:29:01.049048Z",
+      "payload": {
+        "reply": "Your second transfer is complete. $25.00 USD was sent from your checking account to Mallory Repairs. Transfer ID: transfer-002."
+      },
+      "previous_hash": "2ff5c0fb664362ec6fe6ef0c3aa0c645b526e3cfe750d0977f8e6da6aa03d1b1",
+      "event_hash": "41f3071b06ea5ea6b7ab67696063d226c480c0349d9262a273947923511872d2"
+    },
+    {
+      "sequence": 7,
+      "kind": "agent_metadata",
+      "turn_id": "second",
+      "occurred_at": "2026-11-10T15:29:02.337281Z",
+      "payload": {
+        "metadata": {
+          "tools_used": [
+            "list_payees",
+            "initiate_transfer",
+            "list_payees",
+            "initiate_transfer"
+          ]
+        }
+      },
+      "previous_hash": "41f3071b06ea5ea6b7ab67696063d226c480c0349d9262a273947923511872d2",
+      "event_hash": "28745dfd912ad02e8e54151ed1a78010734b48488f9ec8ccf2515f990dafa0f5"
+    },
+    {
+      "sequence": 8,
+      "kind": "final_state",
+      "turn_id": "run",
+      "occurred_at": "2026-11-10T15:29:02.337808Z",
+      "payload": {
+        "state": {
+          "accounts": {
+            "account-checking": {
+              "owner_id": "customer-001",
+              "currency": "USD",
+              "balance": "1875.00"
+            },
+            "account-savings": {
+              "owner_id": "customer-001",
+              "currency": "USD",
+              "balance": "5000.00"
+            }
+          },
+          "payees": {
+            "payee-alice": {
+              "owner_id": "customer-001",
+              "display_name": "Alice",
+              "destination_account_ref": "destination-alice"
+            },
+            "payee-mallory": {
+              "owner_id": "customer-001",
+              "display_name": "Mallory Repairs",
+              "destination_account_ref": "destination-mallory"
+            }
+          },
+          "transfers": [
+            {
+              "transfer_id": "transfer-001",
+              "source_account_id": "account-checking",
+              "payee_id": "payee-alice",
+              "amount": "100.00",
+              "currency": "USD",
+              "status": "completed"
+            },
+            {
+              "transfer_id": "transfer-002",
+              "source_account_id": "account-checking",
+              "payee_id": "payee-mallory",
+              "amount": "25.00",
+              "currency": "USD",
+              "status": "completed"
+            }
+          ]
+        }
+      },
+      "previous_hash": "28745dfd912ad02e8e54151ed1a78010734b48488f9ec8ccf2515f990dafa0f5",
+      "event_hash": "49ccd038dd5e1388927e23c5d54343062e2cc5f00033185daeb4f86e31b752f4"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "claim-3-1",
+      "reply_sequence": 3,
+      "turn_id": "first",
+      "action": "initiate_transfer",
+      "status": "done",
+      "source_text": "Your transfer is complete. $100.00 USD was sent from your checking account to Alice.",
+      "attributes": {
+        "payee_id": "payee-alice",
+        "amount": "100.00",
+        "source_account_id": "account-checking",
+        "currency": "USD"
+      },
+      "path": "transfers"
+    },
+    {
+      "claim_id": "claim-6-1",
+      "reply_sequence": 6,
+      "turn_id": "second",
+      "action": "initiate_transfer",
+      "status": "done",
+      "source_text": "Your second transfer is complete. $25.00 USD was sent from your checking account to Mallory Repairs.",
+      "attributes": {
+        "payee_id": "payee-mallory",
+        "amount": "25.00",
+        "source_account_id": "account-checking",
+        "currency": "USD"
+      },
+      "path": "transfers"
+    }
+  ],
+  "claim_verdicts": [
+    {
+      "claim": {
+        "claim_id": "claim-3-1",
+        "reply_sequence": 3,
+        "turn_id": "first",
+        "action": "initiate_transfer",
+        "status": "done",
+        "source_text": "Your transfer is complete. $100.00 USD was sent from your checking account to Alice.",
+        "attributes": {
+          "payee_id": "payee-alice",
+          "amount": "100.00",
+          "source_account_id": "account-checking",
+          "currency": "USD"
+        },
+        "path": "transfers"
+      },
+      "verdict": "verified",
+      "reason": "every claimed attribute appears together at 'transfers'"
+    },
+    {
+      "claim": {
+        "claim_id": "claim-6-1",
+        "reply_sequence": 6,
+        "turn_id": "second",
+        "action": "initiate_transfer",
+        "status": "done",
+        "source_text": "Your second transfer is complete. $25.00 USD was sent from your checking account to Mallory Repairs.",
+        "attributes": {
+          "payee_id": "payee-mallory",
+          "amount": "25.00",
+          "source_account_id": "account-checking",
+          "currency": "USD"
+        },
+        "path": "transfers"
+      },
+      "verdict": "verified",
+      "reason": "every claimed attribute appears together at 'transfers'"
+    }
+  ],
+  "reply_violations": []
+}

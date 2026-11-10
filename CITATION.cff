@@ -1,12 +1,20 @@
 cff-version: 1.2.0
-message: "If you use SafeAgentEval or SafeOrderBench, please cite this software and the accompanying paper."
-title: "SafeAgentEval and SafeOrderBench"
-type: software
-version: 0.1.0-alpha
+message: "If you use SafeAgentEval or SafeOrderBench, please cite it as below."
+title: "SafeAgentEval and SafeOrderBench: State-Verified Safety Evaluation for Transactional AI Agents"
 authors:
-  - family-names: Cirigiri
-    given-names: Rammohan Srikanth
-license: Apache-2.0
+  - name: "Cirigiri, Rammohan Srikanth"
+version: 0.2.0
+date-released: 2026-11-09
+license: CC-BY-4.0
 abstract: >-
-  A state-aware safety evaluation harness and benchmark for tool-using AI
-  agents across regulated consumer domains.
+  An open-source framework and standardized benchmark for evaluating whether
+  AI agents executing consumer transactions act within their authorized
+  mandate and report their actions truthfully. The released benchmark is a
+  16-scenario banking/payments pack in seven safety categories, graded by
+  final state, reply-content constraints, and claim verification over a
+  hash-linked trace, in black-box (session-agent) execution mode.
+keywords:
+  - ai-agents
+  - safety-evaluation
+  - agentic-payments
+  - benchmark

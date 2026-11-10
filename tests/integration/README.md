@@ -1,4 +1,4 @@
 # Integration tests
 
-End-to-end tests spanning scenarios, agents, tools, backends, traces, and
-scoring belong here.
+End-to-end tests spanning scenarios, session agents, state providers,
+traces, scoring, and judges belong here.

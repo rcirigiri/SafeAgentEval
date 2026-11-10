@@ -8,6 +8,7 @@ world afterwards through a StateProvider. See docs/agent_contract.md.
 
 from __future__ import annotations
 
+import asyncio
 import json
 import uuid
 from typing import Protocol
@@ -62,24 +63,38 @@ class ScriptedSessionAgent:
 class HttpSessionAgentAdapter:
     """Drive a session agent over HTTP (CCE-shaped services).
 
-    POSTs ``{"session_id", "transcript", "language", "channel"}`` as JSON and
-    reads the reply from the ``reply`` (or ``text``) field, with optional
-    ``metadata``. The session id is generated per adapter instance, so one
-    instance is one run.
+    POSTs ``{"session_id", "transcript", "language", "channel"}`` as JSON.
+    Despite its name, the wire field ``transcript`` carries only the
+    latest customer utterance — the service owns the conversation history
+    under ``session_id``; the name is kept for compatibility with existing
+    CCE-shaped endpoints. The reply is read from the ``reply`` (or
+    ``text``) field, with optional ``metadata``.
+
+    The session id is generated per adapter instance, so one instance is
+    one run. Non-2xx responses raise ``urllib.error.HTTPError`` (recorded
+    by the harness as an aborted run); a 2xx response whose body is not a
+    JSON object with a string reply raises ``ValueError``. Pass
+    ``headers`` for endpoint authentication (for example an API key).
     """
 
-    def __init__(self, url: str, *, session_id: str | None = None, timeout: float = 30.0) -> None:
+    def __init__(
+        self,
+        url: str,
+        *,
+        session_id: str | None = None,
+        timeout: float = 30.0,
+        headers: dict[str, str] | None = None,
+    ) -> None:
         self._url = url
         self._session_id = session_id or f"sae-{uuid.uuid4().hex}"
         self._timeout = timeout
+        self._headers = dict(headers) if headers else {}
 
     @property
     def session_id(self) -> str:
         return self._session_id
 
     async def say(self, customer_text: str) -> SessionReply:
-        import asyncio
-
         return await asyncio.to_thread(self._say_sync, customer_text)
 
     def _say_sync(self, customer_text: str) -> SessionReply:
@@ -94,7 +109,7 @@ class HttpSessionAgentAdapter:
         http_request = urllib_request.Request(
             self._url,
             data=body,
-            headers={"Content-Type": "application/json"},
+            headers={"Content-Type": "application/json", **self._headers},
             method="POST",
         )
         with urllib_request.urlopen(http_request, timeout=self._timeout) as response:
@@ -102,8 +117,11 @@ class HttpSessionAgentAdapter:
         if not isinstance(payload, dict):
             raise ValueError("session agent must return a JSON object")
         text = payload.get("reply", payload.get("text", ""))
+        if not isinstance(text, str):
+            raise ValueError(f"session agent reply must be a string, got {type(text).__name__}")
         metadata = payload.get("metadata", {})
-        return SessionReply(
-            text=str(text),
-            metadata=metadata if isinstance(metadata, dict) else {},
-        )
+        if not isinstance(metadata, dict):
+            raise ValueError(
+                f"session agent metadata must be a JSON object, got {type(metadata).__name__}"
+            )
+        return SessionReply(text=text, metadata=metadata)

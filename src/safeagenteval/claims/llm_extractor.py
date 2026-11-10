@@ -1,22 +1,17 @@
 """Language-model claim extractor.
 
-The extractor sees only the reply text and pre-run reference data (payee and
-account identifiers with display names). It never sees the trace, so it cannot
-make claims agree with what happened.
+The extractor sees only the reply text (plus optional pre-run reference
+data such as display names). It never sees the run's outcome, so it cannot
+make claims agree with what happened. Extracted claims are then verified
+deterministically against the final state by ``claims.verifier``.
 """
 
 from __future__ import annotations
 
-import json
-import re
-
-from safeagenteval.agents.chat import ChatClient, ChatEntry, ChatResponse
 from safeagenteval.claims.verifier import ActionClaim, ClaimStatus
 from safeagenteval.core.models import FrozenModel, JsonObject
-
-SUPPORTED_ACTIONS = frozenset({"initiate_transfer"})
-_ATTRIBUTE_KEYS = frozenset({"payee_id", "amount", "currency", "source_account_id"})
-_FENCE = re.compile(r"^```(?:json)?\s*|\s*```$", re.MULTILINE)
+from safeagenteval.llm.client import TextClient, TextResponse
+from safeagenteval.llm.parsing import extract_json_object
 
 
 class ExtractionRecord(FrozenModel):
@@ -27,7 +22,7 @@ class ExtractionRecord(FrozenModel):
     raw_output: str
     parse_error: str | None = None
     dropped_claims: int = 0
-    response: ChatResponse
+    response: TextResponse
 
 
 def parse_claims(
@@ -40,18 +35,13 @@ def parse_claims(
 ) -> tuple[tuple[ActionClaim, ...], str | None, int]:
     """Parse extractor JSON into claims; return (claims, parse error, dropped count).
 
-    Claims with an unsupported action or status, or a malformed shape, are
-    dropped and counted rather than guessed at.
+    Claims with a missing action or an unknown status are dropped and
+    counted rather than guessed at.
     """
-    text = _FENCE.sub("", raw.strip())
-    start, end = text.find("{"), text.rfind("}")
-    if start == -1 or end < start:
-        return (), "no JSON object in extractor output", 0
-    try:
-        payload = json.loads(text[start : end + 1])
-    except json.JSONDecodeError as error:
-        return (), f"invalid JSON: {error.msg}", 0
-    items = payload.get("claims") if isinstance(payload, dict) else None
+    payload, error = extract_json_object(raw)
+    if payload is None:
+        return (), error, 0
+    items = payload.get("claims")
     if not isinstance(items, list):
         return (), "missing 'claims' list", 0
 
@@ -73,36 +63,40 @@ def _to_claim(
         return None
     action = item.get("action")
     status = item.get("status")
-    if action not in SUPPORTED_ACTIONS or status not in {s.value for s in ClaimStatus}:
+    if not isinstance(action, str) or not action:
+        return None
+    if status not in {s.value for s in ClaimStatus}:
         return None
     raw_attributes = item.get("attributes", {})
     if not isinstance(raw_attributes, dict):
         return None
     attributes: JsonObject = {
-        key: str(value)
+        key: value
         for key, value in raw_attributes.items()
-        if key in _ATTRIBUTE_KEYS and isinstance(value, str | int | float) and str(value)
+        if isinstance(value, str | int | float | bool | list)
     }
     source = item.get("source_text")
+    path = item.get("path")
     return ActionClaim(
         claim_id=claim_id,
         reply_sequence=reply_sequence,
         turn_id=turn_id,
-        action=str(action),
+        action=action,
         status=ClaimStatus(status),
         source_text=source if isinstance(source, str) and source else reply,
         attributes=attributes,
+        path=path if isinstance(path, str) and path else None,
     )
 
 
 class LLMClaimExtractor:
-    """ClaimExtractor that asks a chat model for typed claims.
+    """ClaimExtractor that asks a text model for typed claims.
 
-    ``reference`` is a short text listing the identifiers the reply may refer
-    to by name. ``records`` accumulates raw outputs for auditing.
+    ``reference`` is a short text listing the identifiers the reply may
+    refer to by name. ``records`` accumulates raw outputs for auditing.
     """
 
-    def __init__(self, client: ChatClient, prompt: str, reference: str) -> None:
+    def __init__(self, client: TextClient, prompt: str, reference: str) -> None:
         self._client = client
         self._prompt = prompt
         self._reference = reference
@@ -116,9 +110,7 @@ class LLMClaimExtractor:
             f"Reference data:\n{self._reference}\n\n"
             f"Agent reply (turn {turn_id}):\n<<<\n{reply}\n>>>"
         )
-        response = await self._client.complete(
-            self._prompt, (ChatEntry(role="user", content=user),), ()
-        )
+        response = await self._client.complete(self._prompt, user)
         claims, error, dropped = parse_claims(
             response.text,
             reply=reply,

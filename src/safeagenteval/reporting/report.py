@@ -1,42 +1,66 @@
-"""Aggregate saved CLI run files into a Markdown report and leaderboard JSON."""
+"""Saved run records and their aggregation into reports.
+
+The CLI writes one ``SavedRunRecord`` JSON file per run; reporting reads
+only that model. Writer and reader share the schema by construction, so
+record fields cannot drift apart.
+"""
 
 from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Literal
+
+from pydantic import ValidationError
+
+from safeagenteval.claims.verifier import ActionClaim, ClaimVerdict
+from safeagenteval.core.models import FrozenModel, JsonObject
+from safeagenteval.scoring.state import StateScore
+from safeagenteval.trace.recorder import TraceEvent
 
 
-def load_run_files(runs_dir: Path) -> list[dict[str, object]]:
-    """Load every ``*.json`` run record directly under ``runs_dir``."""
-    records: list[dict[str, object]] = []
+class SavedRunRecord(FrozenModel):
+    """One saved black-box run: trace, score, and verdict."""
+
+    scenario_id: str
+    execution_mode: Literal["black_box"] = "black_box"
+    repeat: int = 0
+    run_id: str = ""
+    attempts: int = 1
+    agent: str
+    passed: bool
+    completed: bool
+    aborted_reason: str | None = None
+    final_state: JsonObject
+    state_score: StateScore
+    events: tuple[TraceEvent, ...]
+    claims: tuple[ActionClaim, ...] = ()
+    claim_verdicts: tuple[ClaimVerdict, ...] = ()
+    reply_violations: tuple[str, ...] = ()
+
+
+def load_run_files(runs_dir: Path) -> list[SavedRunRecord]:
+    """Load every valid ``*.json`` run record directly under ``runs_dir``."""
+    records: list[SavedRunRecord] = []
     for path in sorted(runs_dir.glob("*.json")):
         try:
-            data = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
+            records.append(SavedRunRecord.model_validate_json(path.read_text(encoding="utf-8")))
+        except (OSError, ValidationError, json.JSONDecodeError):
             continue
-        if isinstance(data, dict) and "scenario_id" in data and "state_score" in data:
-            records.append(data)
     return records
 
 
-def build_leaderboard(records: list[dict[str, object]]) -> dict[str, object]:
+def build_leaderboard(records: list[SavedRunRecord]) -> dict[str, object]:
     """Summarize run records into a comparable aggregate."""
     total = len(records)
-    passed = sum(1 for record in records if record.get("passed") is True)
-    unauthorized = 0
+    passed = sum(1 for record in records if record.passed)
     per_scenario: dict[str, list[bool]] = {}
     for record in records:
-        score = record.get("state_score")
-        if isinstance(score, dict) and score.get("unauthorized_action") is True:
-            unauthorized += 1
-        scenario_id = record.get("scenario_id")
-        if isinstance(scenario_id, str):
-            per_scenario.setdefault(scenario_id, []).append(record.get("passed") is True)
+        per_scenario.setdefault(record.scenario_id, []).append(record.passed)
     return {
         "runs": total,
         "passed": passed,
         "pass_rate": round(passed / total, 4) if total else 0.0,
-        "unauthorized_runs": unauthorized,
         "scenarios": sorted(per_scenario),
         "scenario_pass_rates": {
             scenario_id: round(sum(outcomes) / len(outcomes), 4)
@@ -45,24 +69,20 @@ def build_leaderboard(records: list[dict[str, object]]) -> dict[str, object]:
     }
 
 
-def build_markdown_report(records: list[dict[str, object]]) -> str:
+def build_markdown_report(records: list[SavedRunRecord]) -> str:
     """Render run records as a small Markdown table."""
     board = build_leaderboard(records)
     lines = [
         "# SafeAgentEval report",
         "",
-        f"Runs: {board['runs']}  Passed: {board['passed']}  "
-        f"Pass rate: {board['pass_rate']}  Unauthorized runs: {board['unauthorized_runs']}",
+        f"Runs: {board['runs']}  Passed: {board['passed']}  Pass rate: {board['pass_rate']}",
         "",
-        "| Scenario | Configuration | Passed | Final state | Unauthorized | Commits |",
-        "|---|---|---|---|---|---|",
+        "| Scenario | Execution mode | Passed | Final state correct |",
+        "|---|---|---|---|",
     ]
     for record in records:
-        score = record.get("state_score")
-        score = score if isinstance(score, dict) else {}
         lines.append(
-            f"| {record.get('scenario_id')} | {record.get('configuration')} "
-            f"| {record.get('passed')} | {score.get('final_state_correct')} "
-            f"| {score.get('unauthorized_action')} | {score.get('successful_commits')} |"
+            f"| {record.scenario_id} | {record.execution_mode} "
+            f"| {record.passed} | {record.state_score.final_state_correct} |"
         )
     return "\n".join(lines) + "\n"

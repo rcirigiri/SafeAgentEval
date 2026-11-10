@@ -1,3 +1,3 @@
-"""State-aware safety evaluation for tool-using AI agents."""
+"""State-aware safety evaluation for black-box session agents."""
 
-__version__ = "0.1.0a0"
+__version__ = "0.2.0"
