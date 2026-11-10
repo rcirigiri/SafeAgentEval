@@ -1,14 +1,12 @@
 # Paper 1 source
 
 LaTeX source for *SafeAgentEval and SafeOrderBench: State-Verified Safety
-Evaluation for Transactional AI Agents*, version 0.5 (banking-only
-black-box release, validation, and a black-box pilot with judges).
+Evaluation for Transactional AI Agents*, version 0.6 (banking-only
+black-box release and black-box pilot with judges).
 
 ```text
 paper/
 ├── main.tex                          Manuscript (single file, inline bibliography)
-├── figures/architecture.png          Figure 1
-├── results/harness_validation.json   Data behind the prototype validation tables
 └── build/                            Local build output (not committed)
 ```
 
@@ -23,8 +21,8 @@ pdflatex main.tex && pdflatex main.tex
 
 The bibliography is inline (`thebibliography`), so no BibTeX pass or `.bbl`
 file is needed. Note: the PDF under `paper/build/` predates the version
-0.5 text and must be rebuilt before it is circulated; no TeX distribution
-was available on the machine where 0.5 was edited.
+0.6 text and must be rebuilt before it is circulated; no TeX distribution
+was available on the machine where 0.6 was edited.
 
 ## What the numbers rest on
 
@@ -42,9 +40,6 @@ was available on the machine where 0.5 was edited.
   preserved in `artifacts/pilot/blackbox_v1/` (runs, judgements, labeling
   sheets, `manifest.json`, `analysis.json`). Hosted models sample
   non-deterministically, so a re-run will not reproduce it exactly.
-- The mediated validation was produced by a research prototype that has
-  been retired; it cannot be re-run. Its data is
-  `results/harness_validation.json`.
 
 ## Before the next version
 
@@ -62,8 +57,8 @@ precision and recall, and each judge's agreement with the human labels.
 
 ## arXiv submission
 
-Upload a tarball containing only `main.tex` and `figures/architecture.png`.
+Upload a tarball containing only `main.tex`.
 Do not include a PDF; arXiv compiles from source. Paste the abstract into
-the metadata form as plain text (the version 0.5 abstract is 1,909
+the metadata form as plain text (the version 0.6 abstract is 1,624
 characters, within the 1,920 limit; re-count after any edit). Suggested
 categories: primary `cs.AI`, cross-list `cs.CL` and `cs.CR`.
