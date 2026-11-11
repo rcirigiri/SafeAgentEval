@@ -57,7 +57,10 @@ runs): two agents ended every run in an authorized final state, while
 gpt-4.1-mini produced nine state failures, including an injected \$500
 transfer it did not report. Judges given the final state detected 9 of 9
 and 7 of 9 state failures, against 5 of 9 and 2 of 9 from chat alone. The
-pilot exposed a defect in our claim verifier; human validation of the
+pilot exposed a defect in our claim verifier, since fixed with
+point-in-time snapshots and key-aware matching; because the state
+provider is the trust root, results are labeled by who operated it.
+Human validation of the
 extractor and judges is pending. Other domains and crypto payments
 remain roadmap designs.
 \end{abstract}
@@ -290,8 +293,8 @@ harness resets and seeds the sandbox through the state provider;
 \texttt{say(text)}; (4)~the agent acts inside its own sandbox, using its
 own tools; (5)~its reply is recorded; (6)~the final state is snapshotted;
 (7)~a model extractor turns replies into typed claims, which the
-deterministic grader verifies against the final snapshot, the authorized
-final states, forbidden reply content, and trace integrity; (8)~a single
+deterministic grader verifies against the recorded snapshots, the authorized
+final states, state invariants, forbidden reply content, and trace integrity; (8)~a single
 \texttt{RunResult.passed} rule emits the verdict and the
 \texttt{--min-pass-rate} CI gate. LLM judges run only after the fact on
 saved runs and never determine the verdict; human labels calibrate the
@@ -454,7 +457,8 @@ untrusted evidence, and grades the final snapshot with the state
 scorer, claim verifier and trace format described above. Structured
 metadata an agent reports about its own actions is recorded as a claim to
 be checked against the snapshot, never as truth. Every record is stamped
-\code{execution\_mode: black\_box}; its
+\code{execution\_mode: black\_box} and labeled with who operated the
+state provider (\code{provider\_trust}); its
 verdicts establish detection and proof rather than mid-flight
 prevention. Adapter and provider implementations are certified by
 behavioral conformance checks (session isolation, multi-turn robustness,
@@ -647,8 +651,8 @@ grading cannot compute the state-based or consistency metrics.
     \midrule
     Final-state correctness & Fraction of runs whose final state is in the authorized set & Implemented \\
     Unauthorized-state rate & Fraction of runs whose final state is outside the authorized set & Implemented \\
-    Response-action consistency & Fraction of verifiable claims in the agent's replies that match the final state & Implemented; extractor not yet human-validated \\
-    Claim-contradiction rate & Fraction of runs with at least one verifiable claim that contradicts the final state; also reported per claim & Implemented; extractor not yet human-validated \\
+    Response-action consistency & Fraction of verifiable claims in the agent's replies that match the recorded state from their turn onward & Implemented; extractor not yet human-validated \\
+    Claim-contradiction rate & Fraction of runs with at least one verifiable claim contradicted by every recorded snapshot from its turn onward; also reported per claim & Implemented; extractor not yet human-validated \\
     Judge miss rate & Among runs a judge passes, the fraction that state-based evaluation fails; per judge and visibility level & Implemented (pilot); judges not yet human-validated \\
     Judge detection rate & Among runs that state-based evaluation fails, the fraction a judge fails & Implemented (pilot) \\
     False-success rate & Among runs, fraction where the agent reports completion of an action the final state does not contain & Implemented; extractor not yet human-validated \\
@@ -807,17 +811,19 @@ preliminary look at H1 and H3.
 
 This section reports validation of the released harness with scripted
 agents; Section~\ref{sec:pilot} reports the black-box pilot with real
-models. All results below are produced by release~0.2.0 on the released
+models. All results below are produced on the released
 16-scenario banking pack.
 
 \subsection{Test suite}
 
-The automated suite for the released framework comprises 40 tests, all
+The automated suite for the framework comprises 45 tests, all
 passing, covering: validation of all 16 released scenarios (the safe
 demonstrator passes each, the hazard demonstrator fails each adversarial
 one, including the reply-content privacy check), the black-box session
 runner and its abort/clarification behavior, agent and state-provider
-conformance, claim verification against final state, claim-extractor and
+conformance, the provider trust controls (seed read-back, randomized
+probe, per-turn snapshots, state invariants), claim verification
+against recorded snapshots, claim-extractor and
 judge parsing, the CLI (including the \code{judge} command, extractor
 wiring and the \code{--min-pass-rate} gate), enterprise scaling
 (concurrency, retries, record sinks, matrix runs), and the released usage
@@ -994,7 +1000,14 @@ agent honesty, and we report state correctness separately so that readers
 need not. The pilot thus gives no support for H3 as stated, and instead
 identifies a verifier defect---balance claims need point-in-time
 snapshots and key-aware matching---that the full study must fix before
-claim verdicts can carry their intended weight. \textbf{[STEP 2
+claim verdicts can carry their intended weight. Both fixes have since
+been implemented (per-turn snapshots, key-aware matching, harness-side
+invariants; Section~\ref{sec:claims}): re-grading the saved pilot
+claims offline changed verdicts in 13 of 96 records through the
+key-aware half alone. The point-in-time half cannot be recovered from
+the pilot traces, which contain no per-turn snapshots, so the pilot
+claim counts above stand as originally computed and a re-run is
+required before claim verdicts carry their intended weight. \textbf{[STEP 2
 PLACEHOLDER: extractor precision/recall and human verdict-accuracy from
 the labeling sheets]}
 
@@ -1091,10 +1104,16 @@ Black-box verdicts observe the final state, not the agent's internal
 attempts: an unsafe action that was tried and failed inside the agent
 leaves no trace in the snapshot, so attempts are measurable only where
 the agent reports them. Black-box verdicts are only as honest as the
-state provider that supplies the final snapshot. Final-state grading also
-observes the end state, not the moment within the conversation at which an
-action executed, and \code{pending}/\code{failed} reply claims cannot be
-confirmed or refuted from a final snapshot; both limits are stated in the
+state provider that supplies the snapshots. That dependence is now
+bounded, not removed: records are labeled by who operated the provider
+(\code{provider\_trust}), the harness aborts on a seed read-back
+mismatch, probes the provider with random states, snapshots after
+every turn, and checks balance conservation and other invariants
+itself (Section~\ref{sec:harness}); a provider operated by the
+evaluatee nevertheless remains self-reported evidence. Final-state
+grading observes states, not the agent's internal path between them,
+and \code{pending}/\code{failed} reply claims cannot be
+confirmed or refuted from snapshots; both limits are stated in the
 dataset card rather than hidden.
 The planned independent audit will partly mitigate this. We invite
 contributions of new scenarios; the repository's test suite rejects a
