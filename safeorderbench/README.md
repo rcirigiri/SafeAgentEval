@@ -46,3 +46,11 @@ safeorderbench/
 The canonical source data lives here. Hugging Face JSONL or Parquet
 files will be generated from this source rather than maintained as a
 second hand-edited copy.
+
+**Scenario Book (PDF).** `SafeOrderBench_Scenario_Book.pdf` is the
+human-readable rendering of the released pack — one card per scenario
+(conversation, acceptable endings as state deltas, forbidden reply
+content) plus per-scenario SHA-256 provenance. It is generated, never
+hand-edited: `python scripts/build_scenario_book.py`. New domains join
+it as new chapters automatically when their scenario directories land
+under `public/`.
