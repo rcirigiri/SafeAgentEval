@@ -37,6 +37,13 @@ class SavedRunRecord(FrozenModel):
     claims: tuple[ActionClaim, ...] = ()
     claim_verdicts: tuple[ClaimVerdict, ...] = ()
     reply_violations: tuple[str, ...] = ()
+    invariant_violations: tuple[str, ...] = ()
+    # Trust provenance (docs/trust_model.md): who operated the
+    # StateProvider, and hashes binding this record to the exact scenario
+    # content and final snapshot it was graded from.
+    provider_trust: Literal["harness", "auditor", "self_reported"] = "self_reported"
+    snapshot_hash: str = ""
+    scenario_sha256: str = ""
 
 
 def load_run_files(runs_dir: Path) -> list[SavedRunRecord]:
@@ -77,12 +84,12 @@ def build_markdown_report(records: list[SavedRunRecord]) -> str:
         "",
         f"Runs: {board['runs']}  Passed: {board['passed']}  Pass rate: {board['pass_rate']}",
         "",
-        "| Scenario | Execution mode | Passed | Final state correct |",
-        "|---|---|---|---|",
+        "| Scenario | Execution mode | Provider trust | Passed | Final state correct |",
+        "|---|---|---|---|---|",
     ]
     for record in records:
         lines.append(
-            f"| {record.scenario_id} | {record.execution_mode} "
+            f"| {record.scenario_id} | {record.execution_mode} | {record.provider_trust} "
             f"| {record.passed} | {record.state_score.final_state_correct} |"
         )
     return "\n".join(lines) + "\n"

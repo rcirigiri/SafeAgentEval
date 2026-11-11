@@ -1,5 +1,25 @@
 # Changelog
 
+## Unreleased — provider trust controls
+
+- Trust model for the StateProvider, the verdict's trust root
+  (`docs/trust_model.md`, `docs/vendor_review_playbook.md`): results are
+  labeled `provider_trust` (`harness` / `auditor` / `self_reported`) on
+  every record and report; evaluatee-operated results are self-reported.
+- Runner controls: a run aborts before the agent acts if the post-seed
+  snapshot differs from the seeded initial state (seed read-back);
+  `--provider-probe` requires a randomized probe round-trip per run;
+  state is snapshotted after every turn (`turn_state` trace events).
+- Harness-side state invariants (`scoring/invariants.py`): balance
+  conservation, referential integrity, valid amounts — checked
+  independently of the provider and folded into the pass rule.
+  `RunResult.state_passed` exposes the pass rule without the claim clause.
+- Claim verifier v2: claims are verified against the snapshots from
+  their own turn onward (no longer only end-of-run) with key-aware
+  identifier matching; `safeagenteval regrade` re-verifies saved records
+  offline with no model calls.
+- Records carry `snapshot_hash` and `scenario_sha256` provenance hashes.
+
 ## Unreleased — enterprise scaling
 
 - Concurrent execution: `run --concurrency N` (bounded worker pool; each

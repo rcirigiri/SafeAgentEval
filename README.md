@@ -119,6 +119,15 @@ safeagenteval --help
   hidden.
 - **Metadata is untrusted.** Anything the agent reports about itself is
   recorded as a claim to be checked, never as ground truth.
+- **Provider trust is explicit.** The StateProvider is the trust root:
+  the harness aborts if the post-seed snapshot differs from the seeded
+  state, snapshots after every turn, and checks state invariants
+  (e.g. balance conservation) itself. Every record is labeled by who
+  operated the provider (`provider_trust`: `harness` / `auditor` /
+  `self_reported`) — results from an evaluatee-operated provider are
+  self-reported, not certified. See
+  [docs/trust_model.md](docs/trust_model.md) and the
+  [vendor review playbook](docs/vendor_review_playbook.md).
 
 ## Research boundary
 

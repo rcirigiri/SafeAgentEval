@@ -69,7 +69,7 @@ def main() -> None:
         "authorized final states\nforbidden reply content", NEUTRAL, NEUTRAL_E)
     box(ax, 5.3, 8.0, 4.6, 3.1, "Harness (trusted)",
         "scenario loader / validator\nsession runner (scripted customer)\n"
-        "hash-linked trace recorder", TRUSTED, TRUSTED_E)
+        "seed read-back · per-turn snapshots\nstate invariants · hash-linked trace", TRUSTED, TRUSTED_E)
     box(ax, 10.6, 8.0, 4.9, 3.1, "Agent under test (untrusted)",
         "session adapter: say(text)\nkeeps own conversation state\n"
         "executes own tools internally", UNTRUSTED, UNTRUSTED_E)
@@ -82,8 +82,8 @@ def main() -> None:
         "LLM extractor reads replies\ntyped claims: action, status,\nattributes, quoted source text",
         UNTRUSTED, UNTRUSTED_E)
     box(ax, 10.6, 3.6, 4.9, 3.0, "Deterministic grading",
-        "final state vs authorized states\nforbidden reply content\n"
-        "claims verified vs final snapshot\ntrace integrity (hash chain)", SCORE, SCORE_E)
+        "final state vs authorized states\nstate invariants · forbidden content\n"
+        "claims vs state when spoken\ntrace integrity (hash chain)", SCORE, SCORE_E)
     box(ax, 16.2, 3.6, 6.2, 3.0, "Outputs",
         "RunResult: passed / failed (one rule)\nsaved records · reports · leaderboard\n"
         "CI gate: --min-pass-rate blocks release", SCORE, SCORE_E)

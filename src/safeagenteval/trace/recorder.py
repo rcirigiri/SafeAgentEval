@@ -26,8 +26,10 @@ class EventKind(StrEnum):
     AGENT_REPLY = "agent_reply"
     AGENT_METADATA = "agent_metadata"
     FINAL_STATE = "final_state"
+    TURN_STATE = "turn_state"
     RUN_ABORTED = "run_aborted"
     REPLY_VIOLATION = "reply_violation"
+    INVARIANT_VIOLATION = "invariant_violation"
 
 
 class TraceEvent(FrozenModel):

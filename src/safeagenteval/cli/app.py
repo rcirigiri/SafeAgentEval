@@ -24,6 +24,7 @@ from safeagenteval.cli import (
     certify_cmd,
     judge_cmd,
     matrix_cmd,
+    regrade_cmd,
     report_cmd,
     run_cmd,
     scaffold,
@@ -53,6 +54,7 @@ def version() -> None:
 
 
 run_cmd.register(app)
+regrade_cmd.register(app)
 judge_cmd.register(app)
 matrix_cmd.register(app)
 scenario_cmd.register(app)

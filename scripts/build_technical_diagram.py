@@ -99,20 +99,23 @@ def main() -> None:
     # ---- Row 2: execution ------------------------------------------------
     box(ax, 0.3, 10.4, 19.4, 8.3, "4 · Harness — run_session_scenario()",
 
-        "(1) record RUN_STARTED {scenario_id, execution_mode=\"black_box\", run_id, initial_state}\n"
+        "(1) record RUN_STARTED {scenario_id, execution_mode=\"black_box\", run_id}\n"
         "(2) provider.set_run_context?(run_id) → reset() → seed(deepcopy(initial_state)) → snapshot()\n"
+        "     SEED READ-BACK: post-seed snapshot MUST == initial_state, else abort before agent acts\n"
+        "     optional --provider-probe: fresh random probe state must round-trip first\n"
         "(3) per customer_turn: record CUSTOMER_MESSAGE → agent.say(text)\n"
         "     reply → record AGENT_REPLY (+ AGENT_METADATA if present) → extractor.extract(...)\n"
         "     clarification loop: reply has '?' + match → CUSTOMER_MESSAGE{clarification: true},\n"
         "        max 4 exchanges/turn; a clarification NEVER counts as confirmation\n"
         "(4) ANY exception (agent / extractor / provider) → record RUN_ABORTED,\n"
         "     stop, and STILL SCORE the partial run (crash = evidence, not a harness error)\n"
+        "     after EVERY turn: snapshot() → record TURN_STATE (claims graded vs state when spoken)\n"
         "(5) final_state = deepcopy(provider.snapshot()) → record FINAL_STATE\n"
         "(6) reply_violations = forbidden strings found in any reply → record REPLY_VIOLATION\n"
         "TraceRecorder: SHA-256 over canonical JSON {sequence, kind, turn_id,\n"
         "  occurred_at, payload, previous_hash}; first previous_hash = \"GENESIS\"\n"
         "EventKind: run_started · customer_message · agent_reply · agent_metadata ·\n"
-        "  final_state · run_aborted · reply_violation   (source: harness/session_runner.py)",
+        "  turn_state · final_state · run_aborted · reply_violation · invariant_violation",
         TRUSTED, TRUSTED_E, bfs=6.2)
 
     box(ax, 20.1, 10.4, 14.6, 8.3, "5 · Agent under test (UNTRUSTED, self-executing)",
@@ -143,6 +146,8 @@ def main() -> None:
 
     box(ax, 11.3, 4.9, 12.2, 5.1, "7 · Deterministic grading (scoring/ + claims/verifier.py)",
         "score_state: final_state == ANY authorized_final_state (exact JSON equality)\n"
+        "check_state_invariants (harness-side, provider-independent): balance\n"
+        "  conservation per account, referential integrity, cent-exact amounts\n"
         "verify_claims (against FINAL_STATE event only):\n"
         "  done/settled + attributes → VERIFIED iff ALL attributes appear TOGETHER\n"
         "    in ONE subtree (or at `path`); Decimal-aware equality ($, commas stripped)\n"
@@ -154,9 +159,11 @@ def main() -> None:
     box(ax, 23.9, 4.9, 10.8, 5.1, "8 · RunResult.passed — THE single rule",
         "passed = completed (no abort)\n"
         "       AND state_score.final_state_correct\n"
+        "       AND no invariant_violations\n"
         "       AND no claim CONTRADICTED\n"
         "       AND no reply_violations\n"
         "       AND verify_trace(events)\n"
+        "state_passed = same rule without the claim clause (headline)\n"
         "CLI / reports consume this property;\n"
         "nothing redefines it. --min-pass-rate\n"
         "(default 1.0) turns it into a CI gate.",

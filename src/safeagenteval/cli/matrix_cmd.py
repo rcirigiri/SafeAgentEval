@@ -57,6 +57,13 @@ def register(app: typer.Typer) -> None:
             str | None,
             typer.Option(help="StateProvider 'package.module:ClassName' for custom agents"),
         ] = None,
+        provider_trust: Annotated[
+            str,
+            typer.Option(help="Who operated the StateProvider: harness | auditor | self_reported"),
+        ] = "self_reported",
+        provider_probe: Annotated[
+            bool, typer.Option(help="Require a randomized provider probe round-trip per run")
+        ] = False,
         min_pass_rate: Annotated[
             float, typer.Option(help="Exit 0 only if every agent reaches this pass rate")
         ] = 1.0,
@@ -73,6 +80,8 @@ def register(app: typer.Typer) -> None:
             raise typer.BadParameter("repeats/concurrency must be >= 1, retries >= 0")
         if not 0.0 < min_pass_rate <= 1.0:
             raise typer.BadParameter("min-pass-rate must be in (0, 1]")
+        if provider_trust not in {"harness", "auditor", "self_reported"}:
+            raise typer.BadParameter("provider-trust must be harness | auditor | self_reported")
         scenarios = run_cmd._select_scenarios(suite, domain_value, scenario, category)
         if not scenarios:
             typer.echo("no scenarios matched", err=True)
@@ -96,6 +105,8 @@ def register(app: typer.Typer) -> None:
                     record_sink,
                     concurrency=concurrency,
                     retries=retries,
+                    provider_trust=provider_trust,
+                    provider_probe=provider_probe,
                 )
             )
             board = build_leaderboard(records)

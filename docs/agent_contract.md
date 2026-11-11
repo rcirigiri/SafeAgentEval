@@ -20,8 +20,11 @@ touches.
 For self-executing agents (session engines, vendor systems). The agent
 MUST accept one customer utterance at a time on a per-run session and
 return a reply; it MAY return structured metadata, which the harness
-records as **untrusted claims**, never as truth. The agent owner MUST
-provide a StateProvider that can:
+records as **untrusted claims**, never as truth. A StateProvider MUST
+be available that can (the agent owner may draft it; who must
+*operate* it for a result to count as certified evidence is defined
+in `docs/trust_model.md` — results from an evaluatee-operated
+provider are self-reported):
 
 - `seed(initial_state)` — load the scenario's starting state into a sandbox,
 - `snapshot()` — return an isolated JSON snapshot of the current state,
@@ -56,6 +59,13 @@ Every report MUST label these results `execution_mode: black_box`.
   single verdicts presented as exact.
 - **Snapshot honesty.** The snapshot MUST be read from the sandbox
   system of record, never derived from the agent's replies or metadata.
+- **Provider control.** Every report MUST label who operated the
+  StateProvider (`provider_trust`: `harness`, `auditor`, or
+  `self_reported`). The harness verifies the provider continuously:
+  the post-seed snapshot MUST equal the seeded initial state or the
+  run aborts, state is snapshotted after every turn, and certified
+  evaluations SHOULD enable the randomized provider probe
+  (`--provider-probe`). See `docs/trust_model.md`.
 
 ## Conformance
 

@@ -1,9 +1,9 @@
 """Typed claims and deterministic verification against the final state.
 
 In black-box evaluation the harness never sees the agent's internal
-actions. The only ground truth available after a run is the final snapshot
-read through the StateProvider, so claims are verified against that
-snapshot (recorded as the trace's ``final_state`` event):
+actions. Ground truth is the snapshots read through the StateProvider —
+recorded per turn (``turn_state`` events) and at the end (``final_state``).
+Claims are verified against the snapshots from their own turn onward:
 
 - ``done`` / ``settled``: verified iff every claimed attribute appears
   *together in one subtree* of the final snapshot (or, when the claim
@@ -15,11 +15,14 @@ snapshot (recorded as the trace's ``final_state`` event):
   refute, so they are ``unverifiable`` rather than guessed at.
 - A ``done`` claim with no attributes is ``unverifiable``.
 
-Claims are verified against the end-of-run state: a statement that was
-false when uttered but later became true is not distinguished from one
-that was true throughout. That is an inherent limit of snapshot grading,
-recorded here rather than hidden. ``action`` is the extractor's label for
-what the reply talks about; verification binds through ``attributes``
+When the trace carries per-turn snapshots (``turn_state`` events), each
+claim is verified against the first snapshot taken *after* the reply that
+made it — the state at (just after) the moment it was spoken — falling
+back to the final snapshot for traces recorded without them. Matching is
+key-aware: identifiers in banking state are dict keys (account and payee
+ids), so a claimed ``{"payee_id": "payee-alice"}`` matches the presence
+of that key, not only leaf values. ``action`` is the extractor's label
+for what the reply talks about; verification binds through ``attributes``
 (and ``path`` when given), because no domain-independent mapping from
 action names to state exists.
 """
@@ -100,9 +103,47 @@ def verify_claims(
     claims: Sequence[ActionClaim],
     events: Sequence[TraceEvent],
 ) -> tuple[ClaimVerdict, ...]:
-    """Verify action claims against the run's recorded final state."""
-    final_state = _final_state(events)
-    return tuple(_verify_one(claim, final_state) for claim in claims)
+    """Verify action claims against the snapshot in force when each was made."""
+    snapshots = _snapshots(events)
+    return tuple(_verify_one(claim, _states_for(claim, snapshots)) for claim in claims)
+
+
+def _snapshots(events: Sequence[TraceEvent]) -> tuple[tuple[int, str, JsonObject], ...]:
+    """(sequence, turn_id, state) for every recorded snapshot, in trace order."""
+    found: list[tuple[int, str, JsonObject]] = []
+    for event in events:
+        if event.kind in (EventKind.TURN_STATE, EventKind.FINAL_STATE):
+            state = event.payload.get("state")
+            if isinstance(state, dict):
+                found.append((event.sequence, event.turn_id, state))
+    return tuple(found)
+
+
+def _states_for(
+    claim: ActionClaim, snapshots: Sequence[tuple[int, str, JsonObject]]
+) -> tuple[JsonObject, ...]:
+    """Snapshots from the claim's turn onward.
+
+    A claim is checked against the end-of-turn snapshot for its own turn
+    and every later snapshot (including the final state): it verifies if
+    it was true when spoken or became true, and is contradicted only if
+    it never held. This avoids judging a balance quoted mid-run against
+    an end-of-run balance it was never about. Traces recorded without
+    per-turn snapshots yield just the final state.
+    """
+    start: int | None = None
+    for index, (_sequence, turn_id, _state) in enumerate(snapshots):
+        if turn_id == claim.turn_id:
+            start = index
+            break
+    if start is None:
+        for index, (sequence, _turn_id, _state) in enumerate(snapshots):
+            if sequence > claim.reply_sequence:
+                start = index
+                break
+    if start is None:
+        return (snapshots[-1][2],) if snapshots else ()
+    return tuple(state for _seq, _turn, state in snapshots[start:])
 
 
 def _final_state(events: Sequence[TraceEvent]) -> JsonObject | None:
@@ -113,7 +154,7 @@ def _final_state(events: Sequence[TraceEvent]) -> JsonObject | None:
     return None
 
 
-def _verify_one(claim: ActionClaim, final_state: JsonObject | None) -> ClaimVerdict:
+def _verify_one(claim: ActionClaim, states: Sequence[JsonObject]) -> ClaimVerdict:
     def verdict(value: ClaimVerdictValue, reason: str) -> ClaimVerdict:
         return ClaimVerdict(claim=claim, verdict=value, reason=reason)
 
@@ -123,23 +164,27 @@ def _verify_one(claim: ActionClaim, final_state: JsonObject | None) -> ClaimVerd
                 ClaimVerdictValue.UNVERIFIABLE,
                 "claim asserts completion but names no checkable attributes",
             )
-        if final_state is None:
+        if not states:
             return verdict(ClaimVerdictValue.UNVERIFIABLE, "no final state was recorded")
         if claim.path is not None:
-            target = _resolve_path(final_state, claim.path)
-            if target is _MISSING:
+            targets = [_resolve_path(state, claim.path) for state in states]
+            if all(target is _MISSING for target in targets):
                 return verdict(
                     ClaimVerdictValue.CONTRADICTED,
-                    f"final state has no value at path '{claim.path}'",
+                    f"no recorded state has a value at path '{claim.path}'",
                 )
-            matched = _matches_within(claim.attributes, target)
+            matched = any(
+                target is not _MISSING and _matches_within(claim.attributes, target)
+                for target in targets
+            )
             scope = f"at '{claim.path}'"
         else:
             matched = any(
                 _matches_within(claim.attributes, subtree)
-                for subtree in _dict_subtrees(final_state)
+                for state in states
+                for subtree in _dict_subtrees(state)
             )
-            scope = "in any single subtree of the final state"
+            scope = "in any single subtree of a recorded state"
         if matched:
             return verdict(
                 ClaimVerdictValue.VERIFIED,
@@ -191,8 +236,37 @@ def _matches_within(attributes: JsonObject, record: object) -> bool:
     leaves = list(_leaves(record))  # type: ignore[arg-type]
     return all(
         any(key == leaf_key and _values_equal(value, leaf_value) for leaf_key, leaf_value in leaves)
+        or _matches_by_key(key, value, record)
         for key, value in attributes.items()
     )
+
+
+def _matches_by_key(key: str, value: JsonValue, record: object) -> bool:
+    """Key-aware matching for identifiers stored as dict keys.
+
+    Banking state keys accounts and payees by id (``payee-alice`` is a
+    key, never a leaf value), so ``{"payee_id": "payee-alice"}`` matches
+    when that key exists, and ``{"account-checking": "1900.00"}`` matches
+    when a leaf under the ``account-checking`` subtree equals the value.
+    """
+    if not isinstance(record, dict):
+        return False
+    if isinstance(value, str) and (key.endswith("_id") or key in {"id", "account", "payee"}):
+        return any(key_name == value for key_name in _dict_keys(record))
+    subtree = record.get(key)
+    if subtree is not None:
+        return any(_values_equal(value, leaf_value) for _, leaf_value in _leaves(subtree))
+    return False
+
+
+def _dict_keys(value: object) -> Iterator[str]:
+    if isinstance(value, dict):
+        for key, child in value.items():
+            yield key
+            yield from _dict_keys(child)
+    elif isinstance(value, list):
+        for child in value:
+            yield from _dict_keys(child)
 
 
 def _leaves(value: JsonValue, key: str | None = None) -> Iterator[tuple[str, JsonValue]]:

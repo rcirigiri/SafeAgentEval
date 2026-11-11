@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import uuid
 from collections.abc import Callable
@@ -24,6 +25,12 @@ from safeagenteval.reporting import RecordSink, SavedRunRecord, build_leaderboar
 from safeagenteval.scenarios.loader import discover_scenarios, load_scenario
 
 SessionPair = tuple[SessionAgent, StateProvider]
+
+
+def _canonical_hash(payload: object) -> str:
+    """SHA-256 of canonical JSON, for scenario/snapshot provenance hashes."""
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
 def _session_pair_factory(
@@ -88,6 +95,8 @@ async def _run_all(
     concurrency: int = 1,
     retries: int = 0,
     retry_backoff: float = 1.0,
+    provider_trust: str = "self_reported",
+    provider_probe: bool = False,
 ) -> list[SavedRunRecord]:
     """Run every scenario/repeat; write one record each to ``sink``.
 
@@ -118,7 +127,12 @@ async def _run_all(
                 )
                 session_agent, provider = build_pair(item)
                 result = await run_session_scenario(
-                    item, session_agent, provider, claim_extractor=extractor, run_id=run_id
+                    item,
+                    session_agent,
+                    provider,
+                    claim_extractor=extractor,
+                    run_id=run_id,
+                    provider_probe=provider_probe,
                 )
                 if result.completed or attempts > retries:
                     break
@@ -138,6 +152,10 @@ async def _run_all(
                 claims=result.claims,
                 claim_verdicts=result.claim_verdicts,
                 reply_violations=result.reply_violations,
+                invariant_violations=result.invariant_violations,
+                provider_trust=provider_trust,  # type: ignore[arg-type]
+                snapshot_hash=_canonical_hash(result.final_state),
+                scenario_sha256=_canonical_hash(item.model_dump(mode="json")),
             )
             sink.write(record)
             return record
@@ -214,6 +232,19 @@ def register(app: typer.Typer) -> None:
         retry_backoff: Annotated[
             float, typer.Option(help="Base seconds for exponential retry backoff")
         ] = 1.0,
+        provider_trust: Annotated[
+            str,
+            typer.Option(
+                help="Who operated the StateProvider: harness | auditor | "
+                "self_reported (docs/trust_model.md)"
+            ),
+        ] = "self_reported",
+        provider_probe: Annotated[
+            bool,
+            typer.Option(
+                help="Require a randomized provider probe round-trip before each run"
+            ),
+        ] = False,
         sink: Annotated[
             str, typer.Option(help="Record sink: file (one JSON per run) | sqlite (one DB)")
         ] = "file",
@@ -239,6 +270,10 @@ def register(app: typer.Typer) -> None:
             raise typer.BadParameter("retries and retry-backoff must be non-negative")
         if not 0.0 < min_pass_rate <= 1.0:
             raise typer.BadParameter("min-pass-rate must be in (0, 1]")
+        if provider_trust not in {"harness", "auditor", "self_reported"}:
+            raise typer.BadParameter(
+                "provider-trust must be harness | auditor | self_reported"
+            )
         extractor_spec = (
             parse_model_spec(extractor_model, extractor_api_key_env, extractor_base_url)
             if extractor_model
@@ -265,6 +300,8 @@ def register(app: typer.Typer) -> None:
                 concurrency=concurrency,
                 retries=retries,
                 retry_backoff=retry_backoff,
+                provider_trust=provider_trust,
+                provider_probe=provider_probe,
             )
         )
         board = build_leaderboard(records)

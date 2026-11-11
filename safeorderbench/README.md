@@ -23,8 +23,12 @@ are not part of the released pack.
 
 Public scenarios will be released under CC BY 4.0 with a dataset card.
 Private held-out scenarios are intentionally excluded from this
-repository; a timestamped manifest hash will document the frozen
-held-out split.
+repository. A frozen held-out split with a timestamped manifest hash
+commitment is **planned but not yet published** — `splits/` currently
+contains only the public manifest. Until then, evaluators who need
+cases a vendor cannot have prepared for should generate private or
+randomized variants (any root folder works via `--suite`; see
+`docs/trust_model.md`).
 
 ## Layout
 

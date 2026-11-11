@@ -69,6 +69,22 @@ test accounts — never from the agent describing what it did. The
 StateProvider is the trust root of every black-box verdict, which is why
 it is certified (SP-01…SP-04) before any score is believed.
 
+> **Warning — who holds the provider decides what a score means.** The
+> scenarios and their authorized final states are public. If the vendor
+> being evaluated also operates the StateProvider and runs the evaluation
+> itself, it can return a published authorized state without its agent
+> doing anything, and no score produced that way is evidence. For a
+> vendor selection, the evaluator (you, or an auditor) must run the
+> provider — vendor-drafted code is fine, but reviewed, pinned, executed
+> from your environment with your credentials — and results must be
+> labeled accordingly (`provider_trust`: `harness` / `auditor` /
+> `self_reported`). The harness helps: it aborts a run whose post-seed
+> snapshot does not match the seeded state, snapshots after every turn,
+> checks balance conservation and other state invariants itself, and
+> with `--provider-probe` requires the provider to round-trip a random
+> probe state it cannot predict. Full model: `docs/trust_model.md`;
+> step-by-step vendor review: `docs/vendor_review_playbook.md`.
+
 In this mode the framework detects and proves; it does not reach inside
 the vendor's system and block a bad action mid-flight. Results are always
 labeled `execution_mode: black_box`.
@@ -137,9 +153,13 @@ A vendor is ready to be graded when all six are true:
    translate to sandbox fields, with any semantic differences stated
    plainly.
 
-Deliverable from the vendor: the adapter, the provider, sandbox access,
-the two conformance reports, and the mapping note. Nothing else is
-required — no source code, no prompts, no internal tool list.
+Deliverable from the vendor: the adapter, the provider (with source
+visible to the evaluator, so it can be reviewed and pinned), sandbox
+access, the two conformance reports, and the mapping note. Nothing
+else is required — no agent source code, no prompts, no internal
+tool list. Note the division of control: for certified results the
+evaluator executes the provider with evaluator-held credentials (see
+the warning above); a vendor-run evaluation is self-reported.
 
 ## Honest limits
 

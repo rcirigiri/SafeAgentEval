@@ -364,13 +364,34 @@ final hash with the run manifest.
   \end{tabularx}
 \end{table}
 
+\paragraph{Trust in the state provider.}
+The state provider is the trust root of every verdict: a snapshot that
+lies produces a verdict that lies. Results therefore carry a
+\texttt{provider\_trust} label (\texttt{harness}, \texttt{auditor}, or
+\texttt{self\_reported}); results from a provider operated by the
+evaluatee are self-reported, because the scenarios and authorized final
+states are public and a self-operated provider could return one
+unexamined. For certified use the evaluator operates the provider
+(vendor-drafted code, reviewed and pinned, run with evaluator-held
+credentials against the system of record). The harness verifies the
+provider continuously: a run aborts before the agent acts if the
+snapshot read back after seeding differs from the seeded initial
+state; an optional probe requires round-tripping a fresh random state;
+state is snapshotted after every turn, so fabrication must be a
+consistent timeline rather than a single invented ending; and
+harness-side invariants (per-account balance conservation, referential
+integrity, cent-exact amounts) are checked independently of the
+provider and folded into the pass rule, whose state-only form
+(\texttt{state\_passed}) excludes all model-extracted claims.
+
 \subsection{Design principles}
 \begin{itemize}
   \item \textbf{State is ground truth.} A run passes on correctness only if its
   final state is in the scenario's authorized set.
   \item \textbf{Claims are checked against the state.} Statements such as ``I
   transferred \$200'' or ``I'll wait for your confirmation'' are extracted and
-  compared with the final state read from the system of record.
+  compared with the snapshots read from the system of record from the
+  turn they were spoken in onward.
   \item \textbf{Deterministic scoring first.} State assertions, permission
   checks and duplicate checks are programmatic. Model-based components are used
   only for claim extraction and for judges, which never determine the state
@@ -391,27 +412,28 @@ final hash with the run manifest.
 
 A claim extractor turns each reply into typed claims: an action, the asserted
 attributes (for banking: payee, amount and currency) and a status. The verifier
-then checks each claim deterministically against the final state snapshot:
+then checks each claim deterministically against the recorded snapshots from
+its own turn onward:
 \begin{itemize}
   \item \textbf{done} / \textbf{settled} is verified only if every claimed
-  attribute appears together in one subtree of the final snapshot (or, when
-  the claim names a path, within that subtree); if the snapshot is present
-  and no subtree matches, the claim is contradicted.
+  attribute appears together in one subtree of a recorded snapshot (or, when
+  the claim names a path, within that subtree); if no snapshot matches, the
+  claim is contradicted.
   \item \textbf{pending}, \textbf{awaiting confirmation} and \textbf{failed}
-  assert transient mid-conversation conditions that a final snapshot cannot
+  assert transient mid-conversation conditions that a snapshot cannot
   confirm or refute; they are marked unverifiable rather than guessed at.
   \item A completion claim with no checkable attributes is unverifiable.
 \end{itemize}
 Verification binds through attributes, not the extractor's action label,
 because no domain-independent mapping from action names to state exists.
-Two limits are intrinsic to snapshot grading and are recorded rather than
-hidden: a statement true when spoken but superseded by later actions
-(for example a pre-transfer balance) is judged against the end state, and
-identifiers that appear as keys of the state object rather than as values
-cannot yet be matched. Both limits bind in the pilot
-(Section~\ref{sec:pilot-claims}). Release~0.2.0 ships the language-model
-extractor of Section~\ref{sec:extraction}, used in the pilot; verification
-of its extracted claims is fully deterministic.
+Matching is key-aware (account and payee identifiers are keys of the
+state object), and per-turn snapshots mean a statement true when spoken
+(for example a pre-transfer balance) is no longer judged against the
+end state. The pilot traces (Section~\ref{sec:pilot-claims}) predate
+per-turn snapshots, so both former limits bind there; the saved claims
+can be re-graded offline (\texttt{safeagenteval regrade}) for the
+key-aware half, but point-in-time re-grading of the pilot requires a
+re-run. Verification of extracted claims is fully deterministic.
 
 \subsection{Black-box execution}
 \label{sec:blackbox}
