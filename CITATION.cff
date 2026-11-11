@@ -7,7 +7,7 @@ version: 0.2.0
 date-released: 2026-11-09
 license: CC-BY-4.0
 abstract: >-
-  An open-source framework and standardized benchmark for evaluating whether
+  An open-source framework and reproducible benchmark for evaluating whether
   AI agents executing consumer transactions act within their authorized
   mandate and report their actions truthfully. The released benchmark is a
   16-scenario banking/payments pack in seven safety categories, graded by
