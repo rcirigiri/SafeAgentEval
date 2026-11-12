@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="docs/assets/brand/safeagenteval-logo-horizontal.png" alt="SafeAgentEval — State-Verified Agent Safety" width="640">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/safeagenteval-logo-horizontal-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/brand/safeagenteval-logo-horizontal.svg">
+    <img src="docs/assets/brand/safeagenteval-logo-horizontal.svg" alt="SafeAgentEval — State-Verified Agent Safety" width="640">
+  </picture>
 </p>
 
 # SafeAgentEval
