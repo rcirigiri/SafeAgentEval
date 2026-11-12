@@ -8,6 +8,13 @@ agent is "certified safe." Conformance results are communicated as dated
 run records (framework version, scenario-pack version, `provider_trust`
 tier), never as badges.
 
+**Lockup tagline:** "State-Verified Agent Safety" — deliberately free of
+any domain name, so the identity survives new scenario packs. The vision
+sentence it compresses: SafeAgentEval evaluates whether AI agents act
+within their authorized mandate and report their actions truthfully,
+verified against independently observed system state, across payments,
+commerce, and other state-changing workflows.
+
 ## Files
 
 | File | Use |

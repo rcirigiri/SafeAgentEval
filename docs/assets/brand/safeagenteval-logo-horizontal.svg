@@ -8,5 +8,5 @@
   <rect x="114" y="194" width="82" height="8" rx="4" fill="#FFFFFF"/>
   </g>
   <text x="238" y="112" font-family="Inter, Arial, sans-serif" font-size="52" font-weight="700" fill="#0B3C6C">SafeAgentEval</text>
-  <text x="240" y="152" font-family="Inter, Arial, sans-serif" font-size="21" fill="#546B80">State-Verified Transactional Agent Safety</text>
+  <text x="240" y="152" font-family="Inter, Arial, sans-serif" font-size="21" fill="#546B80">State-Verified Agent Safety</text>
 </svg>
