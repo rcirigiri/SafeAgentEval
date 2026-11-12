@@ -119,12 +119,6 @@ def main() -> None:
 
     # Legend
     ax.text(0.3, 1.9, "Colors = trust:", fontsize=6.8, fontweight="bold", color=INK)
-    for i, (c, e, t) in enumerate([(TRUSTED, TRUSTED_E, "trusted (harness / provider)"),
-                                   (UNTRUSTED, UNTRUSTED_E, "untrusted (agent / models)"),
-                                   (SCORE, SCORE_E, "deterministic score"),
-                                   (NEUTRAL, NEUTRAL_E, "inputs / post-run analysis")]):
-        y = 1.45 - i * 0.0
-        x = 0.3 + i * 0.0
     # single-line legend at bottom-left vertical stack
     labels = [("trusted (harness / provider)", TRUSTED, TRUSTED_E),
               ("untrusted (agent / models)", UNTRUSTED, UNTRUSTED_E),
