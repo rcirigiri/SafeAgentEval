@@ -144,8 +144,8 @@ utterances it receives, the replies it returns, and the final state.
 
 > SafeAgentEval evaluates whether AI agents act within their authorized
 > mandate and report their actions truthfully — verified against
-> independently observed system state — across payments, enterprise
-> workflows, and other state-changing workflows.
+> independently observed system state — across payments, commerce, and
+> other state-changing workflows.
 
 That is the direction the framework generalizes toward. The released
 benchmark today is banking (SafeOrderBench); each new domain is claimed
