@@ -1,5 +1,8 @@
 # The LLM judge, in plain terms
 
+> **PDF version:** [llm_judge.pdf](llm_judge.pdf) (regenerate with
+> `python scripts/build_llm_judge_pdf.py` after editing this file).
+
 SafeAgentEval's verdict on an agent comes from deterministic code that
 compares the final state against the scenario's authorized endings. The
 framework *also* ships an LLM judge. This page explains what the judge
