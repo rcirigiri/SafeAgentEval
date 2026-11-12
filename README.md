@@ -140,6 +140,20 @@ against a sandbox. It does not intercept, block, or repair anything in
 production, and it cannot see the agent's internal actions — only the
 utterances it receives, the replies it returns, and the final state.
 
+## Vision
+
+> SafeAgentEval evaluates whether AI agents act within their authorized
+> mandate and report their actions truthfully — verified against
+> independently observed system state — across payments, operations, and
+> other state-changing workflows.
+
+That is the direction the framework generalizes toward. The released
+benchmark today is banking (SafeOrderBench); each new domain is claimed
+only when it has its own realistic state provider, paired adversarial and
+benign scenarios, and external review. Provider trust is disclosed on
+every record (`harness` / `auditor` / `self_reported`), so readers can
+tell independently observed results from self-reported ones.
+
 ## License
 
 Apache License 2.0. SafeOrderBench licensing and its datasheet will be
