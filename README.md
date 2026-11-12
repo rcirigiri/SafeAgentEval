@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/assets/brand/safeagenteval-logo-horizontal.png" alt="SafeAgentEval — State-Verified Transactional Agent Safety" width="640">
+</p>
+
 # SafeAgentEval
 
 SafeAgentEval is a state-aware evaluation harness for **black-box session

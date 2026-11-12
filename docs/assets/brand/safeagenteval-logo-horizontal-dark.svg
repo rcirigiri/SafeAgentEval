@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 240" role="img" aria-label="SafeAgentEval">
+  <g>
+  <rect x="38" y="28" width="148" height="118" rx="30" fill="none" stroke="#FFFFFF" stroke-width="17"/>
+  <path d="M70 138 L70 192 L116 146 Z" fill="#FFFFFF"/>
+  <rect x="94" y="104" width="122" height="114" rx="18" fill="#0FA3A8"/>
+  <path d="M118 140 L149 170 L208 94" fill="none" stroke="#FFFFFF" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="114" y="178" width="82" height="8" rx="4" fill="#FFFFFF"/>
+  <rect x="114" y="194" width="82" height="8" rx="4" fill="#FFFFFF"/>
+  </g>
+  <text x="238" y="112" font-family="Inter, Arial, sans-serif" font-size="52" font-weight="700" fill="#FFFFFF">SafeAgentEval</text>
+  <text x="240" y="152" font-family="Inter, Arial, sans-serif" font-size="21" fill="#B2CDE2">State-Verified Transactional Agent Safety</text>
+</svg>
