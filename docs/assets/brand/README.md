@@ -36,8 +36,8 @@ commerce, and other state-changing workflows.
 - Dark background `#082038`
 - Pack badges: SafeOrderBench `#12355B`, SafePayBench `#0E7C86`,
   SafeTradeBench `#B7791F`, SafeCartBench `#2E7D32`,
-  SafeInvoiceBench `#455A6B`, SafeTripBench `#D96C4A`,
-  SafeClaimBench `#3F51B5`, SafeRefillBench `#B04A5A`
+  SafeTripBench `#D96C4A`, SafeClaimBench `#3F51B5`,
+  SafeRefillBench `#B04A5A`
 
 ## Rules
 
