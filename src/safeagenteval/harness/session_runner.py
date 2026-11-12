@@ -224,9 +224,7 @@ async def run_session_scenario(
                 )
                 break
             try:
-                turn_state: JsonObject = copy.deepcopy(
-                    await _maybe_await(provider.snapshot())
-                )
+                turn_state: JsonObject = copy.deepcopy(await _maybe_await(provider.snapshot()))
                 recorder.record(
                     EventKind.TURN_STATE,
                     customer_turn.turn_id,

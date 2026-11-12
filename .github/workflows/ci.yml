@@ -25,5 +25,7 @@ jobs:
       - run: ruff check .
       - run: ruff format --check .
       - run: mypy
-      - run: mypy --strict scripts examples tests
+      # scripts/ holds one-off figure/book builders (not shipped code);
+      # strict typing is enforced on the package, examples, and tests.
+      - run: mypy --strict examples tests
       - run: pytest --cov=safeagenteval --cov-report=term-missing

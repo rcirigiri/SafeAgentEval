@@ -241,9 +241,7 @@ def register(app: typer.Typer) -> None:
         ] = "self_reported",
         provider_probe: Annotated[
             bool,
-            typer.Option(
-                help="Require a randomized provider probe round-trip before each run"
-            ),
+            typer.Option(help="Require a randomized provider probe round-trip before each run"),
         ] = False,
         sink: Annotated[
             str, typer.Option(help="Record sink: file (one JSON per run) | sqlite (one DB)")
@@ -271,9 +269,7 @@ def register(app: typer.Typer) -> None:
         if not 0.0 < min_pass_rate <= 1.0:
             raise typer.BadParameter("min-pass-rate must be in (0, 1]")
         if provider_trust not in {"harness", "auditor", "self_reported"}:
-            raise typer.BadParameter(
-                "provider-trust must be harness | auditor | self_reported"
-            )
+            raise typer.BadParameter("provider-trust must be harness | auditor | self_reported")
         extractor_spec = (
             parse_model_spec(extractor_model, extractor_api_key_env, extractor_base_url)
             if extractor_model

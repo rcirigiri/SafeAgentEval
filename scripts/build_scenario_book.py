@@ -31,8 +31,14 @@ OUT_PDF = BENCH / "SafeOrderBench_Scenario_Book.pdf"
 def esc(text: object) -> str:
     out = str(text)
     for a, b in [
-        ("\\", r"\textbackslash{}"), ("&", r"\&"), ("%", r"\%"), ("$", r"\$"),
-        ("#", r"\#"), ("_", r"\_"), ("{", r"\{"), ("}", r"\}"),
+        ("\\", r"\textbackslash{}"),
+        ("&", r"\&"),
+        ("%", r"\%"),
+        ("$", r"\$"),
+        ("#", r"\#"),
+        ("_", r"\_"),
+        ("{", r"\{"),
+        ("}", r"\}"),
     ]:
         out = out.replace(a, b)
     return out
@@ -72,8 +78,13 @@ def ending_summary(scenario, state) -> str:
 
 def card(scenario) -> str:
     lines = [
-        r"\scenario{" + esc(scenario.scenario_id) + "}{"
-        + esc(scenario.category.value) + "}{" + esc(scenario.kind.value) + "}",
+        r"\scenario{"
+        + esc(scenario.scenario_id)
+        + "}{"
+        + esc(scenario.category.value)
+        + "}{"
+        + esc(scenario.kind.value)
+        + "}",
         esc(scenario.description),
         r"\par\textbf{Customer conversation:}",
         r"\begin{enumerate}[leftmargin=16pt, itemsep=0pt, topsep=2pt]",
@@ -83,11 +94,16 @@ def card(scenario) -> str:
     lines.append(r"\end{enumerate}")
     if scenario.clarifications:
         lines.append(r"\textbf{Clarifications the customer may answer:} ")
-        lines.append("; ".join(
-            f"if asked about ``{esc(c.match)}'' $\\rightarrow$ ``{esc(c.answer)}''"
-            for c in scenario.clarifications
-        ) + r"\par")
-    lines.append(r"\textbf{Acceptable endings (" + str(len(scenario.authorized_final_states)) + "):}")
+        lines.append(
+            "; ".join(
+                f"if asked about ``{esc(c.match)}'' $\\rightarrow$ ``{esc(c.answer)}''"
+                for c in scenario.clarifications
+            )
+            + r"\par"
+        )
+    lines.append(
+        r"\textbf{Acceptable endings (" + str(len(scenario.authorized_final_states)) + "):}"
+    )
     lines.append(r"\begin{itemize}[leftmargin=14pt, itemsep=0pt, topsep=2pt]")
     for state in scenario.authorized_final_states:
         lines.append(r"\item " + ending_summary(scenario, state))
@@ -141,9 +157,7 @@ def main() -> None:
 
     tex: list[str] = [PREAMBLE]
     tex.append(r"{\LARGE\bfseries SafeOrderBench --- Scenario Book}\\[4pt]")
-    tex.append(
-        r"{\large The released scenario pack, rendered from its source files}\\[6pt]"
-    )
+    tex.append(r"{\large The released scenario pack, rendered from its source files}\\[6pt]")
     tex.append(
         "Generated automatically from \\texttt{safeorderbench/public/} "
         f"({esc(manifest['split'])}, {len(scenarios)} scenarios). The YAML files are the "
@@ -176,8 +190,12 @@ def main() -> None:
     for category in sorted(pairs):
         kinds = pairs[category]
         tex.append(
-            esc(category) + " & " + esc(", ".join(kinds["adversarial"]))
-            + " & " + esc(", ".join(kinds["benign"])) + r" \\"
+            esc(category)
+            + " & "
+            + esc(", ".join(kinds["adversarial"]))
+            + " & "
+            + esc(", ".join(kinds["benign"]))
+            + r" \\"
         )
     tex.append(r"\bottomrule\end{longtable}")
 
@@ -192,12 +210,18 @@ def main() -> None:
         tex.append(card(s))
 
     tex.append(r"\section*{Appendix --- Provenance}")
-    tex.append("SHA-256 of each released scenario file (split \\texttt{"
-               + esc(manifest["split"]) + "}):\n")
+    tex.append(
+        "SHA-256 of each released scenario file (split \\texttt{" + esc(manifest["split"]) + "}):\n"
+    )
     tex.append(r"\begin{longtable}{@{}p{8.6cm}p{5.8cm}@{}}")
     for s in scenarios:
-        tex.append(r"\texttt{" + esc(s.scenario_id) + "} & \\footnotesize\\texttt{"
-                   + esc(hashes.get(s.scenario_id, "n/a")[:24]) + r"\ldots} \\")
+        tex.append(
+            r"\texttt{"
+            + esc(s.scenario_id)
+            + "} & \\footnotesize\\texttt{"
+            + esc(hashes.get(s.scenario_id, "n/a")[:24])
+            + r"\ldots} \\"
+        )
     tex.append(r"\end{longtable}")
     tex.append(
         "Future domains (pharmacy, retail, travel, crypto payments) join this "
@@ -209,11 +233,12 @@ def main() -> None:
     tex.append(r"\end{document}")
 
     OUT_TEX.write_text("\n".join(tex), encoding="utf-8")
-    pdflatex = (
-        Path.home() / "AppData/Local/Programs/MiKTeX/miktex/bin/x64/pdflatex.exe"
-    )
-    cmd = [str(pdflatex) if pdflatex.exists() else "pdflatex",
-           "-interaction=nonstopmode", OUT_TEX.name]
+    pdflatex = Path.home() / "AppData/Local/Programs/MiKTeX/miktex/bin/x64/pdflatex.exe"
+    cmd = [
+        str(pdflatex) if pdflatex.exists() else "pdflatex",
+        "-interaction=nonstopmode",
+        OUT_TEX.name,
+    ]
     for _ in range(2):
         subprocess.run(cmd, cwd=BENCH, check=True, capture_output=True)
     for aux in OUT_TEX.parent.glob("SafeOrderBench_Scenario_Book.*"):

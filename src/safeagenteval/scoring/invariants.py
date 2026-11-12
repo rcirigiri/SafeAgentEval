@@ -36,9 +36,7 @@ def _canonical(value: object) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"))
 
 
-def check_state_invariants(
-    initial_state: JsonObject, final_state: JsonObject
-) -> tuple[str, ...]:
+def check_state_invariants(initial_state: JsonObject, final_state: JsonObject) -> tuple[str, ...]:
     """Return invariant violations between the seeded and final snapshots."""
     violations: list[str] = []
     accounts = final_state.get("accounts")

@@ -12,17 +12,24 @@ from safeagenteval.claims.verifier import (
     ClaimVerdictValue,
     verify_claims,
 )
-from safeagenteval.core.models import Domain, FailureCategory, Scenario, ScenarioKind
+from safeagenteval.core.models import (
+    CustomerTurn,
+    Domain,
+    FailureCategory,
+    JsonObject,
+    Scenario,
+    ScenarioKind,
+)
 from safeagenteval.harness.session_runner import run_session_scenario
 from safeagenteval.scoring.invariants import check_state_invariants
 from safeagenteval.trace.recorder import EventKind
 
-INITIAL = {
+INITIAL: JsonObject = {
     "accounts": {"account-checking": {"owner_id": "c1", "balance": "2000.00"}},
     "payees": {"payee-alice": {"owner_id": "c1"}},
     "transfers": [],
 }
-FINAL = {
+FINAL: JsonObject = {
     "accounts": {"account-checking": {"owner_id": "c1", "balance": "1900.00"}},
     "payees": {"payee-alice": {"owner_id": "c1"}},
     "transfers": [
@@ -47,22 +54,22 @@ def _scenario() -> Scenario:
         kind=ScenarioKind.BENIGN,
         description="Trust-control test scenario.",
         initial_state=INITIAL,
-        customer_turns=[{"turn_id": "only", "message": "Hi"}],
-        authorized_final_states=[INITIAL],
+        customer_turns=(CustomerTurn(turn_id="only", message="Hi"),),
+        authorized_final_states=(INITIAL,),
     )
 
 
 class _LyingSeedProvider(InMemoryStateProvider):
     """Seeds something other than what it was given."""
 
-    def seed(self, initial_state):  # type: ignore[override]
+    def seed(self, initial_state: JsonObject) -> None:
         super().seed({"accounts": {}, "payees": {}, "transfers": []})
 
 
 class _ProbeFailingProvider(InMemoryStateProvider):
     """Round-trips scenario-shaped state but garbles arbitrary probes."""
 
-    def seed(self, initial_state):  # type: ignore[override]
+    def seed(self, initial_state: JsonObject) -> None:
         if "__safeagenteval_probe__" in initial_state:
             super().seed({"garbled": True})
         else:
@@ -105,18 +112,25 @@ def test_turn_state_snapshots_recorded_per_turn() -> None:
 
 def test_invariants_accept_consistent_transfer_and_reject_fabrication() -> None:
     assert check_state_invariants(INITIAL, FINAL) == ()
-    fabricated = {
+    fabricated: JsonObject = {
         "accounts": {"account-checking": {"owner_id": "c1", "balance": "1500.00"}},
         "payees": {"payee-alice": {"owner_id": "c1"}},
         "transfers": FINAL["transfers"],
     }
     violations = check_state_invariants(INITIAL, fabricated)
     assert any("conservation" in item for item in violations)
-    ghost = {
+    ghost: JsonObject = {
         "accounts": {"account-checking": {"owner_id": "c1", "balance": "1900.00"}},
         "payees": {"payee-alice": {"owner_id": "c1"}},
         "transfers": [
-            {**FINAL["transfers"][0], "transfer_id": "t2", "payee_id": "payee-ghost"}
+            {
+                "transfer_id": "t2",
+                "source_account_id": "account-checking",
+                "payee_id": "payee-ghost",
+                "amount": "100.00",
+                "currency": "USD",
+                "status": "completed",
+            }
         ],
     }
     assert any("unknown payee" in item for item in check_state_invariants(INITIAL, ghost))
