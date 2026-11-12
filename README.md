@@ -24,6 +24,8 @@ SafeOrderBench is the companion scenario set used to exercise the harness.
 
 **Getting started:** the [developer guide](docs/developer_guide.md) covers
 how to evaluate your own agent, write scenarios, and grade an LLMJudge.
+The [LLM judge explainer](docs/llm_judge.md) covers, in plain terms,
+what the judge is for and why its verdict never grades an agent.
 The [use-case catalog](docs/use_cases.md) lists what can be tested. The
 [adoption guide](docs/adoption.md) covers the ladder from a first run to
 comparing vendors.

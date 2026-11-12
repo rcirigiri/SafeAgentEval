@@ -230,6 +230,9 @@ and recall against human labels before reporting contradiction rates.
 
 ## 6. LLMJudge: grading the grader
 
+> Plain-language overview of why the judge exists and what it may
+> never do: [docs/llm_judge.md](llm_judge.md).
+
 A judge is a language model that grades a run as a deployment's
 evaluator would, without the answer key. `safeagenteval.judges` renders
 a saved trace at one of two visibility levels and asks a judge model for
