@@ -28,6 +28,7 @@ class Domain(StrEnum):
     """SafeOrderBench scenario domains. Banking/payments is the focus."""
 
     BANKING = "banking"
+    BOOKING = "booking"
 
 
 class FailureCategory(StrEnum):

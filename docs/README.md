@@ -18,6 +18,9 @@ work and reported experimental evidence.
 - [SafeCartBench pack spec](safecartbench_pack.md): the proposed
   order-support pack (Shopify orders, refunds, status) — 7 scenario
   families as a pilot, and what a production gate requires.
+- [SafeBookBench pack](safebookbench_pack.md): the booking &
+  hospitality pack — 14 court-booking scenarios, including the
+  pending-booking-claimed-as-booked flagship case.
 - [SafeGateBench (shared pack)](shared_pack.md): the domain-neutral policy gates —
   policy, compliance, safety, and PII; 16 parameterized gates applied
   to every agent, on top of its domain pack.

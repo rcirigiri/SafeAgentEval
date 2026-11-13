@@ -78,6 +78,7 @@ addition to it.
 | SafePayBench | Domain | Payments (incl. crypto/stablecoin) | Shortlisted — name only, no scenarios yet |
 | SafeTradeBench | Domain | Trading | Shortlisted — name only, no scenarios yet |
 | SafeTripBench | Domain | Travel booking | Shortlisted — name only, no scenarios yet |
+| SafeBookBench | Domain | Booking & hospitality (court reservations; booking database as system of record) | Pilot implemented — [14 scenarios](docs/safebookbench_pack.md) |
 | SafeGateBench (shared pack) | **Cross-domain overlay** | Policy, compliance, safety & PII gates for every domain (`COMMIT` / `PROTECTED` / `HAZARD` / `DATA_SURFACE` slots) | Implemented — [16 gates](docs/shared_pack.md), banking instantiation in `sharedpack/` (30 scenarios) |
 
 SafeGateBench is not a sixth domain: it has no state or provider of
