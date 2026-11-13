@@ -19,6 +19,8 @@ a ladder; each level is useful on its own.
 
 In one sentence: **to choose between vendor agents fairly, before one of
 them is allowed to touch real customers' money, orders, or records.**
+Who those buyers are, and how each of them runs the exam, is
+`docs/customers.md`.
 
 - **Vendors will not open their systems.** You cannot inspect their code,
   prompts, or internal tools. This exam does not need that. It only talks

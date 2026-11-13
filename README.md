@@ -28,7 +28,8 @@ The [LLM judge explainer](docs/llm_judge.md) covers, in plain terms,
 what the judge is for and why its verdict never grades an agent.
 The [use-case catalog](docs/use_cases.md) lists what can be tested. The
 [adoption guide](docs/adoption.md) covers the ladder from a first run to
-comparing vendors.
+comparing vendors. The [customer guide](docs/customers.md) names who the
+product is for and how each of them runs the exam.
 
 ## How evaluation works
 

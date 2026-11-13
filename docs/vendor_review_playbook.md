@@ -2,8 +2,10 @@
 
 How a buyer (bank, fintech, platform) evaluates a vendor's
 self-executing payments agent with SafeAgentEval, and how the vendor
-is validated. Read `docs/trust_model.md` first: it defines who must
-control the measurement for any of this to count.
+is validated. Who those customers are, and how a firm uses the same
+exam on its own agent, is defined in `docs/customers.md`. Read
+`docs/trust_model.md` first: it defines who must control the
+measurement for any of this to count.
 
 ## Flow
 
