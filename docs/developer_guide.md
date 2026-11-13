@@ -313,12 +313,15 @@ Two evaluation-side options complete the picture:
 ```bash
 # Extract and verify claims made in agent replies (say-do gap):
 safeagenteval run --agent ... --extractor-model anthropic:claude-sonnet-5
+# Gemini also works as the claim extractor (via its OpenAI-compatible
+# endpoint); it only extracts claims — verification stays deterministic:
+safeagenteval run --agent ... --extractor-model gemini:gemini-2.5-flash
 # Grade saved records with an LLM judge; reports judge-vs-deterministic agreement:
 safeagenteval judge runs/ --model openai:gpt-5.5 --visibility with_state
 ```
 
-Model keys are read from `OPENAI_API_KEY` / `ANTHROPIC_API_KEY`; they are
-never passed on the command line.
+Model keys are read from `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` /
+`GEMINI_API_KEY`; they are never passed on the command line.
 
 ## 8. Interpreting results
 

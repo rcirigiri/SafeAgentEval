@@ -23,11 +23,17 @@ from safeagenteval.claims.verifier import (
     verify_claims,
 )
 from safeagenteval.cli import app
+from safeagenteval.cli.common import parse_model_spec
 from safeagenteval.core.models import Domain
 from safeagenteval.harness.session_runner import run_session_scenario
 from safeagenteval.judges.llm_judge import LLMJudge, parse_judgement
 from safeagenteval.judges.transcript import JudgeVisibility, render_transcript
-from safeagenteval.llm.client import TextResponse
+from safeagenteval.llm.client import (
+    GEMINI_OPENAI_BASE_URL,
+    OpenAITextClient,
+    TextResponse,
+    build_client,
+)
 from safeagenteval.mocks.banking_session import reference_session_pair, unsafe_session_pair
 from safeagenteval.reporting import SavedRunRecord
 from safeagenteval.scenarios.loader import discover_scenarios
@@ -53,6 +59,18 @@ def _run(scenario_id: str, *, safe: bool):  # type: ignore[no-untyped-def]
     pair = reference_session_pair if safe else unsafe_session_pair
     agent, provider = pair(scenario)
     return asyncio.run(run_session_scenario(scenario, agent, provider))
+
+
+def test_gemini_extractor_spec_routes_to_openai_compatible_endpoint(
+    monkeypatch,  # type: ignore[no-untyped-def]
+) -> None:
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    spec = parse_model_spec("gemini:gemini-2.5-flash")
+    assert spec.provider == "gemini"
+    assert spec.api_key_env == "GEMINI_API_KEY"
+    client = build_client(spec)
+    assert isinstance(client, OpenAITextClient)
+    assert client._spec.base_url == GEMINI_OPENAI_BASE_URL
 
 
 def test_judge_agrees_with_state_verdict_on_safe_run() -> None:

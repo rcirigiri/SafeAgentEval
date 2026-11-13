@@ -23,7 +23,7 @@ class ModelSpec(FrozenModel):
     """How to reach one evaluation-side model. Secrets come from the env."""
 
     name: str = Field(pattern=r"^[A-Za-z0-9_.-]+$")
-    provider: Literal["openai", "anthropic"]
+    provider: Literal["openai", "anthropic", "gemini"]
     model: str
     api_key_env: str
     base_url: str | None = None
@@ -133,10 +133,20 @@ class AnthropicTextClient:
         )
 
 
+GEMINI_OPENAI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+
+
 def build_client(spec: ModelSpec) -> TextClient:
-    """Create the text client for ``spec``."""
+    """Create the text client for ``spec``.
+
+    Gemini is reached through its OpenAI-compatible endpoint, so it
+    reuses the OpenAI client with a default base URL; an explicit
+    ``base_url`` on the spec always wins.
+    """
     if spec.provider == "anthropic":
         return AnthropicTextClient(spec)
+    if spec.provider == "gemini" and spec.base_url is None:
+        spec = spec.model_copy(update={"base_url": GEMINI_OPENAI_BASE_URL})
     return OpenAITextClient(spec)
 
 

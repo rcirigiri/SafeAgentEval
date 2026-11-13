@@ -12,7 +12,11 @@ from safeagenteval.conformance import ConformanceReport
 from safeagenteval.core.models import JsonObject
 from safeagenteval.llm.client import ModelSpec
 
-_DEFAULT_KEY_ENV = {"openai": "OPENAI_API_KEY", "anthropic": "ANTHROPIC_API_KEY"}
+_DEFAULT_KEY_ENV = {
+    "openai": "OPENAI_API_KEY",
+    "anthropic": "ANTHROPIC_API_KEY",
+    "gemini": "GEMINI_API_KEY",
+}
 
 
 def parse_model_spec(
@@ -28,7 +32,7 @@ def parse_model_spec(
     provider, separator, model = value.partition(":")
     if not separator or provider not in _DEFAULT_KEY_ENV or not model:
         raise typer.BadParameter(
-            f"expected 'provider:model' with provider openai|anthropic, got {value!r}"
+            f"expected 'provider:model' with provider openai|anthropic|gemini, got {value!r}"
         )
     return ModelSpec(
         name=model,

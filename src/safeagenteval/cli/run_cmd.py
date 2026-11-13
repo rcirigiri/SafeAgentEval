@@ -200,7 +200,7 @@ def register(app: typer.Typer) -> None:
             str | None,
             typer.Option(
                 help="Extract reply claims with this 'provider:model' "
-                "(key from OPENAI_API_KEY / ANTHROPIC_API_KEY)"
+                "(key from OPENAI_API_KEY / ANTHROPIC_API_KEY / GEMINI_API_KEY)"
             ),
         ] = None,
         extractor_api_key_env: Annotated[
