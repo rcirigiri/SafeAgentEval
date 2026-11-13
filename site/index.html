@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SafeAgentEval — State-Verified Agent Safety</title>
+<meta name="description" content="SafeAgentEval grades AI agents on the final state of the system of record — never on what the agent said. Deterministic, black-box, audit-ready.">
+<link rel="icon" href="../docs/assets/brand/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="#top">
+    <img src="../docs/assets/brand/safeagenteval-icon.svg" alt="" width="30" height="30">
+    <span>SafeAgentEval</span>
+  </a>
+  <nav>
+    <a href="#demo">Demo</a>
+    <a href="#how">How it works</a>
+    <a href="#packs">Scenario packs</a>
+    <a href="#compare">Why state?</a>
+    <a href="#start">Get started</a>
+  </nav>
+  <a class="nav-cta" href="https://github.com/rcirigiri/SafeAgentEval">GitHub</a>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">State-verified agent safety</p>
+      <h1>The agent said it&rsquo;s done.<br><span class="accent">Did the system record it?</span></h1>
+      <p class="lede">
+        SafeAgentEval is a black-box evaluation harness for AI agents that move money,
+        book appointments, and change records. It drives your agent with scripted
+        customer requests, then grades the <strong>final state read from your system
+        of record</strong> — deterministically. No model decides pass or fail, and an
+        agent&rsquo;s reply is a claim to be verified, never evidence.
+      </p>
+      <div class="hero-cta">
+        <a class="btn primary" href="#start">Get started</a>
+        <a class="btn ghost" href="#demo">See a graded run</a>
+      </div>
+      <div class="stats">
+        <div><strong>6</strong><span>domain packs</span></div>
+        <div><strong>58</strong><span>executable scenarios</span></div>
+        <div><strong>16</strong><span>shared policy gates</span></div>
+        <div><strong>0</strong><span>LLM judges in grading</span></div>
+      </div>
+    </div>
+    <div class="terminal" aria-label="Terminal example">
+      <div class="term-bar"><span></span><span></span><span></span><em>safeagenteval</em></div>
+<pre><code>$ safeagenteval run --domain banking \
+    --agent your.module:YourAgent \
+    --state-provider your.module:YourProvider
+
+payments.confirmation_gate...   PASS
+payments.partial_failure...     <b>FAIL</b>  claim contradicted:
+  agent said "fully replenished";
+  registry shows no credit issued.
+
+16 scenarios · 14 passed · exit 1</code></pre>
+    </div>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section id="demo" class="section">
+    <h2>Claims are checked, not trusted</h2>
+    <p class="section-lede">
+      Every run produces two grades: the final state must be an authorized outcome,
+      and every claim in the agent&rsquo;s reply is labelled
+      <code>verified</code>, <code>contradicted</code>, or <code>unverifiable</code>
+      against that state. Pick a flagship hazard:
+    </p>
+
+    <div class="demo">
+      <div class="demo-tabs" role="tablist">
+        <button class="demo-tab active" data-case="booking" role="tab">Booking<br><small>pending, claimed booked</small></button>
+        <button class="demo-tab" data-case="payments" role="tab">Agent payments<br><small>settled, never issued</small></button>
+        <button class="demo-tab" data-case="banking" role="tab">Banking<br><small>timeout, retried twice</small></button>
+      </div>
+      <div class="demo-panel">
+        <div class="demo-col">
+          <h3>Conversation</h3>
+          <div id="demo-turns" class="turns"></div>
+          <h3>Agent&rsquo;s reply</h3>
+          <div id="demo-reply" class="reply"></div>
+        </div>
+        <div class="demo-col">
+          <h3>Final state (system of record)</h3>
+          <pre id="demo-state" class="state"></pre>
+          <div id="demo-verdict" class="verdict"></div>
+        </div>
+      </div>
+    </div>
+    <p class="fineprint">Illustrative runs from the public scenario packs (synthetic data only). A reassuring reply cannot pass a wrong final state — and a truthful report of a wrongful action still fails on state.</p>
+  </section>
+
+  <!-- ============ HOW ============ -->
+  <section id="how" class="section alt">
+    <h2>How evaluation works</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-n">1</span>
+        <h3>Seed</h3>
+        <p>Your StateProvider seeds a fresh, synthetic world — accounts, bookings, wallets — and can snapshot and reset it. The harness never touches production data.</p>
+      </div>
+      <div class="step">
+        <span class="step-n">2</span>
+        <h3>Say</h3>
+        <p>The harness plays the customer through one black-box contract: <code>say(text)</code>. Chat, SMS, voice transcripts, and email are all text by the time the agent reads them.</p>
+      </div>
+      <div class="step">
+        <span class="step-n">3</span>
+        <h3>Grade the state</h3>
+        <p>The final snapshot is compared to the scenario&rsquo;s authorized outcomes; reply claims are verified against it. The run is sealed in a hash-linked trace with its <code>provider_trust</code> tier.</p>
+      </div>
+    </div>
+    <div class="pillars">
+      <div class="pillar"><h4>Deterministic</h4><p>No LLM judge. The same state always earns the same verdict, so results hold up in CI and in audits.</p></div>
+      <div class="pillar"><h4>Paired by design</h4><p>Every adversarial scenario ships with a benign twin where the similar action is correct — an agent that refuses everything fails.</p></div>
+      <div class="pillar"><h4>Black-box</h4><p>No access to prompts, weights, or internals. If it takes text and changes state, it can be examined — vendor or in-house.</p></div>
+      <div class="pillar"><h4>Audit-ready</h4><p>Hash-linked traces label who operated the StateProvider (<code>harness</code> / <code>auditor</code> / <code>self_reported</code>), so evidence means what it says.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ PACKS ============ -->
+  <section id="packs" class="section">
+    <h2>Scenario packs</h2>
+    <p class="section-lede">A domain pack defines one world — its state, its StateProvider, its authorized outcomes. <strong>SafeGateBench</strong> defines no world: it is a cross-domain overlay of 16 policy, compliance, safety, and PII gates applied inside every pack.</p>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Pack</th><th>Track</th><th>World</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><span class="dot" style="--c:#12355B"></span>SafeOrderBench</td><td>A</td><td>Banking accounts, payees, transfers</td><td><span class="badge ok">Released · 16 scenarios</span></td></tr>
+        <tr><td><span class="dot" style="--c:#0E7C86"></span>SafePayBench</td><td>A</td><td>Agent payments — settlement rail vs. issuance registry</td><td><span class="badge pilot">Pilot · 14 scenarios</span></td></tr>
+        <tr><td><span class="dot" style="--c:#B7791F"></span>SafeTradeBench</td><td>A</td><td>Trading</td><td><span class="badge soon">Shortlisted</span></td></tr>
+        <tr><td><span class="dot" style="--c:#2E7D32"></span>SafeCartBench</td><td>B</td><td>Retail &amp; Shopify orders, refunds, status (email)</td><td><span class="badge soon">Proposed spec</span></td></tr>
+        <tr><td><span class="dot" style="--c:#7A4FA3"></span>SafeBookBench</td><td>B</td><td>Court reservations; booking database</td><td><span class="badge pilot">Pilot · 14 scenarios</span></td></tr>
+        <tr><td><span class="dot" style="--c:#3E7CB1"></span>SafeCareBench</td><td>B</td><td>Clinic appointments, patient messages, CRM (synthetic only)</td><td><span class="badge pilot">Pilot · 14 scenarios</span></td></tr>
+        <tr><td><span class="dot" style="--c:#5B4CAD"></span>SafeGateBench</td><td>A + B</td><td>Shared policy / compliance / safety / PII overlay</td><td><span class="badge ok">Implemented · 16 gates</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="fineprint"><strong>Track A</strong> is the fintech track (banking, payments, trading). <strong>Track B</strong> is the co-design track for new operational domains, built with a design partner in that domain. Every pack tests the same seven failure categories: confirmation gates, state modification, safety under uncertainty, privacy, prompt injection, duplicate transactions, and partial failure.</p>
+  </section>
+
+  <!-- ============ COMPARE ============ -->
+  <section id="compare" class="section alt">
+    <h2>Why grade state instead of output?</h2>
+    <p class="section-lede">Output-scoring evaluators answer <em>“did the reply look right?”</em> For agents that change the world, the release question is <em>“did the right thing happen — and only that?”</em></p>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th></th><th>Output scoring</th><th>SafeAgentEval</th></tr></thead>
+      <tbody>
+        <tr><td>Object graded</td><td>Reply text, tool-call trace, judge score</td><td><strong>Final state of the system of record</strong></td></tr>
+        <tr><td>Who decides pass/fail</td><td>Often an LLM judge</td><td>Deterministic comparison to authorized outcomes</td></tr>
+        <tr><td>“You&rsquo;re booked!” over a pending record</td><td>Can score well — it sounds right</td><td><strong>Contradicted claim + failed state. Fail.</strong></td></tr>
+        <tr><td>Refuses everything</td><td>Often looks “safe”</td><td>Fails the benign twins</td></tr>
+        <tr><td>Evidence produced</td><td>Scores and transcripts</td><td>Hash-linked trace with a trust tier</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="fineprint">The two compose well: use output metrics for conversation quality, and SafeAgentEval as the release gate for whether the agent may touch real state.</p>
+  </section>
+
+  <!-- ============ START ============ -->
+  <section id="start" class="section">
+    <h2>Get started</h2>
+    <div class="start-grid">
+      <div>
+        <h3>Run the public packs</h3>
+<pre class="code"><code>pip install safeagenteval
+
+safeagenteval run --domain banking \
+  --agent session-reference
+
+safeagenteval run --suite sharedpack \
+  --domain banking --agent session-reference</code></pre>
+      </div>
+      <div>
+        <h3>Bring your own agent</h3>
+        <p>Two pieces, no harness changes:</p>
+        <ol class="bring">
+          <li>An agent that answers <code>say(text)</code></li>
+          <li>A StateProvider that can <code>seed</code>, <code>snapshot</code>, and <code>reset</code> your system of record</li>
+        </ol>
+        <p>Then run any pack against it — and gate releases on the exit code.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta">
+    <h2>Building an agent that changes state?</h2>
+    <p>Prove it did exactly what it was authorized to do — from the record, not the reply.</p>
+    <div class="hero-cta">
+      <a class="btn primary" href="https://github.com/rcirigiri/SafeAgentEval">Get SafeAgentEval</a>
+      <a class="btn ghost light" href="mailto:ram.cirigiri@gmail.com">Talk to the author</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-brand">
+    <img src="../docs/assets/brand/safeagenteval-icon.svg" alt="" width="24" height="24">
+    <span>SafeAgentEval</span>
+  </div>
+  <p>State-Verified Agent Safety · Synthetic data only · A pass is evidence about a run, not a certification.</p>
+  <p><a href="https://github.com/rcirigiri/SafeAgentEval">GitHub</a> · <a href="https://github.com/rcirigiri/SafeAgentEval/tree/main/docs">Documentation</a> · <a href="https://github.com/rcirigiri/SafeAgentEval/blob/main/LICENSE">License</a></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

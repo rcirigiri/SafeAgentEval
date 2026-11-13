@@ -29,7 +29,8 @@ what the judge is for and why its verdict never grades an agent.
 The [use-case catalog](docs/use_cases.md) lists what can be tested. The
 [adoption guide](docs/adoption.md) covers the ladder from a first run to
 comparing vendors. The [customer guide](docs/customers.md) names who the
-product is for and how each of them runs the exam.
+product is for and how each of them runs the exam. A product-style
+website lives in [`site/`](site/README.md) (static, no build step).
 
 ## Who this is for
 
