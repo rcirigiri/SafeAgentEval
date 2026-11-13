@@ -1,6 +1,6 @@
 """Session-agent interface for black-box (Profile C) evaluation.
 
-A session agent is a CCE-shaped agent: it receives one customer utterance at
+A session agent is a session-engine agent: it receives one customer utterance at
 a time, keeps its own conversation state, and executes its own tools
 internally. The harness cannot mediate its actions; it grades the agent's
 world afterwards through a StateProvider. See docs/agent_contract.md.
@@ -61,13 +61,13 @@ class ScriptedSessionAgent:
 
 
 class HttpSessionAgentAdapter:
-    """Drive a session agent over HTTP (CCE-shaped services).
+    """Drive a session agent over HTTP (vendor session services).
 
     POSTs ``{"session_id", "transcript", "language", "channel"}`` as JSON.
     Despite its name, the wire field ``transcript`` carries only the
     latest customer utterance — the service owns the conversation history
     under ``session_id``; the name is kept for compatibility with existing
-    CCE-shaped endpoints. The reply is read from the ``reply`` (or
+    vendor endpoints. The reply is read from the ``reply`` (or
     ``text``) field, with optional ``metadata``.
 
     The session id is generated per adapter instance, so one instance is

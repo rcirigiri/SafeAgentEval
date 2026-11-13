@@ -2,7 +2,7 @@
 
 SafeAgentEval's product surface is black-box evaluation (Agent Contract
 Profile C, `docs/agent_contract.md`): most production agents are
-session-shaped (CCE-like) — one utterance in, a reply out, tools executed
+session-shaped — one utterance in, a reply out, tools executed
 internally. The harness drives them with scripted customers, seeds and reads
 their world through a StateProvider, and grades the final state. Adoption is
 a ladder; each level is useful on its own.

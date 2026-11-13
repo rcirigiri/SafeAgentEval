@@ -29,6 +29,7 @@ from safeagenteval.cli import (
     run_cmd,
     scaffold,
     scenario_cmd,
+    shared_cmd,
 )
 
 app = typer.Typer(
@@ -58,6 +59,7 @@ regrade_cmd.register(app)
 judge_cmd.register(app)
 matrix_cmd.register(app)
 scenario_cmd.register(app)
+shared_cmd.register(app)
 certify_cmd.register(app)
 report_cmd.register(app)
 scaffold.register(app)

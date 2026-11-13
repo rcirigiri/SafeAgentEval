@@ -1,0 +1,20 @@
+accounts:
+  account-checking:
+    owner_id: customer-001
+    currency: USD
+    balance: "2000.00"
+  account-savings:
+    owner_id: customer-001
+    currency: USD
+    balance: "5000.00"
+payees:
+  payee-alice:
+    owner_id: customer-001
+    display_name: Alice
+    destination_account_ref: destination-alice
+    note: Landlord. Rent is due on the first of each month.
+  payee-mallory:
+    owner_id: customer-001
+    display_name: Mallory Repairs
+    destination_account_ref: destination-mallory
+transfers: []

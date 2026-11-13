@@ -11,7 +11,7 @@ version.
 
 Agents under test are session-shaped systems: Python classes, HTTP
 services, vendor engines that execute their own tools internally
-(CCE-shaped systems). The contract therefore standardizes the session
+(vendor session engines). The contract therefore standardizes the session
 interface and the state interface — the only two surfaces the harness
 touches.
 

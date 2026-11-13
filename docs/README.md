@@ -18,9 +18,6 @@ work and reported experimental evidence.
 - [SafeCartBench pack spec](safecartbench_pack.md): the proposed
   order-support pack (Shopify orders, refunds, status) — 7 scenario
   families as a pilot, and what a production gate requires.
-- [CCE compliance review](cce_compliance_review.md): the CCE reference
-  implementation reviewed against Agent Contract Profile C — what it
-  enforces, what an adapter must translate, findings F1–F8.
-- [Shared pack](shared_pack.md): policy, compliance, safety, and PII —
-  16 parameterized families applied to every agent, on top of its
-  domain pack.
+- [Shared pack](shared_pack.md): the domain-neutral policy gates —
+  policy, compliance, safety, and PII; 16 parameterized gates applied
+  to every agent, on top of its domain pack.
