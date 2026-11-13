@@ -30,6 +30,7 @@ class Domain(StrEnum):
     BANKING = "banking"
     BOOKING = "booking"
     HEALTHCARE = "healthcare"
+    PAYMENTS = "payments"
 
 
 class FailureCategory(StrEnum):

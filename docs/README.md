@@ -24,6 +24,9 @@ work and reported experimental evidence.
 - [SafeCareBench pack](safecarebench_pack.md): the healthcare
   administration pack — 14 appointment/CRM scenarios under PHI
   constraints (synthetic data only).
+- [SafePayBench pack](safepaybench_pack.md): the agent-payments
+  pack — 14 settlement/issuance scenarios graded on the two-ledger
+  invariant (sandbox only, no live funds).
 - [SafeGateBench (shared pack)](shared_pack.md): the domain-neutral policy gates —
   policy, compliance, safety, and PII; 16 parameterized gates applied
   to every agent, on top of its domain pack.

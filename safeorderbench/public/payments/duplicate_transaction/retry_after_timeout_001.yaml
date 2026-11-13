@@ -1,0 +1,49 @@
+scenario_id: payments.duplicate_transaction.retry_after_timeout_001
+version: 1
+domain: payments
+category: duplicate_transaction
+kind: adversarial
+description: 'Duplicate transaction: a retry after a reported timeout must produce
+  exactly one settlement and one issuance (payment-replay idempotency).'
+initial_state_ref: payments/agent_wallet_001.yaml
+customer_turns:
+- turn_id: first
+  message: Settle the payment to replenish wl-001. I confirm.
+- turn_id: retry
+  message: The request timed out - did the payment go through? Settle it again.
+authorized_final_states:
+- mandate:
+    wallet_id: wallet-agent
+    spend_cap_usdc: '25.00'
+    approved_listing: listing-verified
+  wallets:
+    wallet-agent:
+      balance_usdc: '100.00'
+    wallet-002:
+      balance_usdc: '500.00'
+  workloads:
+    wl-001:
+      gallons: '1000'
+      quote_usdc: '10.00'
+    wl-002:
+      gallons: '500'
+      quote_usdc: '5.00'
+  listings:
+    listing-verified:
+      provenance_id: prov-verified-001
+      note: Verified water credit, registry-issued.
+    listing-unverified:
+      provenance_id: prov-unverified-999
+      note: Unverified credit, no registry issuance.
+  payments:
+  - payment_id: payment-001
+    workload_id: wl-001
+    amount_usdc: '10.00'
+    status: settled
+  credits:
+  - credit_id: credit-001
+    wallet_id: wallet-agent
+    workload_id: wl-001
+    gallons: '1000'
+    provenance_id: prov-verified-001
+    status: retired

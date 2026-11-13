@@ -75,7 +75,7 @@ addition to it.
 |---|---|---|---|
 | SafeOrderBench | Domain | Banking / payments ledger | Released — 16 scenarios |
 | SafeCartBench | Domain | Retail & Shopify order support (orders, refunds, status) | Proposed — [pack spec](docs/safecartbench_pack.md) |
-| SafePayBench | Domain | Payments (incl. crypto/stablecoin) | Shortlisted — name only, no scenarios yet |
+| SafePayBench | Domain | Agent payments (settlement rail vs issuance/provenance registry; verified water-credit pilot) | Pilot implemented — [14 scenarios](docs/safepaybench_pack.md) |
 | SafeTradeBench | Domain | Trading | Shortlisted — name only, no scenarios yet |
 | SafeTripBench | Domain | Travel booking | Shortlisted — name only, no scenarios yet |
 | SafeBookBench | Domain | Booking & hospitality (court reservations; booking database as system of record) | Pilot implemented — [14 scenarios](docs/safebookbench_pack.md) |
