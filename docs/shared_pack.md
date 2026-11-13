@@ -1,5 +1,12 @@
 # The shared pack — domain-neutral policy gates
 
+**Category: cross-domain overlay** (not a domain pack). In the pack
+catalog it sits alongside the domain packs — SafeOrderBench,
+SafeCartBench, SafePayBench, SafeTradeBench, SafeTripBench — but it
+defines no world, state, or provider of its own. It is applied inside
+each domain pack's world, so classifying it as a domain would duplicate
+that domain's state for no benefit.
+
 One pack of policy gates, applied to **every** agent SafeAgentEval
 grades, on top of that agent's domain pack. Domain packs differ
 (banking ledger, Shopify store, restaurant cart); the obligations
