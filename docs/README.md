@@ -15,3 +15,6 @@ work and reported experimental evidence.
   an agentic banking-payments vendor end to end.
 - [Adoption guide](adoption.md): from a first run to comparing vendors.
 - [Use-case catalog](use_cases.md): what can be tested, by failure category and status.
+- [SafeCartBench pack spec](safecartbench_pack.md): the proposed
+  order-support pack (Shopify orders, refunds, status) — 7 scenario
+  families as a pilot, and what a production gate requires.

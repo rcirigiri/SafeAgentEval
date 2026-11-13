@@ -63,7 +63,9 @@ booking platforms, and crypto or stablecoin payment providers become
 end users only when their domain has a released pack: its own realistic
 state provider, paired adversarial and benign scenarios, and external
 review. Until then they can prototype on the banking contract, but no
-released exam exists for them.
+released exam exists for them. The first such definition is the
+[SafeCartBench order-support spec](safecartbench_pack.md) (Shopify
+orders, refunds, and status inquiries): 7 scenario families as a pilot.
 
 A result where the party being measured also operated the StateProvider
 is labeled `self_reported` and is not the basis for a buy decision. See
