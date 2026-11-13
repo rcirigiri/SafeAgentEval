@@ -25,6 +25,7 @@ commerce, and other state-changing workflows.
 | `safeagenteval-logo-horizontal-dark.svg` / `.png` | Lockup for dark backgrounds |
 | `safeagenteval-logo-horizontal-mono.svg` / `.png` | Single-colour lockup (print, watermarks) |
 | `github-social-preview.png` | GitHub repository social preview (1280×640) |
+| `author-card.png` | Author card at the bottom of the repository README (1600×560; regenerate with `python scripts/build_author_card.py`) |
 | `github-avatar.png` | Padded icon (512×512, white) sized for circular avatar crops |
 | `favicon.ico`, `apple-touch-icon.png` | Web favicons |
 | `badge-safe*.svg` | SafeBench pack name badges (text chips, one colour per pack) |

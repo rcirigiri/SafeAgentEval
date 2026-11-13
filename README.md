@@ -165,3 +165,14 @@ tell independently observed results from self-reported ones.
 
 Apache License 2.0. SafeOrderBench licensing and its datasheet will be
 finalized before the first public dataset release.
+
+## Authors
+
+<p>
+  <a href="mailto:ram.cirigiri@gmail.com">
+    <img src="docs/assets/brand/author-card.png" alt="Author: Rammohan Srikanth Cirigiri — ram.cirigiri@gmail.com" width="640">
+  </a>
+</p>
+
+**Rammohan Srikanth Cirigiri** — Creator & maintainer, SafeAgentEval
+([ram.cirigiri@gmail.com](mailto:ram.cirigiri@gmail.com))
