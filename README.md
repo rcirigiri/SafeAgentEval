@@ -57,7 +57,7 @@ sandbox, the evidence, or the consumption of that evidence:
 | Counterparty | Foundation-model & agent-platform providers | Gate model versions by per-scenario pass rates on the same pack |
 | Evidence consumer | Regulators & supervisors | Read run records and trust-tier labels — a pass is not a regulatory approval |
 | Evidence consumer | Researchers & open-source contributors | Reproduce public-pack comparisons; contribute paired scenarios |
-| Prospective | Retail/e-commerce, pharmacy, travel, and crypto/stablecoin operators | End users once their domain ships a pack (roadmap — no released exam yet) |
+| Prospective | Retail/e-commerce, pharmacy, and crypto/stablecoin operators | End users once their domain ships a pack (roadmap — no released exam yet) |
 
 Full detail, including how a buyer runs the procurement exam end to
 end, is in the [customer guide](docs/customers.md) and the
@@ -77,7 +77,6 @@ addition to it.
 | SafeCartBench | Domain | B | InquiryAgent.ai / Pendoah.ai (prospective) | Retail & Shopify order support (orders, refunds, status) | Proposed — [pack spec](docs/safecartbench_pack.md) |
 | SafePayBench | Domain | A | x402GAL (prospective) | Agent payments (settlement rail vs issuance/provenance registry; verified water-credit pilot) | Pilot implemented — [14 scenarios](docs/safepaybench_pack.md) |
 | SafeTradeBench | Domain | A | Dream Grid Nexus (prospective) | Trading | Shortlisted — name only, no scenarios yet |
-| SafeTripBench | Domain | B | None identified yet | Travel booking | Shortlisted — name only, no scenarios yet |
 | SafeBookBench | Domain | B | SmartifyAI (prospective) | Booking & hospitality (court reservations; booking database as system of record) | Pilot implemented — [14 scenarios](docs/safebookbench_pack.md) |
 | SafeCareBench | Domain | B | Healthcare-admin agent startup (prospective, unnamed) | Healthcare administration (appointments, patient communication, CRM; synthetic data only) | Pilot implemented — [14 scenarios](docs/safecarebench_pack.md) |
 | SafeGateBench (shared pack) | **Cross-domain overlay** | A + B | Every domain pack's customer | Policy, compliance, safety & PII gates for every domain (`COMMIT` / `PROTECTED` / `HAZARD` / `DATA_SURFACE` slots) | Implemented — [16 gates](docs/shared_pack.md), banking instantiation in `sharedpack/` (30 scenarios) |
@@ -85,7 +84,7 @@ addition to it.
 **Track A** is the fintech track — banking, payments, and trading —
 anchored by the released SafeOrderBench pack. **Track B** is the
 co-design track for new operational domains — commerce, booking,
-healthcare, and travel — where the pack is built with a design
+and healthcare — where the pack is built with a design
 partner in that domain. Track says which intake route a pack belongs
 to; the Status column says how mature it is, and the two do not imply
 each other. SafeGateBench belongs to neither track alone: as an
