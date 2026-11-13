@@ -1,10 +1,12 @@
 # Enterprise customers
 
-The end customer is an institution that will let an agent commit a change
-on a system of record, and that has to decide whether the agent may do
-so. The grade is the sandbox ledger after the conversation. A team that
-only needs to know which model chats more fluently is outside this
-product.
+The primary end customer is an institution that will let an agent commit
+a change on a system of record, and that has to decide whether the agent
+may do so. Around that customer sit the counterparties who supply or
+assure the agent, and the parties who later consume the evidence; the
+tables below list every end user. The grade is the sandbox ledger after
+the conversation. A team that only needs to know which model chats more
+fluently is outside this product.
 
 The released exam is the banking pack in SafeOrderBench (16 scenarios,
 seven categories). Pharmacy, retail, travel, and crypto or stablecoin
@@ -18,15 +20,50 @@ exam in full.
 
 ## Who uses it
 
-The people who use SafeAgentEval inside the institution are the ones who
-own the decision, the sandbox, or the evidence.
+Every end user below owns one of four things: the go/no-go decision, the
+sandbox, the evidence, or the consumption of that evidence. If none of
+those applies — for example, a team scoring only chat fluency — the
+framework is not for them.
 
-| Customer | The decision they own | How they use SafeAgentEval |
+### Enterprise end users (the buying institution)
+
+| End user | The decision they own | How they use SafeAgentEval |
 |---|---|---|
-| Bank, payments fintech, or platform buying an agent | Which vendor may move customer money, and on what limits | The same 16 scenarios against every vendor's sandbox. Compare pass rates by category and by repeat, then accept, limit, or reject |
-| The same firm building its own agent | Whether a model, prompt, or tool change may ship | `safeagenteval run` in CI. A non-zero exit, or a pass rate under the agreed floor, blocks the release |
-| Independent auditor | Whether a result counts as certified evidence | Operates the StateProvider with auditor-held credentials against the vendor's sandbox. The record is labeled `auditor` |
-| Agent vendor | Whether they can be evaluated, and whether a later change stays inside the buyer's bar | Supplies a session endpoint and a synthetic sandbox. May draft the StateProvider. The buyer reviews it, pins it, and runs it. After acceptance, the vendor runs the pack on every change |
+| Retail & commercial banks, credit unions buying a vendor agent | Which vendor may move customer money, and on what limits | The same 16 scenarios against every vendor's sandbox. Compare pass rates by category and by repeat, then accept, limit, or reject |
+| Payments fintechs, processors, and BaaS / platform providers buying or embedding an agent | Whether an embedded agent may act on their rails and their customers' accounts | Run the pack against the vendor in their own tenant; reuse the run records as the integration gate before launch |
+| Banks and fintechs building their own agent (AI platform & agent engineering) | Whether a model, prompt, or tool change may ship | `safeagenteval run` in CI. A non-zero exit, or a pass rate under the agreed floor, blocks the release |
+| Payments product & business owners | Whether the authorized final states match business policy | Review the answer key with `explain-scenario`, approve thresholds, own the accept / conditional / reject call |
+| Model risk management, risk & compliance (second line) | Whether the agent is inside its authorized mandate | Set tolerances (e.g. zero for executed injection or duplicate payment), require repeats, and sign off on the evidence pack |
+| Procurement & third-party risk management | Which vendor is selected, and how the choice is defended | Score every bidder on the identical exam; file the JSON run records with the selection decision |
+| QA & evaluation engineering | Whether the regression suite is complete and still discriminating | Own the private scenario suite, the benign twins, and the CI gate; keep the demo agents passing / failing as designed |
+| Security & AI red teams | Whether data planted in the world can steer the agent | Author prompt-injection and privacy scenarios, add new attack variants, and track them as regressions |
+| Operations, support & incident management | Whether a production failure can recur | Turn each incident into a private adversarial scenario plus its benign twin; retest it on every change |
+| Internal audit (third line) | Whether the deployment decision was evidenced | Re-perform or review saved runs; the hash-linked trace is the artifact under audit |
+
+### Counterparties and assurance providers
+
+| End user | The decision they own | How they use SafeAgentEval |
+|---|---|---|
+| Independent auditors & assurance firms | Whether a result counts as certified evidence | Operate the StateProvider with auditor-held credentials against the vendor's sandbox. The record is labeled `auditor` |
+| System integrators & consultancies | Whether a client's evaluation was run correctly | Build the session adapter and StateProvider, run the exam on the client's behalf, and hand over the run records |
+| Agent vendors & ISVs selling a payments agent | Whether they can be evaluated, and whether a later change stays inside the buyer's bar | Supply a session endpoint and a synthetic sandbox, and may draft the StateProvider. The buyer reviews it, pins it, and runs it. After acceptance, the vendor runs the pack on every change |
+| Foundation-model & agent-platform providers | Which model version may power a state-changing agent | Run the same pack with only the model swapped; compare per-scenario pass rates as a release gate for the model |
+
+### Evidence consumers
+
+| End user | The decision they own | How they use SafeAgentEval |
+|---|---|---|
+| Regulators & supervisors | None over the vendor — they consume, never certify | Read run records and trust-tier labels as supervisory evidence. A passing run is not a regulatory approval |
+| Researchers & open-source contributors | Whether a published comparison is reproducible | Run the public pack, contribute paired scenarios, and publish pass rates with their `provider_trust` tier |
+
+### Prospective end users (roadmap domains)
+
+Retail and e-commerce operators, pharmacy and refill services, travel
+booking platforms, and crypto or stablecoin payment providers become
+end users only when their domain has a released pack: its own realistic
+state provider, paired adversarial and benign scenarios, and external
+review. Until then they can prototype on the banking contract, but no
+released exam exists for them.
 
 A result where the party being measured also operated the StateProvider
 is labeled `self_reported` and is not the basis for a buy decision. See
