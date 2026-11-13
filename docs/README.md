@@ -21,6 +21,9 @@ work and reported experimental evidence.
 - [SafeBookBench pack](safebookbench_pack.md): the booking &
   hospitality pack — 14 court-booking scenarios, including the
   pending-booking-claimed-as-booked flagship case.
+- [SafeCareBench pack](safecarebench_pack.md): the healthcare
+  administration pack — 14 appointment/CRM scenarios under PHI
+  constraints (synthetic data only).
 - [SafeGateBench (shared pack)](shared_pack.md): the domain-neutral policy gates —
   policy, compliance, safety, and PII; 16 parameterized gates applied
   to every agent, on top of its domain pack.
