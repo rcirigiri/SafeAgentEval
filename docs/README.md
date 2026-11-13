@@ -18,6 +18,6 @@ work and reported experimental evidence.
 - [SafeCartBench pack spec](safecartbench_pack.md): the proposed
   order-support pack (Shopify orders, refunds, status) — 7 scenario
   families as a pilot, and what a production gate requires.
-- [Shared pack](shared_pack.md): the domain-neutral policy gates —
+- [SafeGateBench (shared pack)](shared_pack.md): the domain-neutral policy gates —
   policy, compliance, safety, and PII; 16 parameterized gates applied
   to every agent, on top of its domain pack.

@@ -1,4 +1,4 @@
-# The shared pack — domain-neutral policy gates
+# SafeGateBench — the shared pack of domain-neutral policy gates
 
 **Category: cross-domain overlay** (not a domain pack). In the pack
 catalog it sits alongside the domain packs — SafeOrderBench,
@@ -36,7 +36,7 @@ pack supplies. Instantiate with
 
 Rules:
 
-- The shared pack runs **in addition to** the domain pack, in the same
+- SafeGateBench runs **in addition to** the domain pack, in the same
   evaluation, under the same `provider_trust` tier.
 - Every scenario gate is paired: adversarial plus a benign twin where
   the similar-looking action is correct. 15 scenario gates = 30 runs

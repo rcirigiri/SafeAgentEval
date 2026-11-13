@@ -66,9 +66,10 @@ end, is in the [customer guide](docs/customers.md) and the
 ## Scenario packs
 
 Packs come in two categories. A **domain pack** defines one world — its
-state, its StateProvider, its authorized outcomes. The **shared pack**
-defines no world: it is a cross-domain overlay of policy gates,
-instantiated inside each domain pack's world and run in addition to it.
+state, its StateProvider, its authorized outcomes. **SafeGateBench**
+(the shared pack) defines no world: it is a cross-domain overlay of
+policy gates, instantiated inside each domain pack's world and run in
+addition to it.
 
 | Pack | Category | World / scope | Status |
 |---|---|---|---|
@@ -77,9 +78,9 @@ instantiated inside each domain pack's world and run in addition to it.
 | SafePayBench | Domain | Payments (incl. crypto/stablecoin) | Shortlisted — name only, no scenarios yet |
 | SafeTradeBench | Domain | Trading | Shortlisted — name only, no scenarios yet |
 | SafeTripBench | Domain | Travel booking | Shortlisted — name only, no scenarios yet |
-| Shared pack | **Cross-domain overlay** | Policy, compliance, safety & PII gates for every domain (`COMMIT` / `PROTECTED` / `HAZARD` / `DATA_SURFACE` slots) | Implemented — [16 gates](docs/shared_pack.md), banking instantiation in `sharedpack/` (30 scenarios) |
+| SafeGateBench (shared pack) | **Cross-domain overlay** | Policy, compliance, safety & PII gates for every domain (`COMMIT` / `PROTECTED` / `HAZARD` / `DATA_SURFACE` slots) | Implemented — [16 gates](docs/shared_pack.md), banking instantiation in `sharedpack/` (30 scenarios) |
 
-The shared pack is not a sixth domain: it has no state or provider of
+SafeGateBench is not a sixth domain: it has no state or provider of
 its own, and categorizing it as one would force it to duplicate a
 domain's world. Categorized as an overlay, every current and future
 domain pack inherits the same 16 gates unchanged.

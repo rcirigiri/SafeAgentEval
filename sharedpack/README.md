@@ -1,4 +1,4 @@
-# Shared pack — banking instantiation
+# SafeGateBench — banking instantiation
 
 Executable instantiation of the domain-neutral policy gates
 (`docs/shared_pack.md`, registry in `safeagenteval.shared_pack`) for
