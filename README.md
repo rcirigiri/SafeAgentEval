@@ -71,18 +71,27 @@ state, its StateProvider, its authorized outcomes. **SafeGateBench**
 policy gates, instantiated inside each domain pack's world and run in
 addition to it.
 
-| Pack | Category | World / scope | Status |
-|---|---|---|---|
-| SafeOrderBench | Domain | Banking / payments ledger | Released — 16 scenarios |
-| SafeCartBench | Domain | Retail & Shopify order support (orders, refunds, status) | Proposed — [pack spec](docs/safecartbench_pack.md) |
-| SafePayBench | Domain | Agent payments (settlement rail vs issuance/provenance registry; verified water-credit pilot) | Pilot implemented — [14 scenarios](docs/safepaybench_pack.md) |
-| SafeTradeBench | Domain | Trading | Shortlisted — name only, no scenarios yet |
-| SafeTripBench | Domain | Travel booking | Shortlisted — name only, no scenarios yet |
-| SafeBookBench | Domain | Booking & hospitality (court reservations; booking database as system of record) | Pilot implemented — [14 scenarios](docs/safebookbench_pack.md) |
-| SafeCareBench | Domain | Healthcare administration (appointments, patient communication, CRM; synthetic data only) | Pilot implemented — [14 scenarios](docs/safecarebench_pack.md) |
-| SafeGateBench (shared pack) | **Cross-domain overlay** | Policy, compliance, safety & PII gates for every domain (`COMMIT` / `PROTECTED` / `HAZARD` / `DATA_SURFACE` slots) | Implemented — [16 gates](docs/shared_pack.md), banking instantiation in `sharedpack/` (30 scenarios) |
+| Pack | Category | Track | World / scope | Status |
+|---|---|---|---|---|
+| SafeOrderBench | Domain | A | Banking / payments ledger | Released — 16 scenarios |
+| SafeCartBench | Domain | B | Retail & Shopify order support (orders, refunds, status) | Proposed — [pack spec](docs/safecartbench_pack.md) |
+| SafePayBench | Domain | A | Agent payments (settlement rail vs issuance/provenance registry; verified water-credit pilot) | Pilot implemented — [14 scenarios](docs/safepaybench_pack.md) |
+| SafeTradeBench | Domain | A | Trading | Shortlisted — name only, no scenarios yet |
+| SafeTripBench | Domain | B | Travel booking | Shortlisted — name only, no scenarios yet |
+| SafeBookBench | Domain | B | Booking & hospitality (court reservations; booking database as system of record) | Pilot implemented — [14 scenarios](docs/safebookbench_pack.md) |
+| SafeCareBench | Domain | B | Healthcare administration (appointments, patient communication, CRM; synthetic data only) | Pilot implemented — [14 scenarios](docs/safecarebench_pack.md) |
+| SafeGateBench (shared pack) | **Cross-domain overlay** | A + B | Policy, compliance, safety & PII gates for every domain (`COMMIT` / `PROTECTED` / `HAZARD` / `DATA_SURFACE` slots) | Implemented — [16 gates](docs/shared_pack.md), banking instantiation in `sharedpack/` (30 scenarios) |
 
-SafeGateBench is not a sixth domain: it has no state or provider of
+**Track A** is the fintech track — banking, payments, and trading —
+anchored by the released SafeOrderBench pack. **Track B** is the
+co-design track for new operational domains — commerce, booking,
+healthcare, and travel — where the pack is built with a design
+partner in that domain. Track says which intake route a pack belongs
+to; the Status column says how mature it is, and the two do not imply
+each other. SafeGateBench belongs to neither track alone: as an
+overlay it applies to packs on both.
+
+SafeGateBench is not another domain: it has no state or provider of
 its own, and categorizing it as one would force it to duplicate a
 domain's world. Categorized as an overlay, every current and future
 domain pack inherits the same 16 gates unchanged.
