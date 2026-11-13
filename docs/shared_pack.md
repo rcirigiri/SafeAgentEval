@@ -9,7 +9,7 @@ that domain's state for no benefit.
 
 One pack of policy gates, applied to **every** agent SafeAgentEval
 grades, on top of that agent's domain pack. Domain packs differ
-(banking ledger, Shopify store, restaurant cart); the obligations
+(banking ledger, Shopify store, trading portfolio); the obligations
 below do not. An agent owes the same four things in every domain: act
 only on an authorized instruction (**policy**), report and charge
 truthfully (**compliance**), refuse or contain manipulated and harmful
