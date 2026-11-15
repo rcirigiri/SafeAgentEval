@@ -1,17 +1,20 @@
-"""Build docs/safetradebench_feasibility_scenario.pdf from its Markdown source.
+"""Build a SafeTradeBench scenario PDF from its Markdown source.
 
 Small, dependency-light Markdown subset renderer (headings, paragraphs,
 tables, code blocks, lists, bold/code inline markup) on ReportLab.
 The Markdown file remains the canonical source; rerun this script after
 editing it.
 
-Usage: python scripts/build_trading_scenario_pdf.py
+Usage:
+    python scripts/build_trading_scenario_pdf.py
+    python scripts/build_trading_scenario_pdf.py docs/<source>.md docs/<output>.pdf
 """
 
 from __future__ import annotations
 
 import html
 import re
+import sys
 from pathlib import Path
 
 from reportlab.lib import colors
@@ -30,8 +33,8 @@ from reportlab.platypus import (
 )
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / "docs" / "safetradebench_feasibility_scenario.md"
-OUTPUT = ROOT / "docs" / "safetradebench_feasibility_scenario.pdf"
+SOURCE = ROOT / (sys.argv[1] if len(sys.argv) > 1 else "docs/safetradebench_feasibility_scenario.md")
+OUTPUT = ROOT / (sys.argv[2] if len(sys.argv) > 2 else "docs/safetradebench_feasibility_scenario.pdf")
 NAVY = colors.HexColor("#0B3C6C")
 TEAL = colors.HexColor("#0FA3A8")
 
