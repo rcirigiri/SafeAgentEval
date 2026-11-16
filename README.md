@@ -89,16 +89,13 @@ world and run in addition to it.
 | SafeOrderBench | Banking / payments ledger | Released — 16 scenarios · **Actively maintained** (flagship) |
 | SafePayBench | Agent payments (settlement rail vs issuance/provenance registry) | Pilot implemented — [14 scenarios](docs/safepaybench_pack.md) · **Actively maintained** (flagship) |
 
-> Partner-driven and compatibility-only pilot packs — SafeCartBench
-> (retail & Shopify order support), SafeTradeBench (trading),
-> SafeBookBench (booking & hospitality), and SafeCareBench (healthcare
-> administration, synthetic data only) — are kept green against
-> framework changes and advance when their design partners validate
-> them. SafeGateBench is a framework component: 16 policy, compliance,
-> safety & PII conformance gates applied inside every pack. Full
-> per-pack status, prospective design partners, and maintenance levels
-> are in the [pack maintenance policy](docs/pack_maintenance_policy.md).
-> Naming a prospective design partner there does not claim a customer
+> Additional partner-driven and compatibility-only pilot packs, and a
+> framework set of policy, compliance, safety & PII conformance gates,
+> are kept green against framework changes and advance when their
+> design partners validate them; full per-pack status, prospective
+> design partners, and maintenance levels are in the
+> [pack maintenance policy](docs/pack_maintenance_policy.md), and
+> naming a prospective design partner there does not claim a customer
 > relationship, adoption, or endorsement by any organization named.
 
 SafeGateBench is not another domain: it has no state or provider of
