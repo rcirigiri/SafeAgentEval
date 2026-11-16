@@ -72,15 +72,22 @@ state, its StateProvider, its authorized outcomes. **SafeGateBench**
 policy gates, instantiated inside each domain pack's world and run in
 addition to it.
 
-| Pack | Category | Track | Potential customer | World / scope | Status |
-|---|---|---|---|---|---|
-| SafeOrderBench | Domain | A | Banking-agent vendors and banks (no named prospect) | Banking / payments ledger | Released — 16 scenarios |
-| SafeCartBench | Domain | B | InquiryAgent.ai / Pendoah.ai (prospective) | Retail & Shopify order support (orders, refunds, status) | Proposed — [pack spec](docs/safecartbench_pack.md) |
-| SafePayBench | Domain | A | x402GAL (prospective) | Agent payments (settlement rail vs issuance/provenance registry; verified water-credit pilot) | Pilot implemented — [14 scenarios](docs/safepaybench_pack.md) |
-| SafeTradeBench | Domain | A | Dream Grid Nexus (prospective) | Trading | Shortlisted — name only, no scenarios yet |
-| SafeBookBench | Domain | B | SmartifyAI (prospective) | Booking & hospitality (court reservations; booking database as system of record) | Pilot implemented — [14 scenarios](docs/safebookbench_pack.md) |
-| SafeCareBench | Domain | B | Healthcare-admin agent startup (prospective, unnamed) | Healthcare administration (appointments, patient communication, CRM; synthetic data only) | Pilot implemented — [14 scenarios](docs/safecarebench_pack.md) |
-| SafeGateBench (shared pack) | **Cross-domain overlay** | A + B | Every domain pack's customer | Policy, compliance, safety & PII gates for every domain (`COMMIT` / `PROTECTED` / `HAZARD` / `DATA_SURFACE` slots) | Implemented — [16 gates](docs/shared_pack.md), banking instantiation in `sharedpack/` (30 scenarios) |
+| Pack | Category | Track | Potential customer | World / scope | Status | Maintenance |
+|---|---|---|---|---|---|---|
+| SafeOrderBench | Domain | A | Banking-agent vendors and banks (no named prospect) | Banking / payments ledger | Released — 16 scenarios | **Actively maintained** (flagship) |
+| SafeCartBench | Domain | B | InquiryAgent.ai / Pendoah.ai (prospective) | Retail & Shopify order support (orders, refunds, status) | Proposed — [pack spec](docs/safecartbench_pack.md) | Partner-driven |
+| SafePayBench | Domain | A | x402GAL (prospective) | Agent payments (settlement rail vs issuance/provenance registry; verified water-credit pilot) | Pilot implemented — [14 scenarios](docs/safepaybench_pack.md) | **Actively maintained** (flagship) |
+| SafeTradeBench | Domain | A | Dream Grid Nexus (prospective) | Trading | Shortlisted — name only, no scenarios yet | Partner-driven |
+| SafeBookBench | Domain | B | SmartifyAI (prospective) | Booking & hospitality (court reservations; booking database as system of record) | Pilot implemented — [14 scenarios](docs/safebookbench_pack.md) | Compatibility-only |
+| SafeCareBench | Domain | B | Healthcare-admin agent startup (prospective, unnamed) | Healthcare administration (appointments, patient communication, CRM; synthetic data only) | Pilot implemented — [14 scenarios](docs/safecarebench_pack.md) | Compatibility-only |
+| SafeGateBench | **Framework component** | A + B | Every domain pack's customer | Policy, compliance, safety & PII conformance gates for every domain (`COMMIT` / `PROTECTED` / `HAZARD` / `DATA_SURFACE` slots) | Implemented — [16 gates](docs/shared_pack.md), banking instantiation in `sharedpack/` (30 scenarios) | Framework-maintained |
+
+Maintenance levels are defined in the
+[pack maintenance policy](docs/pack_maintenance_policy.md): the two
+flagship packs are actively maintained; pilot packs are kept green
+against framework changes and advance when a design partner validates
+their domain; SafeGateBench is maintained once, centrally, as a
+framework component rather than as a separate domain pack.
 
 **Track A** is the fintech track — banking, payments, and trading —
 anchored by the released SafeOrderBench pack. **Track B** is the
@@ -98,8 +105,10 @@ named.
 
 SafeGateBench is not another domain: it has no state or provider of
 its own, and categorizing it as one would force it to duplicate a
-domain's world. Categorized as an overlay, every current and future
-domain pack inherits the same 16 gates unchanged.
+domain's world. It is a framework component — a shared set of
+conformance gates that every current and future domain pack inherits
+unchanged, and that is maintained once, centrally, with the
+framework.
 
 ## How evaluation works
 

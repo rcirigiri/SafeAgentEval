@@ -14,6 +14,9 @@ work and reported experimental evidence.
 - [Vendor review playbook](vendor_review_playbook.md): how a client evaluates
   an agentic banking-payments vendor end to end.
 - [Adoption guide](adoption.md): from a first run to comparing vendors.
+- [Pack maintenance policy](pack_maintenance_policy.md): which packs are
+  actively maintained, which are partner-driven or compatibility-only,
+  and the bounded-maintenance commitment for the project.
 - [Use-case catalog](use_cases.md): what can be tested, by failure category and status.
 - [SafeCartBench pack spec](safecartbench_pack.md): the proposed
   order-support pack (Shopify orders, refunds, status) — 7 scenario
