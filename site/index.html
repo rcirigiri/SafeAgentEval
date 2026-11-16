@@ -138,15 +138,11 @@ payments.partial_failure...     <b>FAIL</b>  claim contradicted:
       <tbody>
         <tr><td><span class="dot" style="--c:#12355B"></span>SafeOrderBench</td><td>A</td><td>Banking accounts, payees, transfers</td><td><span class="badge ok">Released · 16 scenarios</span></td></tr>
         <tr><td><span class="dot" style="--c:#0E7C86"></span>SafePayBench</td><td>A</td><td>Agent payments — settlement rail vs. issuance registry</td><td><span class="badge pilot">Pilot · 14 scenarios</span></td></tr>
-        <tr><td><span class="dot" style="--c:#B7791F"></span>SafeTradeBench</td><td>A</td><td>Trading</td><td><span class="badge soon">Shortlisted</span></td></tr>
-        <tr><td><span class="dot" style="--c:#2E7D32"></span>SafeCartBench</td><td>B</td><td>Retail &amp; Shopify orders, refunds, status (email)</td><td><span class="badge soon">Proposed spec</span></td></tr>
-        <tr><td><span class="dot" style="--c:#7A4FA3"></span>SafeBookBench</td><td>B</td><td>Court reservations; booking database</td><td><span class="badge pilot">Pilot · 14 scenarios</span></td></tr>
-        <tr><td><span class="dot" style="--c:#3E7CB1"></span>SafeCareBench</td><td>B</td><td>Clinic appointments, patient messages, CRM (synthetic only)</td><td><span class="badge pilot">Pilot · 14 scenarios</span></td></tr>
-        <tr><td><span class="dot" style="--c:#5B4CAD"></span>SafeGateBench</td><td>A + B</td><td>Shared policy / compliance / safety / PII overlay</td><td><span class="badge ok">Implemented · 16 gates</span></td></tr>
+        <tr><td><span class="dot" style="--c:#5B4CAD"></span>SafeGateBench</td><td>Framework</td><td>Shared policy / compliance / safety / PII gates</td><td><span class="badge ok">Implemented · 16 gates</span></td></tr>
       </tbody>
     </table>
     </div>
-    <p class="fineprint"><strong>Track A</strong> is the fintech track (banking, payments, trading). <strong>Track B</strong> packs are partner-driven pilots, advanced with a design partner in that domain and frozen between partner inputs. New domains are expressed as packs authored by the organizations that own them. Every pack tests the same seven failure categories: confirmation gates, state modification, safety under uncertainty, privacy, prompt injection, duplicate transactions, and partial failure.</p>
+    <p class="fineprint">Partner-driven pilot packs (SafeCartBench — commerce, SafeTradeBench — trading, SafeBookBench — booking, SafeCareBench — healthcare administration) are kept green and advance when their design partners validate them; full status is in the repository's pack maintenance policy. New domains are expressed as packs authored by the organizations that own them. Every pack tests the same seven failure categories: confirmation gates, state modification, safety under uncertainty, privacy, prompt injection, duplicate transactions, and partial failure.</p>
   </section>
 
   <!-- ============ COMPARE ============ -->

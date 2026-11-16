@@ -84,36 +84,22 @@ pilots. **SafeGateBench** defines no world: it is a framework
 component of policy gates, instantiated inside each domain pack's
 world and run in addition to it.
 
-| Pack | Category | Track | Potential customer | World / scope | Status | Maintenance |
-|---|---|---|---|---|---|---|
-| SafeOrderBench | Domain | A | Banking-agent vendors and banks (no named prospect) | Banking / payments ledger | Released — 16 scenarios | **Actively maintained** (flagship) |
-| SafeCartBench | Domain | B | InquiryAgent.ai / Pendoah.ai (prospective) | Retail & Shopify order support (orders, refunds, status) | Proposed — [pack spec](docs/safecartbench_pack.md) | Partner-driven |
-| SafePayBench | Domain | A | x402GAL (prospective) | Agent payments (settlement rail vs issuance/provenance registry; verified water-credit pilot) | Pilot implemented — [14 scenarios](docs/safepaybench_pack.md) | **Actively maintained** (flagship) |
-| SafeTradeBench | Domain | A | Dream Grid Nexus (prospective) | Trading | Shortlisted — name only, no scenarios yet | Partner-driven |
-| SafeBookBench | Domain | B | SmartifyAI (prospective) | Booking & hospitality (court reservations; booking database as system of record) | Pilot implemented — [14 scenarios](docs/safebookbench_pack.md) | Compatibility-only |
-| SafeCareBench | Domain | B | Healthcare-admin agent startup (prospective, unnamed) | Healthcare administration (appointments, patient communication, CRM; synthetic data only) | Pilot implemented — [14 scenarios](docs/safecarebench_pack.md) | Compatibility-only |
-| SafeGateBench | **Framework component** | A + B | Every domain pack's customer | Policy, compliance, safety & PII conformance gates for every domain (`COMMIT` / `PROTECTED` / `HAZARD` / `DATA_SURFACE` slots) | Implemented — [16 gates](docs/shared_pack.md), banking instantiation in `sharedpack/` (30 scenarios) | Framework-maintained |
+| Pack | World / scope | Status |
+|---|---|---|
+| SafeOrderBench | Banking / payments ledger | Released — 16 scenarios · **Actively maintained** (flagship) |
+| SafePayBench | Agent payments (settlement rail vs issuance/provenance registry) | Pilot implemented — [14 scenarios](docs/safepaybench_pack.md) · **Actively maintained** (flagship) |
 
-Maintenance levels are defined in the
-[pack maintenance policy](docs/pack_maintenance_policy.md): the two
-flagship packs are actively maintained; pilot packs are kept green
-against framework changes and advance when a design partner validates
-their domain; SafeGateBench is maintained once, centrally, as a
-framework component rather than as a separate domain pack.
-
-**Track A** is the fintech track — banking, payments, and trading —
-anchored by the released SafeOrderBench pack. **Track B** is the
-co-design track for new operational domains — commerce, booking,
-and healthcare — where the pack is built with a design
-partner in that domain. Track says which intake route a pack belongs
-to; the Status column says how mature it is, and the two do not imply
-each other. SafeGateBench belongs to neither track alone: as an
-overlay it applies to packs on both.
-
-"Potential customer" names a prospective design partner at
-organization level where one is identified. It does not claim a
-customer relationship, adoption, or endorsement by any organization
-named.
+> Partner-driven and compatibility-only pilot packs — SafeCartBench
+> (retail & Shopify order support), SafeTradeBench (trading),
+> SafeBookBench (booking & hospitality), and SafeCareBench (healthcare
+> administration, synthetic data only) — are kept green against
+> framework changes and advance when their design partners validate
+> them. SafeGateBench is a framework component: 16 policy, compliance,
+> safety & PII conformance gates applied inside every pack. Full
+> per-pack status, prospective design partners, and maintenance levels
+> are in the [pack maintenance policy](docs/pack_maintenance_policy.md).
+> Naming a prospective design partner there does not claim a customer
+> relationship, adoption, or endorsement by any organization named.
 
 SafeGateBench is not another domain: it has no state or provider of
 its own, and categorizing it as one would force it to duplicate a
