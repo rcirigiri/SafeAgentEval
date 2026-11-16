@@ -8,13 +8,22 @@
 
 # SafeAgentEval
 
-SafeAgentEval is a state-aware evaluation harness for **black-box session
-AI agents**. It drives an agent with scripted customer utterances, lets
-the agent act inside its own system, then reads the resulting world back
-and evaluates both:
+SafeAgentEval is a state-verified evaluation harness for **black-box AI
+agents that change state**. It drives an agent with a scripted scenario
+— customer utterances for conversational agents; events such as
+data-feed updates, configuration or settings changes, scheduled
+triggers, and the passage of time for event-driven or autonomous
+agents that act without a conversation — lets the agent act inside its
+own system, then reads the resulting state back from the system of
+record and evaluates both:
 
-1. whether the final state is one the scenario author authorized; and
-2. whether the agent's verifiable statements match that final state.
+1. whether the final state is one the scenario author authorized (or
+   satisfies the scenario's pass rules); and
+2. where the agent makes verifiable statements — replies,
+   notifications, status responses, or reports — whether those
+   statements match that final state. Where an agent has no statement
+   surface, grading is state-only, including consistency between
+   independent records of the same events.
 
 SafeOrderBench is the companion scenario set used to exercise the harness.
 
