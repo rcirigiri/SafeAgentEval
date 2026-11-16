@@ -1,8 +1,8 @@
-# SafeGateBench — the shared pack of domain-neutral policy gates
+# SafeGateBench — domain-neutral policy gates (framework component)
 
-**Category: cross-domain overlay** (not a domain pack). In the pack
-catalog it sits alongside the domain packs — SafeOrderBench,
-SafeCartBench, SafePayBench, SafeTradeBench — but it
+**Category: framework component** (not a domain pack). In the
+reference-benchmark catalog it sits alongside the domain packs —
+SafeOrderBench, SafeCartBench, SafePayBench, SafeTradeBench — but it
 defines no world, state, or provider of its own. It is applied inside
 each domain pack's world, so classifying it as a domain would duplicate
 that domain's state for no benefit.

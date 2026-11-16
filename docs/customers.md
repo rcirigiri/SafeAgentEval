@@ -8,12 +8,16 @@ tables below list every end user. The grade is the sandbox ledger after
 the conversation. A team that only needs to know which model chats more
 fluently is outside this product.
 
-The released exam is the banking pack in SafeOrderBench (16 scenarios,
-seven categories). Pharmacy, retail, travel, and crypto or stablecoin
-payments are roadmap domains. They are not current customers of a
-released pack. Each new domain is claimed only when it has its own
-realistic state provider, paired adversarial and benign scenarios, and
-external review. See the [adoption guide](adoption.md) for the ladder
+The flagship reference exams are SafeOrderBench (banking, 16 scenarios,
+seven categories) and SafePayBench (agent payments, 14 scenarios).
+SafeAgentEval is framework-first: an enterprise in any other
+transactional domain does not wait for a centrally released pack for
+that domain — it authors its own scenarios against its own system of
+record, policies, and test data, and runs them through the harness,
+using the flagship packs as worked examples. A domain is claimed as a
+reference benchmark only when it has its own realistic state provider,
+paired adversarial and benign scenarios, and external review. See the
+[adoption guide](adoption.md) for the ladder
 from a first run to a vendor comparison, and the
 [vendor review playbook](vendor_review_playbook.md) for the procurement
 exam in full.

@@ -169,6 +169,7 @@ the warning above); a vendor-run evaluation is self-reported.
   safety certification and not a regulatory approval.
 - A vendor that exposes no seedable, readable sandbox state cannot be
   state-graded by anyone; only its words can be judged.
-- The public black-box library is small today (the banking/payments pack).
-  A real selection means writing your own paired scenarios (L2) on this
-  same contract.
+- The shipped reference packs are deliberately few (banking and agent
+  payments). That is the model, not a gap: a real selection means
+  writing your own paired scenarios (L2) — against your own system,
+  policies, and test data — on this same contract.

@@ -18,6 +18,13 @@ and evaluates both:
 
 SafeOrderBench is the companion scenario set used to exercise the harness.
 
+SafeAgentEval is **framework-first**: organizations are expected to
+evaluate their own agents by authoring their own scenarios — against
+their own systems, policies, and test data — and running them through
+this harness. The domain packs shipped in this repository are
+reference benchmarks and worked examples of that model, not a growing
+catalog of maintained domain products.
+
 > **Status:** Pre-release research software. Results are benchmark
 > findings, not safety certifications: a passing run shows what an agent
 > did on these scenarios, not that it is safe in production.
@@ -64,13 +71,18 @@ Full detail, including how a buyer runs the procurement exam end to
 end, is in the [customer guide](docs/customers.md) and the
 [vendor review playbook](docs/vendor_review_playbook.md).
 
-## Scenario packs
+## Reference benchmarks and scenario packs
 
-Packs come in two categories. A **domain pack** defines one world — its
-state, its StateProvider, its authorized outcomes. **SafeGateBench**
-(the shared pack) defines no world: it is a cross-domain overlay of
-policy gates, instantiated inside each domain pack's world and run in
-addition to it.
+The framework is the product; packs are how a domain is expressed in
+it. A **domain pack** defines one world — its state, its
+StateProvider, its authorized outcomes — and organizations author
+packs (or private scenario sets) for their own domains, systems, and
+test data. The packs below are the shipped references: two actively
+maintained flagship benchmarks, partner-driven pilots that advance
+when their design partner validates them, and compatibility-only
+pilots. **SafeGateBench** defines no world: it is a framework
+component of policy gates, instantiated inside each domain pack's
+world and run in addition to it.
 
 | Pack | Category | Track | Potential customer | World / scope | Status | Maintenance |
 |---|---|---|---|---|---|---|
@@ -233,10 +245,13 @@ utterances it receives, the replies it returns, and the final state.
 > independently observed system state — across payments, commerce, and
 > other state-changing workflows.
 
-That is the direction the framework generalizes toward. The released
-benchmark today is banking (SafeOrderBench); each new domain is claimed
-only when it has its own realistic state provider, paired adversarial and
-benign scenarios, and external review. Provider trust is disclosed on
+That is the direction the framework generalizes toward. The flagship
+reference benchmarks today are banking (SafeOrderBench) and agent
+payments (SafePayBench); further domains are expressed as packs
+authored by the organizations that own them — with their own state
+providers, paired adversarial and benign scenarios, and test data —
+rather than as centrally maintained packs in this repository. Provider
+trust is disclosed on
 every record (`harness` / `auditor` / `self_reported`), so readers can
 tell independently observed results from self-reported ones.
 

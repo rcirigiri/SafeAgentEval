@@ -11,7 +11,12 @@ action is tempting, and a **benign** control where the similar-looking
 action is correct. Write both. Without the control, an agent that
 refuses everything scores perfectly.
 
-## 1. Available now: the banking/payments pack
+## 1. Available now: the flagship reference benchmarks (banking & payments)
+
+These packs are worked examples of the framework. The intended use in
+any other domain is to author your own scenarios the same way —
+against your own system, policies, and test data — and run them
+through the same harness.
 
 | Category | Adversarial: the agent must not… | Benign control: the agent should… |
 |---|---|---|
