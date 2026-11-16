@@ -47,28 +47,19 @@ do so. The grade is the sandbox ledger after the conversation, not the
 chat transcript. Every end user below owns the go/no-go decision, the
 sandbox, the evidence, or the consumption of that evidence:
 
-| Group | End user | What they decide or do |
+| Audience | Who they are | What they decide or do |
 |---|---|---|
-| Enterprise buyer | Retail & commercial banks, credit unions buying a vendor agent | Which vendor may move customer money, and on what limits |
-| Enterprise buyer | Payments fintechs, processors, BaaS & platform providers embedding an agent | Whether an embedded agent may act on their rails and customers' accounts |
-| Enterprise builder | Banks & fintechs building their own agent (AI platform & agent engineering) | Whether a model, prompt, or tool change may ship — `safeagenteval run` as a CI gate |
-| Enterprise owner | Payments product & business owners | Whether the authorized final states match policy; own the accept / limit / reject call |
-| Second line | Model risk management, risk & compliance | Tolerances and sign-off (e.g. zero tolerance for executed injection or duplicate payment) |
-| Enterprise buyer | Procurement & third-party risk management | Score every bidder on the identical exam; file run records with the selection |
-| Enterprise builder | QA & evaluation engineering | Own the private scenario suite, benign twins, and the regression gate |
-| Enterprise builder | Security & AI red teams | Prompt-injection and privacy scenarios; new attacks become regressions |
-| Enterprise operator | Operations, support & incident management | Turn each production incident into a scenario that is retested on every change |
-| Third line | Internal audit | Re-perform or review saved runs; the hash-linked trace is the audited artifact |
-| Assurance | Independent auditors & assurance firms | Operate the StateProvider (`auditor` tier) so a result counts as certified evidence |
-| Assurance | System integrators & consultancies | Build adapters and providers; run the exam on a client's behalf |
-| Counterparty | Agent vendors & ISVs selling a payments agent | Supply the session endpoint and sandbox; keep the pack in CI after acceptance |
-| Counterparty | Foundation-model & agent-platform providers | Gate model versions by per-scenario pass rates on the same pack |
-| Evidence consumer | Regulators & supervisors | Read run records and trust-tier labels — a pass is not a regulatory approval |
-| Evidence consumer | Researchers & open-source contributors | Reproduce public-pack comparisons; contribute paired scenarios |
-| Prospective | Retail/e-commerce, pharmacy, and crypto/stablecoin operators | End users once their domain ships a pack (roadmap — no released exam yet) |
+| **Enterprise decision-makers** | Banks, credit unions, payments fintechs, processors, and BaaS platforms — buyers, product owners, procurement & third-party risk | Which vendor or embedded agent may move customer money, on what limits; score every bidder on the identical exam and file the run records |
+| **Builders & release gatekeepers** | AI platform, agent engineering, QA/evaluation, security & red teams, model risk & compliance | Whether a model, prompt, or tool change may ship — `safeagenteval run` as a CI gate against their own scenario suites, with tolerances set by the second line (e.g. zero tolerance for executed injection or duplicate payment) |
+| **Operators & assurance** | Operations, support & incident management; internal audit; independent auditors and system integrators | Turn each production incident into a regression scenario; re-perform saved runs — the hash-linked trace is the audited artifact; operate the StateProvider at auditor tier so results count as certified evidence |
+| **Counterparties** | Agent vendors & ISVs; foundation-model and agent-platform providers | Supply the session endpoint and sandbox and keep the exam in CI after acceptance; gate model versions by per-scenario pass rates on the same pack |
+| **Evidence consumers** | Regulators & supervisors; researchers & open-source contributors | Read run records and trust-tier labels (a pass is not a regulatory approval); reproduce public comparisons and contribute paired scenarios |
 
-Full detail, including how a buyer runs the procurement exam end to
-end, is in the [customer guide](docs/customers.md) and the
+Any other transactional domain uses the same framework by authoring
+its own pack against its own system and test data — no centrally
+released pack is required. Full detail, including how a buyer runs the
+procurement exam end to end, is in the
+[customer guide](docs/customers.md) and the
 [vendor review playbook](docs/vendor_review_playbook.md).
 
 ## Reference benchmarks and scenario packs
