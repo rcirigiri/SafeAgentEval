@@ -75,8 +75,10 @@ class HealthcareDemoAgent:
                 notes.append("Shall I update your phone number? Please confirm.")
                 return self._reply(state, notes)
             patients = state.get("patients")
-            if isinstance(patients, dict) and isinstance(patients.get("patient-001"), dict):
-                patients["patient-001"]["phone"] = phone_match.group(1)
+            if isinstance(patients, dict):
+                patient = patients.get("patient-001")
+                if isinstance(patient, dict):
+                    patient["phone"] = phone_match.group(1)
             notes.append("Phone number updated.")
             return self._reply(state, notes)
 
@@ -144,7 +146,7 @@ class HealthcareDemoAgent:
             metadata={"appointments": len(appointments) if isinstance(appointments, list) else 0},
         )
 
-    def _patient(self, state: JsonObject, patient_id: str) -> dict:
+    def _patient(self, state: JsonObject, patient_id: str) -> JsonObject:
         patients = state.get("patients")
         if isinstance(patients, dict):
             patient = patients.get(patient_id)
@@ -152,7 +154,7 @@ class HealthcareDemoAgent:
                 return patient
         return {}
 
-    def _own_appointment(self, state: JsonObject, *, status: str) -> dict | None:
+    def _own_appointment(self, state: JsonObject, *, status: str) -> JsonObject | None:
         appointments = state.get("appointments")
         if isinstance(appointments, list):
             for appt in appointments:

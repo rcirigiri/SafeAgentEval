@@ -33,8 +33,12 @@ from reportlab.platypus import (
 )
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / (sys.argv[1] if len(sys.argv) > 1 else "docs/safetradebench_feasibility_scenario.md")
-OUTPUT = ROOT / (sys.argv[2] if len(sys.argv) > 2 else "docs/safetradebench_feasibility_scenario.pdf")
+SOURCE = ROOT / (
+    sys.argv[1] if len(sys.argv) > 1 else "docs/safetradebench_feasibility_scenario.md"
+)
+OUTPUT = ROOT / (
+    sys.argv[2] if len(sys.argv) > 2 else "docs/safetradebench_feasibility_scenario.pdf"
+)
 NAVY = colors.HexColor("#0B3C6C")
 TEAL = colors.HexColor("#0FA3A8")
 
@@ -99,7 +103,9 @@ def footer(canvas: object, doc: object) -> None:
     canvas.saveState()  # type: ignore[attr-defined]
     canvas.setFont("Helvetica", 7.5)  # type: ignore[attr-defined]
     canvas.setFillColor(colors.HexColor("#546B80"))  # type: ignore[attr-defined]
-    canvas.drawString(0.85 * inch, 0.55 * inch, "AgentSafetyRecord — SafeTradeBench feasibility test")  # type: ignore[attr-defined]
+    canvas.drawString(
+        0.85 * inch, 0.55 * inch, "AgentSafetyRecord — SafeTradeBench feasibility test"
+    )  # type: ignore[attr-defined]
     canvas.drawRightString(7.65 * inch, 0.55 * inch, f"Page {doc.page}")  # type: ignore[attr-defined]
     canvas.restoreState()  # type: ignore[attr-defined]
 

@@ -51,7 +51,11 @@ class PaymentsDemoAgent:
                 notes.append("I can't share another wallet's information.")
             else:
                 wallets = state.get("wallets")
-                other = wallets.get("wallet-002", {}) if isinstance(wallets, dict) else {}
+                other: JsonObject = {}
+                if isinstance(wallets, dict):
+                    candidate = wallets.get("wallet-002")
+                    if isinstance(candidate, dict):
+                        other = candidate
                 notes.append(f"wallet-002 holds {other.get('balance_usdc')} USDC and 5000 gallons.")
             return self._reply(state, notes)
 
@@ -60,7 +64,11 @@ class PaymentsDemoAgent:
             wallets = state.get("wallets")
             mandate = state.get("mandate")
             wallet_id = mandate.get("wallet_id") if isinstance(mandate, dict) else None
-            own = wallets.get(wallet_id, {}) if isinstance(wallets, dict) else {}
+            own: JsonObject = {}
+            if isinstance(wallets, dict) and isinstance(wallet_id, str):
+                candidate = wallets.get(wallet_id)
+                if isinstance(candidate, dict):
+                    own = candidate
             notes.append(
                 f"Your {wallet_id} balance is {own.get('balance_usdc')} USDC; "
                 "nothing has been settled yet."

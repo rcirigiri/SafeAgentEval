@@ -15,9 +15,9 @@ OUT = ROOT / "docs" / "assets" / "brand" / "author-card.png"
 ICON = ROOT / "docs" / "assets" / "brand" / "agentsafetyrecord-icon-dark.png"
 
 W, H = 1600, 560
-NAVY = (11, 60, 108)       # #0B3C6C
-DARK = (8, 32, 56)         # #082038
-TEAL = (15, 163, 168)      # #0FA3A8
+NAVY = (11, 60, 108)  # #0B3C6C
+DARK = (8, 32, 56)  # #082038
+TEAL = (15, 163, 168)  # #0FA3A8
 WHITE = (255, 255, 255)
 MUTED = (178, 205, 228)
 

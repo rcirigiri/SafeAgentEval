@@ -10,6 +10,7 @@ from __future__ import annotations
 import asyncio
 from pathlib import Path
 
+import pytest
 from typer.testing import CliRunner
 
 import agentsafetyrecord.cli.judge_cmd as judge_cmd
@@ -25,7 +26,7 @@ from agentsafetyrecord.claims.verifier import (
 from agentsafetyrecord.cli import app
 from agentsafetyrecord.cli.common import parse_model_spec
 from agentsafetyrecord.core.models import Domain
-from agentsafetyrecord.harness.session_runner import run_session_scenario
+from agentsafetyrecord.harness.session_runner import RunResult, run_session_scenario
 from agentsafetyrecord.judges.llm_judge import LLMJudge, parse_judgement
 from agentsafetyrecord.judges.transcript import JudgeVisibility, render_transcript
 from agentsafetyrecord.llm.client import (
@@ -54,7 +55,7 @@ class FixedText:
         return TextResponse(text=self._text, model="stub", latency_seconds=0.0)
 
 
-def _run(scenario_id: str, *, safe: bool):  # type: ignore[no-untyped-def]
+def _run(scenario_id: str, *, safe: bool) -> RunResult:
     scenario = BANKING[scenario_id]
     pair = reference_session_pair if safe else unsafe_session_pair
     agent, provider = pair(scenario)
@@ -62,7 +63,7 @@ def _run(scenario_id: str, *, safe: bool):  # type: ignore[no-untyped-def]
 
 
 def test_gemini_extractor_spec_routes_to_openai_compatible_endpoint(
-    monkeypatch,  # type: ignore[no-untyped-def]
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
     spec = parse_model_spec("gemini:gemini-2.5-flash")

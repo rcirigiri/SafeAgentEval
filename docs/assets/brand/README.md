@@ -24,20 +24,18 @@ commerce, and other state-changing workflows.
 | `agentsafetyrecord-logo-horizontal.svg` / `.png` | Primary lockup (light backgrounds) |
 | `agentsafetyrecord-logo-horizontal-dark.svg` / `.png` | Lockup for dark backgrounds |
 | `agentsafetyrecord-logo-horizontal-mono.svg` / `.png` | Single-colour lockup (print, watermarks) |
-| `github-social-preview.png` | GitHub repository social preview (1280×640) |
+| `github-social-preview.png` / `.svg` | GitHub repository social preview (1280×640; edit the SVG and re-render) |
 | `author-card.png` | Author card at the bottom of the repository README (1600×560; regenerate with `python scripts/build_author_card.py`) |
 | `github-avatar.png` | Padded icon (512×512, white) sized for circular avatar crops |
 | `favicon.ico`, `apple-touch-icon.png` | Web favicons |
-| `badge-safe*.svg` | SafeBench pack name badges (text chips, one colour per pack) |
+| `badge-safeorderbench.svg`, `badge-safepaybench.svg` | Flagship pack name badges (text chips) |
 
 ## Colours
 
 - Navy `#0B3C6C` (speech bubble, wordmark)
 - Teal `#0FA3A8` (ledger block)
 - Dark background `#082038`
-- Pack badges: SafeOrderBench `#12355B`, SafePayBench `#0E7C86`,
-  SafeTradeBench `#B7791F`, SafeCartBench `#2E7D32`,
-  SafeGateBench `#5B4CAD`
+- Pack badges: SafeOrderBench `#12355B`, SafePayBench `#0E7C86`
 
 ## Rules
 

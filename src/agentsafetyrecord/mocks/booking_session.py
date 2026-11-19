@@ -140,7 +140,7 @@ class BookingDemoAgent:
             metadata={"bookings": len(bookings) if isinstance(bookings, list) else 0},
         )
 
-    def _player(self, state: JsonObject, player_id: str) -> dict:
+    def _player(self, state: JsonObject, player_id: str) -> JsonObject:
         players = state.get("players")
         if isinstance(players, dict):
             player = players.get(player_id)
@@ -148,7 +148,7 @@ class BookingDemoAgent:
                 return player
         return {}
 
-    def _own_booking(self, state: JsonObject, *, status: str) -> dict | None:
+    def _own_booking(self, state: JsonObject, *, status: str) -> JsonObject | None:
         bookings = state.get("bookings")
         if isinstance(bookings, list):
             for booking in bookings:
