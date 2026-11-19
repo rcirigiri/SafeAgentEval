@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SafeAgentEval — State-Verified Agent Safety</title>
-<meta name="description" content="SafeAgentEval grades AI agents on the final state of the system of record — never on what the agent said. Deterministic, black-box, audit-ready.">
+<title>AgentSafetyRecord — State-Verified Agent Safety</title>
+<meta name="description" content="AgentSafetyRecord grades AI agents on the final state of the system of record — never on what the agent said. Deterministic, black-box, audit-ready.">
 <link rel="icon" href="../docs/assets/brand/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -14,8 +14,8 @@
 
 <header class="nav">
   <a class="brand" href="#top">
-    <img src="../docs/assets/brand/safeagenteval-icon.svg" alt="" width="30" height="30">
-    <span>SafeAgentEval</span>
+    <img src="../docs/assets/brand/agentsafetyrecord-icon.svg" alt="" width="30" height="30">
+    <span>AgentSafetyRecord</span>
   </a>
   <nav>
     <a href="#demo">Demo</a>
@@ -24,7 +24,7 @@
     <a href="#compare">Why state?</a>
     <a href="#start">Get started</a>
   </nav>
-  <a class="nav-cta" href="https://github.com/rcirigiri/SafeAgentEval">GitHub</a>
+  <a class="nav-cta" href="https://github.com/rcirigiri/AgentSafetyRecord">GitHub</a>
 </header>
 
 <main id="top">
@@ -35,7 +35,7 @@
       <p class="eyebrow">State-verified agent safety</p>
       <h1>The agent said it&rsquo;s done.<br><span class="accent">Did the system record it?</span></h1>
       <p class="lede">
-        SafeAgentEval is a black-box evaluation harness for AI agents that move money,
+        AgentSafetyRecord is a black-box evaluation harness for AI agents that move money,
         book appointments, and change records. It drives your agent with scripted
         customer requests, then grades the <strong>final state read from your system
         of record</strong> — deterministically. No model decides pass or fail, and an
@@ -53,8 +53,8 @@
       </div>
     </div>
     <div class="terminal" aria-label="Terminal example">
-      <div class="term-bar"><span></span><span></span><span></span><em>safeagenteval</em></div>
-<pre><code>$ safeagenteval run --domain banking \
+      <div class="term-bar"><span></span><span></span><span></span><em>agentsafetyrecord</em></div>
+<pre><code>$ agentsafetyrecord run --domain banking \
     --agent your.module:YourAgent \
     --state-provider your.module:YourProvider
 
@@ -131,7 +131,7 @@ payments.partial_failure...     <b>FAIL</b>  claim contradicted:
   <!-- ============ PACKS ============ -->
   <section id="packs" class="section">
     <h2>Reference benchmarks</h2>
-    <p class="section-lede">SafeAgentEval is a framework, not a pack catalog: your organization authors scenarios against <strong>your own systems, policies, and test data</strong>, and runs them through the harness. The packs below are shipped references — two actively maintained flagships and partner-driven pilots. <strong>SafeGateBench</strong> defines no world: it is a framework component of 16 policy, compliance, safety, and PII gates applied inside every pack.</p>
+    <p class="section-lede">AgentSafetyRecord is a framework, not a pack catalog: your organization authors scenarios against <strong>your own systems, policies, and test data</strong>, and runs them through the harness. The packs below are shipped references — two actively maintained flagships and partner-driven pilots. <strong>SafeGateBench</strong> defines no world: it is a framework component of 16 policy, compliance, safety, and PII gates applied inside every pack.</p>
     <div class="table-wrap">
     <table>
       <thead><tr><th>Pack</th><th>Track</th><th>World</th><th>Status</th></tr></thead>
@@ -151,7 +151,7 @@ payments.partial_failure...     <b>FAIL</b>  claim contradicted:
     <p class="section-lede">Output-scoring evaluators answer <em>“did the reply look right?”</em> For agents that change the world, the release question is <em>“did the right thing happen — and only that?”</em></p>
     <div class="table-wrap">
     <table>
-      <thead><tr><th></th><th>Output scoring</th><th>SafeAgentEval</th></tr></thead>
+      <thead><tr><th></th><th>Output scoring</th><th>AgentSafetyRecord</th></tr></thead>
       <tbody>
         <tr><td>Object graded</td><td>Reply text, tool-call trace, judge score</td><td><strong>Final state of the system of record</strong></td></tr>
         <tr><td>Who decides pass/fail</td><td>Often an LLM judge</td><td>Deterministic comparison to authorized outcomes</td></tr>
@@ -161,7 +161,7 @@ payments.partial_failure...     <b>FAIL</b>  claim contradicted:
       </tbody>
     </table>
     </div>
-    <p class="fineprint">The two compose well: use output metrics for conversation quality, and SafeAgentEval as the release gate for whether the agent may touch real state.</p>
+    <p class="fineprint">The two compose well: use output metrics for conversation quality, and AgentSafetyRecord as the release gate for whether the agent may touch real state.</p>
   </section>
 
   <!-- ============ START ============ -->
@@ -170,12 +170,12 @@ payments.partial_failure...     <b>FAIL</b>  claim contradicted:
     <div class="start-grid">
       <div>
         <h3>Run the public packs</h3>
-<pre class="code"><code>pip install safeagenteval
+<pre class="code"><code>pip install agentsafetyrecord
 
-safeagenteval run --domain banking \
+agentsafetyrecord run --domain banking \
   --agent session-reference
 
-safeagenteval run --suite sharedpack \
+agentsafetyrecord run --suite sharedpack \
   --domain banking --agent session-reference</code></pre>
       </div>
       <div>
@@ -195,7 +195,7 @@ safeagenteval run --suite sharedpack \
     <h2>Building an agent that changes state?</h2>
     <p>Prove it did exactly what it was authorized to do — from the record, not the reply.</p>
     <div class="hero-cta">
-      <a class="btn primary" href="https://github.com/rcirigiri/SafeAgentEval">Get SafeAgentEval</a>
+      <a class="btn primary" href="https://github.com/rcirigiri/AgentSafetyRecord">Get AgentSafetyRecord</a>
       <a class="btn ghost light" href="mailto:ram.cirigiri@gmail.com">Talk to the author</a>
     </div>
   </section>
@@ -204,11 +204,11 @@ safeagenteval run --suite sharedpack \
 
 <footer>
   <div class="foot-brand">
-    <img src="../docs/assets/brand/safeagenteval-icon.svg" alt="" width="24" height="24">
-    <span>SafeAgentEval</span>
+    <img src="../docs/assets/brand/agentsafetyrecord-icon.svg" alt="" width="24" height="24">
+    <span>AgentSafetyRecord</span>
   </div>
   <p>State-Verified Agent Safety · Synthetic data only · A pass is evidence about a run, not a certification.</p>
-  <p><a href="https://github.com/rcirigiri/SafeAgentEval">GitHub</a> · <a href="https://github.com/rcirigiri/SafeAgentEval/tree/main/docs">Documentation</a> · <a href="https://github.com/rcirigiri/SafeAgentEval/blob/main/LICENSE">License</a></p>
+  <p><a href="https://github.com/rcirigiri/AgentSafetyRecord">GitHub</a> · <a href="https://github.com/rcirigiri/AgentSafetyRecord/tree/main/docs">Documentation</a> · <a href="https://github.com/rcirigiri/AgentSafetyRecord/blob/main/LICENSE">License</a></p>
 </footer>
 
 <script src="script.js"></script>

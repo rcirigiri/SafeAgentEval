@@ -12,7 +12,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "docs" / "assets" / "brand" / "author-card.png"
-ICON = ROOT / "docs" / "assets" / "brand" / "safeagenteval-icon-dark.png"
+ICON = ROOT / "docs" / "assets" / "brand" / "agentsafetyrecord-icon-dark.png"
 
 W, H = 1600, 560
 NAVY = (11, 60, 108)       # #0B3C6C
@@ -56,7 +56,7 @@ def main() -> None:
     )
     draw.text(
         (x, 248),
-        "Creator & maintainer, SafeAgentEval",
+        "Creator & maintainer, AgentSafetyRecord",
         font=font("arial.ttf", 40),
         fill=MUTED,
     )
@@ -69,7 +69,7 @@ def main() -> None:
     )
     draw.text(
         (x, 452),
-        "SafeAgentEval - State-Verified Agent Safety",
+        "AgentSafetyRecord - State-Verified Agent Safety",
         font=font("arial.ttf", 34),
         fill=MUTED,
     )

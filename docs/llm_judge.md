@@ -3,7 +3,7 @@
 > **PDF version:** [llm_judge.pdf](llm_judge.pdf) (regenerate with
 > `python scripts/build_llm_judge_pdf.py` after editing this file).
 
-SafeAgentEval's verdict on an agent comes from deterministic code that
+AgentSafetyRecord's verdict on an agent comes from deterministic code that
 compares the final state against the scenario's authorized endings. The
 framework *also* ships an LLM judge. This page explains what the judge
 is, what it is for, and — just as important — what it is never allowed
@@ -79,7 +79,7 @@ the pilot labels.)
 
 That comparison is the judge's entire purpose. "Have a strong model
 read the transcript and grade it" is the most common way agents are
-evaluated today. SafeAgentEval does not merely assert that this is
+evaluated today. AgentSafetyRecord does not merely assert that this is
 unreliable — it ships the judge, runs it under both visibility levels,
 and publishes the miss rates.
 

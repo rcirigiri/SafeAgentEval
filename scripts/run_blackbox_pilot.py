@@ -28,15 +28,15 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from safeagenteval.agents.llm_session import llm_session_pair
-from safeagenteval.cli.run_cmd import _run_all
-from safeagenteval.core.models import Domain
-from safeagenteval.judges.llm_judge import LLMJudge
-from safeagenteval.judges.transcript import JudgeVisibility, render_transcript
-from safeagenteval.llm.client import ModelSpec, build_client
-from safeagenteval.llm.prompts import JUDGE_PROMPT
-from safeagenteval.reporting import FileRecordSink, SavedRunRecord, load_records
-from safeagenteval.scenarios.loader import discover_scenarios
+from agentsafetyrecord.agents.llm_session import llm_session_pair
+from agentsafetyrecord.cli.run_cmd import _run_all
+from agentsafetyrecord.core.models import Domain
+from agentsafetyrecord.judges.llm_judge import LLMJudge
+from agentsafetyrecord.judges.transcript import JudgeVisibility, render_transcript
+from agentsafetyrecord.llm.client import ModelSpec, build_client
+from agentsafetyrecord.llm.prompts import JUDGE_PROMPT
+from agentsafetyrecord.reporting import FileRecordSink, SavedRunRecord, load_records
+from agentsafetyrecord.scenarios.loader import discover_scenarios
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "artifacts" / "pilot" / "blackbox_v1"

@@ -8,16 +8,16 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-import safeagenteval.cli.run_cmd as run_cmd
-from safeagenteval.agents.session import SessionReply
-from safeagenteval.backends.state_provider import InMemoryStateProvider
-from safeagenteval.cli import app
-from safeagenteval.cli.judge_cmd import _sample
-from safeagenteval.core.models import Domain, JsonObject
-from safeagenteval.harness.session_runner import run_session_scenario
-from safeagenteval.mocks.banking_session import reference_session_pair
-from safeagenteval.reporting import FileRecordSink, build_leaderboard, load_records
-from safeagenteval.scenarios.loader import discover_scenarios
+import agentsafetyrecord.cli.run_cmd as run_cmd
+from agentsafetyrecord.agents.session import SessionReply
+from agentsafetyrecord.backends.state_provider import InMemoryStateProvider
+from agentsafetyrecord.cli import app
+from agentsafetyrecord.cli.judge_cmd import _sample
+from agentsafetyrecord.core.models import Domain, JsonObject
+from agentsafetyrecord.harness.session_runner import run_session_scenario
+from agentsafetyrecord.mocks.banking_session import reference_session_pair
+from agentsafetyrecord.reporting import FileRecordSink, build_leaderboard, load_records
+from agentsafetyrecord.scenarios.loader import discover_scenarios
 
 ROOT = Path(__file__).parents[2]
 BENCHMARK = ROOT / "safeorderbench"
@@ -52,7 +52,7 @@ class AsyncProvider:
 def test_async_provider_and_run_context_are_supported() -> None:
     scenario = BANKING["banking.confirmation_gate.benign_transfer_001"]
     provider = AsyncProvider()
-    from safeagenteval.mocks.banking_session import BankingDemoAgent
+    from agentsafetyrecord.mocks.banking_session import BankingDemoAgent
 
     agent = BankingDemoAgent(provider._inner, safe=True)  # acts on the same world
     result = asyncio.run(run_session_scenario(scenario, agent, provider, run_id="run-123"))
@@ -150,7 +150,7 @@ def test_judge_sampling_is_deterministic() -> None:
     scenario = BANKING["banking.confirmation_gate.benign_transfer_001"]
     agent, provider = reference_session_pair(scenario)
     result = asyncio.run(run_session_scenario(scenario, agent, provider))
-    from safeagenteval.reporting import SavedRunRecord
+    from agentsafetyrecord.reporting import SavedRunRecord
 
     records = [
         SavedRunRecord(

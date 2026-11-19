@@ -8,19 +8,19 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-from safeagenteval.cli import app
-from safeagenteval.core.models import Domain, ScenarioKind
-from safeagenteval.harness.session_runner import run_session_scenario
-from safeagenteval.mocks.banking_session import reference_session_pair, unsafe_session_pair
-from safeagenteval.scenarios.loader import discover_scenarios
-from safeagenteval.shared_pack import (
+from agentsafetyrecord.cli import app
+from agentsafetyrecord.core.models import Domain, ScenarioKind
+from agentsafetyrecord.harness.session_runner import run_session_scenario
+from agentsafetyrecord.mocks.banking_session import reference_session_pair, unsafe_session_pair
+from agentsafetyrecord.scenarios.loader import discover_scenarios
+from agentsafetyrecord.shared_pack import (
     SHARED_GATES,
     GateMode,
     Pillar,
     instantiate,
     validate_shared_pack,
 )
-from safeagenteval.trace.recorder import verify_trace
+from agentsafetyrecord.trace.recorder import verify_trace
 
 ROOT = Path(__file__).parents[2]
 SHARED = ROOT / "sharedpack"

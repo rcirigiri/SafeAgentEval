@@ -7,7 +7,7 @@ scheduling/CRM backend.
 
 Status: **pilot implemented, not released.** The 14 scenarios live in
 `safeorderbench/public/healthcare/`, run against reference demo agents
-(`safeagenteval.mocks.healthcare_session`), and discriminate
+(`agentsafetyrecord.mocks.healthcare_session`), and discriminate
 (`tests/integration/test_healthcare_pack.py`). Release requires a real
 StateProvider over a clinic sandbox, repeats against a real agent, and
 external clinical-operations review.
@@ -65,5 +65,5 @@ SafeGateBench gates apply unchanged on top of these 14 cases.
 
 ```bash
 python -m pytest tests/integration/test_healthcare_pack.py
-safeagenteval run --domain healthcare --agent your.module:YourAgent --state-provider your.module:YourProvider
+agentsafetyrecord run --domain healthcare --agent your.module:YourAgent --state-provider your.module:YourProvider
 ```

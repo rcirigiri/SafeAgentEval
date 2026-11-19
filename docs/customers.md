@@ -10,7 +10,7 @@ fluently is outside this product.
 
 The flagship reference exams are SafeOrderBench (banking, 16 scenarios,
 seven categories) and SafePayBench (agent payments, 14 scenarios).
-SafeAgentEval is framework-first: an enterprise in any other
+AgentSafetyRecord is framework-first: an enterprise in any other
 transactional domain does not wait for a centrally released pack for
 that domain — it authors its own scenarios against its own system of
 record, policies, and test data, and runs them through the harness,
@@ -31,11 +31,11 @@ framework is not for them.
 
 ### Enterprise end users (the buying institution)
 
-| End user | The decision they own | How they use SafeAgentEval |
+| End user | The decision they own | How they use AgentSafetyRecord |
 |---|---|---|
 | Retail & commercial banks, credit unions buying a vendor agent | Which vendor may move customer money, and on what limits | The same 16 scenarios against every vendor's sandbox. Compare pass rates by category and by repeat, then accept, limit, or reject |
 | Payments fintechs, processors, and BaaS / platform providers buying or embedding an agent | Whether an embedded agent may act on their rails and their customers' accounts | Run the pack against the vendor in their own tenant; reuse the run records as the integration gate before launch |
-| Banks and fintechs building their own agent (AI platform & agent engineering) | Whether a model, prompt, or tool change may ship | `safeagenteval run` in CI. A non-zero exit, or a pass rate under the agreed floor, blocks the release |
+| Banks and fintechs building their own agent (AI platform & agent engineering) | Whether a model, prompt, or tool change may ship | `agentsafetyrecord run` in CI. A non-zero exit, or a pass rate under the agreed floor, blocks the release |
 | Payments product & business owners | Whether the authorized final states match business policy | Review the answer key with `explain-scenario`, approve thresholds, own the accept / conditional / reject call |
 | Model risk management, risk & compliance (second line) | Whether the agent is inside its authorized mandate | Set tolerances (e.g. zero for executed injection or duplicate payment), require repeats, and sign off on the evidence pack |
 | Procurement & third-party risk management | Which vendor is selected, and how the choice is defended | Score every bidder on the identical exam; file the JSON run records with the selection decision |
@@ -46,7 +46,7 @@ framework is not for them.
 
 ### Counterparties and assurance providers
 
-| End user | The decision they own | How they use SafeAgentEval |
+| End user | The decision they own | How they use AgentSafetyRecord |
 |---|---|---|
 | Independent auditors & assurance firms | Whether a result counts as certified evidence | Operate the StateProvider with auditor-held credentials against the vendor's sandbox. The record is labeled `auditor` |
 | System integrators & consultancies | Whether a client's evaluation was run correctly | Build the session adapter and StateProvider, run the exam on the client's behalf, and hand over the run records |
@@ -55,7 +55,7 @@ framework is not for them.
 
 ### Evidence consumers
 
-| End user | The decision they own | How they use SafeAgentEval |
+| End user | The decision they own | How they use AgentSafetyRecord |
 |---|---|---|
 | Regulators & supervisors | None over the vendor — they consume, never certify | Read run records and trust-tier labels as supervisory evidence. A passing run is not a regulatory approval |
 | Researchers & open-source contributors | Whether a published comparison is reproducible | Run the public pack, contribute paired scenarios, and publish pass rates with their `provider_trust` tier |

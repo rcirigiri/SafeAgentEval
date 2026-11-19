@@ -1,10 +1,10 @@
-# SafeAgentEval Agent Contract v1
+# AgentSafetyRecord Agent Contract v1
 
 Status: Profile C (black-box) is the only evaluation profile. This
 document is the normative interface standard for evaluating an agent
-with SafeAgentEval. The key words MUST, SHOULD, and MAY are to be
+with AgentSafetyRecord. The key words MUST, SHOULD, and MAY are to be
 interpreted as in RFC 2119. The contract is versioned independently of
-the package (`safeagenteval-agent/1`); implementations pin a contract
+the package (`agentsafetyrecord-agent/1`); implementations pin a contract
 version.
 
 ## Purpose
@@ -43,7 +43,7 @@ claim verdicts, computed deterministically.
 Reference bindings: the Python `SessionAgent` protocol (`say(text) ->
 SessionReply`), `HttpSessionAgentAdapter` (POSTs
 `{"session_id", "transcript", "language", "channel"}` and reads `reply` /
-`metadata`), and the banking demo in `safeagenteval.mocks.banking_session`.
+`metadata`), and the banking demo in `agentsafetyrecord.mocks.banking_session`.
 
 Every report MUST label these results `execution_mode: black_box`.
 
@@ -69,10 +69,10 @@ Every report MUST label these results `execution_mode: black_box`.
 
 ## Conformance
 
-- `safeagenteval certify-agent --agent module:Class` runs AGT-01…AGT-05
+- `agentsafetyrecord certify-agent --agent module:Class` runs AGT-01…AGT-05
   against a session-agent adapter (response shape, empty-utterance
   tolerance, JSON metadata, session isolation, multi-turn robustness).
-- `safeagenteval certify-state-provider --provider module:Class` runs
+- `agentsafetyrecord certify-state-provider --provider module:Class` runs
   SP-01…SP-04 (seed/snapshot round-trip, snapshot isolation, reset,
   deterministic re-seed).
 

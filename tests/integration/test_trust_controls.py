@@ -4,15 +4,15 @@ from __future__ import annotations
 
 import asyncio
 
-from safeagenteval.agents.session import ScriptedSessionAgent
-from safeagenteval.backends.state_provider import InMemoryStateProvider
-from safeagenteval.claims.verifier import (
+from agentsafetyrecord.agents.session import ScriptedSessionAgent
+from agentsafetyrecord.backends.state_provider import InMemoryStateProvider
+from agentsafetyrecord.claims.verifier import (
     ActionClaim,
     ClaimStatus,
     ClaimVerdictValue,
     verify_claims,
 )
-from safeagenteval.core.models import (
+from agentsafetyrecord.core.models import (
     CustomerTurn,
     Domain,
     FailureCategory,
@@ -20,9 +20,9 @@ from safeagenteval.core.models import (
     Scenario,
     ScenarioKind,
 )
-from safeagenteval.harness.session_runner import run_session_scenario
-from safeagenteval.scoring.invariants import check_state_invariants
-from safeagenteval.trace.recorder import EventKind
+from agentsafetyrecord.harness.session_runner import run_session_scenario
+from agentsafetyrecord.scoring.invariants import check_state_invariants
+from agentsafetyrecord.trace.recorder import EventKind
 
 INITIAL: JsonObject = {
     "accounts": {"account-checking": {"owner_id": "c1", "balance": "2000.00"}},
@@ -70,7 +70,7 @@ class _ProbeFailingProvider(InMemoryStateProvider):
     """Round-trips scenario-shaped state but garbles arbitrary probes."""
 
     def seed(self, initial_state: JsonObject) -> None:
-        if "__safeagenteval_probe__" in initial_state:
+        if "__agentsafetyrecord_probe__" in initial_state:
             super().seed({"garbled": True})
         else:
             super().seed(initial_state)

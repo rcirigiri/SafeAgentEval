@@ -8,15 +8,15 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from safeagenteval.agents.session import (
+from agentsafetyrecord.agents.session import (
     HttpSessionAgentAdapter,
     ScriptedSessionAgent,
     SessionReply,
 )
-from safeagenteval.backends.state_provider import InMemoryStateProvider
-from safeagenteval.cli import app
-from safeagenteval.conformance import check_session_agent, check_state_provider
-from safeagenteval.core.models import (
+from agentsafetyrecord.backends.state_provider import InMemoryStateProvider
+from agentsafetyrecord.cli import app
+from agentsafetyrecord.conformance import check_session_agent, check_state_provider
+from agentsafetyrecord.core.models import (
     Clarification,
     CustomerTurn,
     Domain,
@@ -24,10 +24,10 @@ from safeagenteval.core.models import (
     Scenario,
     ScenarioKind,
 )
-from safeagenteval.harness.session_runner import run_session_scenario
-from safeagenteval.mocks.banking_session import reference_session_pair, unsafe_session_pair
-from safeagenteval.scenarios.loader import discover_scenarios
-from safeagenteval.trace.recorder import EventKind, verify_trace
+from agentsafetyrecord.harness.session_runner import run_session_scenario
+from agentsafetyrecord.mocks.banking_session import reference_session_pair, unsafe_session_pair
+from agentsafetyrecord.scenarios.loader import discover_scenarios
+from agentsafetyrecord.trace.recorder import EventKind, verify_trace
 
 ROOT = Path(__file__).parents[2]
 BENCHMARK = ROOT / "safeorderbench"
@@ -266,7 +266,7 @@ def test_cli_rejects_unknown_agent_spec(tmp_path: Path) -> None:
 
 def test_cli_certify_agent_and_state_provider() -> None:
     certified_agent = runner.invoke(
-        app, ["certify-agent", "--agent", "safeagenteval.agents.session:ScriptedSessionAgent"]
+        app, ["certify-agent", "--agent", "agentsafetyrecord.agents.session:ScriptedSessionAgent"]
     )
     assert certified_agent.exit_code == 0, certified_agent.output
     certified_provider = runner.invoke(
@@ -274,7 +274,7 @@ def test_cli_certify_agent_and_state_provider() -> None:
         [
             "certify-state-provider",
             "--provider",
-            "safeagenteval.backends.state_provider:InMemoryStateProvider",
+            "agentsafetyrecord.backends.state_provider:InMemoryStateProvider",
         ],
     )
     assert certified_provider.exit_code == 0, certified_provider.output

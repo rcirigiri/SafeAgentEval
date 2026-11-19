@@ -1,14 +1,18 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/safeagenteval-logo-horizontal-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="docs/assets/brand/safeagenteval-logo-horizontal.svg">
-    <img src="docs/assets/brand/safeagenteval-logo-horizontal.svg" alt="SafeAgentEval — State-Verified Agent Safety" width="640">
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/agentsafetyrecord-logo-horizontal-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="docs/assets/brand/agentsafetyrecord-logo-horizontal.svg">
+    <img src="docs/assets/brand/agentsafetyrecord-logo-horizontal.svg" alt="AgentSafetyRecord — State-Verified Agent Safety" width="640">
   </picture>
 </p>
 
-# SafeAgentEval
+# AgentSafetyRecord
 
-SafeAgentEval is a state-verified evaluation harness for **black-box AI
+> **Renamed:** AgentSafetyRecord was formerly named SafeAgentEval.
+> Earlier talks, submissions, issues, and releases under that name
+> refer to this project.
+
+AgentSafetyRecord is a state-verified evaluation harness for **black-box AI
 agents that change state**. It drives an agent with a scripted scenario
 — customer utterances for conversational agents; events such as
 data-feed updates, configuration or settings changes, scheduled
@@ -27,7 +31,7 @@ record and evaluates both:
 
 SafeOrderBench is the companion scenario set used to exercise the harness.
 
-SafeAgentEval is **framework-first**: organizations are expected to
+AgentSafetyRecord is **framework-first**: organizations are expected to
 evaluate their own agents by authoring their own scenarios — against
 their own systems, policies, and test data — and running them through
 this harness. The domain packs shipped in this repository are
@@ -50,7 +54,7 @@ website lives in [`site/`](site/README.md) (static, no build step).
 
 ## Who this is for
 
-SafeAgentEval is for any institution that will let an agent commit a
+AgentSafetyRecord is for any institution that will let an agent commit a
 change on a system of record — and has to decide whether that agent may
 do so. The grade is the sandbox ledger after the conversation, not the
 chat transcript. Every end user below owns the go/no-go decision, the
@@ -59,7 +63,7 @@ sandbox, the evidence, or the consumption of that evidence:
 | Audience | Who they are | What they decide or do |
 |---|---|---|
 | **Enterprise decision-makers** | Banks, credit unions, payments fintechs, processors, and BaaS platforms — buyers, product owners, procurement & third-party risk | Which vendor or embedded agent may move customer money, on what limits; score every bidder on the identical exam and file the run records |
-| **Builders & release gatekeepers** | AI platform, agent engineering, QA/evaluation, security & red teams, model risk & compliance | Whether a model, prompt, or tool change may ship — `safeagenteval run` as a CI gate against their own scenario suites, with tolerances set by the second line (e.g. zero tolerance for executed injection or duplicate payment) |
+| **Builders & release gatekeepers** | AI platform, agent engineering, QA/evaluation, security & red teams, model risk & compliance | Whether a model, prompt, or tool change may ship — `agentsafetyrecord run` as a CI gate against their own scenario suites, with tolerances set by the second line (e.g. zero tolerance for executed injection or duplicate payment) |
 | **Operators & assurance** | Operations, support & incident management; internal audit; independent auditors and system integrators | Turn each production incident into a regression scenario; re-perform saved runs — the hash-linked trace is the audited artifact; operate the StateProvider at auditor tier so results count as certified evidence |
 | **Counterparties** | Agent vendors & ISVs; foundation-model and agent-platform providers | Supply the session endpoint and sandbox and keep the exam in CI after acceptance; gate model versions by per-scenario pass rates on the same pack |
 | **Evidence consumers** | Regulators & supervisors; researchers & open-source contributors | Read run records and trust-tier labels (a pass is not a regulatory approval); reproduce public comparisons and contribute paired scenarios |
@@ -130,12 +134,12 @@ verdict.
 
 ```bash
 python -m pip install -e .
-safeagenteval run --domain banking --agent session-reference   # demo suite
-safeagenteval run --agent your.module:YourSessionAgent --state-provider your.module:YourProvider
-safeagenteval certify-agent --agent your.module:YourSessionAgent
-safeagenteval certify-state-provider --provider your.module:YourProvider
-safeagenteval explain-scenario safeorderbench/public/banking/confirmation_gate/benign_transfer_001.yaml
-safeagenteval report artifacts/cli_runs
+agentsafetyrecord run --domain banking --agent session-reference   # demo suite
+agentsafetyrecord run --agent your.module:YourSessionAgent --state-provider your.module:YourProvider
+agentsafetyrecord certify-agent --agent your.module:YourSessionAgent
+agentsafetyrecord certify-state-provider --provider your.module:YourProvider
+agentsafetyrecord explain-scenario safeorderbench/public/banking/confirmation_gate/benign_transfer_001.yaml
+agentsafetyrecord report artifacts/cli_runs
 ```
 
 `run` writes one JSON record (full trace + score) per scenario run and
@@ -146,7 +150,7 @@ nondeterministic agents; the leaderboard reports per-scenario pass rates.
 ## Repository layout
 
 ```text
-SafeAgentEval/
+AgentSafetyRecord/
 ├── .github/workflows/       Continuous integration
 ├── docs/                    Agent contract, guides, use-case catalog
 ├── examples/                Black-box usage examples
@@ -158,7 +162,7 @@ SafeAgentEval/
 │   ├── schemas/             Machine-readable dataset schemas
 │   └── splits/              Public manifests and held-out hash
 ├── scripts/                 Maintenance entry points
-├── src/safeagenteval/
+├── src/agentsafetyrecord/
 │   ├── agents/              Session-agent interface (say -> reply)
 │   ├── backends/            StateProvider (seed / snapshot / reset)
 │   ├── claims/              Claim extraction and verification
@@ -185,7 +189,7 @@ SafeAgentEval/
 python -m venv .venv
 python -m pip install -e ".[dev]"
 pytest
-safeagenteval --help
+agentsafetyrecord --help
 ```
 
 ## Scoring model
@@ -216,14 +220,14 @@ safeagenteval --help
 
 ## Research boundary
 
-SafeAgentEval evaluates an agent during a controlled benchmark run
+AgentSafetyRecord evaluates an agent during a controlled benchmark run
 against a sandbox. It does not intercept, block, or repair anything in
 production, and it cannot see the agent's internal actions — only the
 utterances it receives, the replies it returns, and the final state.
 
 ## Vision
 
-> SafeAgentEval evaluates whether AI agents act within their authorized
+> AgentSafetyRecord evaluates whether AI agents act within their authorized
 > mandate and report their actions truthfully — verified against
 > independently observed system state — across payments, commerce, and
 > other state-changing workflows.
@@ -251,5 +255,5 @@ finalized before the first public dataset release.
   </a>
 </p>
 
-**Rammohan Srikanth Cirigiri** — Creator & maintainer, SafeAgentEval
+**Rammohan Srikanth Cirigiri** — Creator & maintainer, AgentSafetyRecord
 ([ram.cirigiri@gmail.com](mailto:ram.cirigiri@gmail.com))

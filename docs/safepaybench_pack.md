@@ -10,7 +10,7 @@ fulfilment live on different systems.
 
 Status: **pilot implemented, not released.** The 14 scenarios live in
 `safeorderbench/public/payments/`, run against reference demo agents
-(`safeagenteval.mocks.payments_session`), and discriminate
+(`agentsafetyrecord.mocks.payments_session`), and discriminate
 (`tests/integration/test_payments_pack.py`). Release requires a real
 StateProvider over a payments sandbox, repeats against a real agent,
 and external payments review.
@@ -95,5 +95,5 @@ cases.
 
 ```bash
 python -m pytest tests/integration/test_payments_pack.py
-safeagenteval run --domain payments --agent your.module:YourAgent --state-provider your.module:YourProvider
+agentsafetyrecord run --domain payments --agent your.module:YourAgent --state-provider your.module:YourProvider
 ```

@@ -1,7 +1,7 @@
 # Client playbook: reviewing an agentic banking-payments vendor
 
 How a buyer (bank, fintech, platform) evaluates a vendor's
-self-executing payments agent with SafeAgentEval, and how the vendor
+self-executing payments agent with AgentSafetyRecord, and how the vendor
 is validated. Who those customers are, and how a firm uses the same
 exam on its own agent, is defined in `docs/customers.md`. Read
 `docs/trust_model.md` first: it defines who must control the
@@ -30,7 +30,7 @@ procurement decision).
 1. **Agent endpoint**: a session service receiving one customer
    utterance at a time (`say(text)`) and returning a reply; it keeps
    its own state and executes its own tools internally.
-   (`safeagenteval new-session-agent` scaffolds this.)
+   (`agentsafetyrecord new-session-agent` scaffolds this.)
 2. **Sandbox access**: a resettable, seedable test tenant (synthetic
    customers only, never production) plus read access to its system
    of record for the evaluator.
@@ -43,8 +43,8 @@ trust model). No provider source visibility → no certified tier.
 ## Phase 2 — Gate 1: conformance (automated)
 
 ```bash
-safeagenteval certify-agent --agent <adapter>            # AGT-01..05
-safeagenteval certify-state-provider --provider <impl>  # SP-01..04
+agentsafetyrecord certify-agent --agent <adapter>            # AGT-01..05
+agentsafetyrecord certify-state-provider --provider <impl>  # SP-01..04
 ```
 
 AGT checks reply shape, empty-input tolerance, JSON metadata,
@@ -57,14 +57,14 @@ evaluation**; the integration itself is the finding.
 
 Run one benign and one adversarial scenario end to end. Business
 owners review scenarios and authorized outcomes with
-`safeagenteval explain-scenario <id>` and `lint-scenario`, confirming
+`agentsafetyrecord explain-scenario <id>` and `lint-scenario`, confirming
 the answer key matches policy ("sending $500 to Mallory on a
 confirmed $100 instruction is exactly what must never happen").
 
 ## Phase 4 — Gate 2: full evaluation
 
 ```bash
-safeagenteval run --domain banking --agent <vendor> --repeats 10 \
+agentsafetyrecord run --domain banking --agent <vendor> --repeats 10 \
   --provider-probe --provider-trust auditor \
   --extractor-model <provider:model> --min-pass-rate 1.0
 ```

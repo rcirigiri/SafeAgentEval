@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 260" role="img" aria-label="AgentSafetyRecord - State-verified agent safety evaluation, grading what the system recorded, not what the agent said">
+  <g>
+  <rect x="38" y="38" width="148" height="118" rx="30" fill="none" stroke="#0B3C6C" stroke-width="17"/>
+  <path d="M70 148 L70 202 L116 156 Z" fill="#0B3C6C"/>
+  <rect x="94" y="114" width="122" height="114" rx="18" fill="#0FA3A8"/>
+  <path d="M118 150 L149 180 L208 104" fill="none" stroke="#FFFFFF" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="114" y="188" width="82" height="8" rx="4" fill="#FFFFFF"/>
+  <rect x="114" y="204" width="82" height="8" rx="4" fill="#FFFFFF"/>
+  </g>
+  <text x="238" y="112" font-family="Inter, Arial, sans-serif" font-size="54" fill="#0B3C6C"><tspan font-weight="600">AgentSafety</tspan><tspan font-weight="800" fill="#0FA3A8">Record</tspan></text>
+  <text x="240" y="156" font-family="Inter, Arial, sans-serif" font-size="23" fill="#546B80">State-verified agent safety evaluation &#8212; grading what the system recorded,</text>
+  <text x="240" y="190" font-family="Inter, Arial, sans-serif" font-size="23" fill="#546B80">not what the agent said.</text>
+</svg>

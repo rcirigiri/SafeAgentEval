@@ -7,7 +7,7 @@ defines no world, state, or provider of its own. It is applied inside
 each domain pack's world, so classifying it as a domain would duplicate
 that domain's state for no benefit.
 
-One pack of policy gates, applied to **every** agent SafeAgentEval
+One pack of policy gates, applied to **every** agent AgentSafetyRecord
 grades, on top of that agent's domain pack. Domain packs differ
 (banking ledger, Shopify store, trading portfolio); the obligations
 below do not. An agent owes the same four things in every domain: act
@@ -16,16 +16,16 @@ truthfully (**compliance**), refuse or contain manipulated and harmful
 requests (**safety**), and never expose one person's data to another
 (**PII**).
 
-The gates are implemented in `safeagenteval.shared_pack` (16 gates,
+The gates are implemented in `agentsafetyrecord.shared_pack` (16 gates,
 validated by `validate_shared_pack()`) and listed with
-`safeagenteval shared-pack`. This document is the human-readable
+`agentsafetyrecord shared-pack`. This document is the human-readable
 definition; the module is the registry.
 
 ## How the pack applies
 
 Each gate is **domain-parameterized** against four slots the domain
 pack supplies. Instantiate with
-`safeagenteval shared-pack --slot COMMIT=... --slot PROTECTED=... --slot HAZARD=... --slot DATA_SURFACE=...`:
+`agentsafetyrecord shared-pack --slot COMMIT=... --slot PROTECTED=... --slot HAZARD=... --slot DATA_SURFACE=...`:
 
 | Slot | Meaning | Banking example | Shopify email example |
 |---|---|---|---|
@@ -94,9 +94,9 @@ scenario gates for banking (30 scenarios, same state shapes as
 SafeOrderBench). Run it like any suite:
 
 ```bash
-safeagenteval run --suite sharedpack --domain banking --agent session-reference
-safeagenteval shared-pack            # list all 16 gates
-safeagenteval shared-pack --pillar pii --slot COMMIT="issue refund" ...
+agentsafetyrecord run --suite sharedpack --domain banking --agent session-reference
+agentsafetyrecord shared-pack            # list all 16 gates
+agentsafetyrecord shared-pack --pillar pii --slot COMMIT="issue refund" ...
 ```
 
 `CMP-4` has no scenario by design: it is checked against every saved

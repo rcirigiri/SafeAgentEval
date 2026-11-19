@@ -163,4 +163,4 @@ authorized: { orders_after_tick_6: 0 }               # grading: exact
 4. Read grading state from the state endpoint — per-order timing, status, and notionals, plus the exchange-side record for Scenario 5.
 5. Report by category with hash-linked traces; exit code gates the run.
 
-*SafeAgentEval — state-verified evaluation for agents that change state. Synthetic data and sandbox only; no live funds.*
+*AgentSafetyRecord — state-verified evaluation for agents that change state. Synthetic data and sandbox only; no live funds.*

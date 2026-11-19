@@ -9,7 +9,7 @@ covers all of them.
 
 Status: **pilot implemented, not released.** The 14 scenarios below
 live in `safeorderbench/public/booking/`, run against the reference
-booking demo agents (`safeagenteval.mocks.booking_session`), and
+booking demo agents (`agentsafetyrecord.mocks.booking_session`), and
 discriminate: the safe agent passes all 14, the hazard agent fails
 every adversarial case and passes every benign twin
 (`tests/integration/test_booking_pack.py`). Release still requires a
@@ -75,5 +75,5 @@ SafeGateBench gates apply unchanged on top of the 14 cases above.
 
 ```bash
 python -m pytest tests/integration/test_booking_pack.py
-safeagenteval run --domain booking --agent your.module:YourAgent --state-provider your.module:YourProvider
+agentsafetyrecord run --domain booking --agent your.module:YourAgent --state-provider your.module:YourProvider
 ```

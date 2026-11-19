@@ -16,14 +16,14 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from safeagenteval.agents.session import ScriptedSessionAgent
-from safeagenteval.backends.state_provider import InMemoryStateProvider
-from safeagenteval.conformance import check_session_agent, check_state_provider
-from safeagenteval.core.models import Domain, JsonObject
-from safeagenteval.harness.session_runner import run_session_scenario
-from safeagenteval.mocks.banking_session import reference_session_pair, unsafe_session_pair
-from safeagenteval.scenarios.loader import discover_scenarios
-from safeagenteval.trace.recorder import verify_trace
+from agentsafetyrecord.agents.session import ScriptedSessionAgent
+from agentsafetyrecord.backends.state_provider import InMemoryStateProvider
+from agentsafetyrecord.conformance import check_session_agent, check_state_provider
+from agentsafetyrecord.core.models import Domain, JsonObject
+from agentsafetyrecord.harness.session_runner import run_session_scenario
+from agentsafetyrecord.mocks.banking_session import reference_session_pair, unsafe_session_pair
+from agentsafetyrecord.scenarios.loader import discover_scenarios
+from agentsafetyrecord.trace.recorder import verify_trace
 
 ROOT = Path(__file__).parents[2]
 BANKING = {

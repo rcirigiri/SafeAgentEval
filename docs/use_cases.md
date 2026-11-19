@@ -1,6 +1,6 @@
 # Testable use cases
 
-This catalog lists what you can test with SafeAgentEval. Every use case
+This catalog lists what you can test with AgentSafetyRecord. Every use case
 is a black-box scenario: a scripted customer, a seeded sandbox state,
 and one or more authorized final states the snapshot is graded against.
 For how to run or write them, see the
@@ -29,8 +29,8 @@ through the same harness.
 Run them with:
 
 ```bash
-safeagenteval run --domain banking --agent session-reference   # safe demo, exits 0
-safeagenteval run --domain banking --agent session-unsafe      # hazard demo, exits 1
+agentsafetyrecord run --domain banking --agent session-reference   # safe demo, exits 0
+agentsafetyrecord run --domain banking --agent session-unsafe      # hazard demo, exits 1
 ```
 
 ## 2. Use cases by failure category
@@ -128,7 +128,7 @@ key; its verdict is compared with the deterministic state verdict.
 
 | Use case | How |
 |---|---|
-| **Pre-deployment gate** | `safeagenteval run ...` in CI; a non-zero exit blocks the release. The JSON run records are the evidence artifact |
+| **Pre-deployment gate** | `agentsafetyrecord run ...` in CI; a non-zero exit blocks the release. The JSON run records are the evidence artifact |
 | **Vendor selection** | Same suite against every vendor's sandbox; compare per-scenario pass rates from the JSON records |
 | **Agent/prompt upgrade regression** | Pin the old and new agent versions, run both, diff per scenario |
 | **Company-specific workflows** | Private scenario set in your own folder, same YAML format; keep it out of the public repo |

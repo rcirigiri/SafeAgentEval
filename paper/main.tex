@@ -26,7 +26,7 @@
 \setlist{itemsep=2pt, topsep=4pt}
 \setlength{\emergencystretch}{2em}
 
-\title{SafeAgentEval and SafeOrderBench: State-Verified Safety Evaluation\\
+\title{AgentSafetyRecord and SafeOrderBench: State-Verified Safety Evaluation\\
 for Transactional AI Agents}
 \author{Rammohan Srikanth Cirigiri\\Independent Researcher}
 \date{November 2026\\[2pt] \small Version 0.6: banking-only black-box release and black-box pilot with judges}
@@ -39,7 +39,7 @@ AI agents can now move money on a customer's behalf. Evaluating only
 what such an agent generates cannot establish what it did, whether the
 action was authorized, or whether it reported the action truthfully. We
 measure these failures, led by agentic payments, where an unauthorized
-action can move money irreversibly. SafeAgentEval is an open-source
+action can move money irreversibly. AgentSafetyRecord is an open-source
 harness that drives an agent with customer utterances, records its
 replies in a hash-linked trace, reads the resulting backend state
 through a state provider, and scores two axes: whether the final state
@@ -167,7 +167,7 @@ reported once human labeling is complete.
   explicit denominators, and give protocols for extracting and checking claims
   against the final state and for grading runs with judges at two levels of
   visibility.
-  \item \textbf{SafeAgentEval}, an architecture-agnostic Python harness that
+  \item \textbf{AgentSafetyRecord}, an architecture-agnostic Python harness that
   drives a self-executing agent with customer utterances, records replies
   and agent-reported metadata in a tamper-evident trace, and grades the
   final state read from the agent's own sandbox through a state provider
@@ -202,7 +202,7 @@ reported once human labeling is complete.
 \section{Related work}
 \label{sec:related}
 
-SafeAgentEval sits between three lines of work: tool-use benchmarks that check
+AgentSafetyRecord sits between three lines of work: tool-use benchmarks that check
 outcomes, agent-safety benchmarks that check harmful actions, and
 response-quality judges that check text. Its distinct contribution is
 cross-checking the second against the third.
@@ -254,7 +254,7 @@ execution trace rather than a document.
 outside the model: CaMeL~\cite{debenedetti2025camel}, the design patterns of
 Beurer-Kellner et al.~\cite{beurerkellner2025patterns},
 Progent~\cite{shi2025progent}, AgentSpec~\cite{wang2025agentspec} and
-FIDES~\cite{costa2025fides}. These are complementary. SafeAgentEval is
+FIDES~\cite{costa2025fides}. These are complementary. AgentSafetyRecord is
 architecture-agnostic and can measure any of them. It is an evaluation harness, not a runtime defense: it
 measures such architectures from outside, including self-executing agents
 that no gate can mediate, and its prevention role is pre-deployment, as a
@@ -268,10 +268,10 @@ agent systems in January 2026~\cite{nist2026rfi}. SafeOrderBench is one concrete
 measurement method of that kind.
 
 % ---------------------------------------------------------------------------
-\section{SafeAgentEval}
+\section{AgentSafetyRecord}
 \label{sec:harness}
 
-SafeAgentEval evaluates a self-executing agent from outside: it seeds the
+AgentSafetyRecord evaluates a self-executing agent from outside: it seeds the
 agent's sandbox with a scenario's initial state, drives a scripted
 customer conversation, records the replies in a hash-linked trace, and
 grades the final state read back from the sandbox. The agent and any
@@ -283,7 +283,7 @@ components and their interaction.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{figures/architecture.png}
-\caption{SafeAgentEval evaluates a self-executing agent as a black box.
+\caption{AgentSafetyRecord evaluates a self-executing agent as a black box.
 Color encodes trust: blue components are trusted (harness and state
 provider), orange components are untrusted (the agent under test and the
 model-based claim extractor), green is the deterministic score, and slate
@@ -434,7 +434,7 @@ state object), and per-turn snapshots mean a statement true when spoken
 (for example a pre-transfer balance) is no longer judged against the
 end state. The pilot traces (Section~\ref{sec:pilot-claims}) predate
 per-turn snapshots, so both former limits bind there; the saved claims
-can be re-graded offline (\texttt{safeagenteval regrade}) for the
+can be re-graded offline (\texttt{agentsafetyrecord regrade}) for the
 key-aware half, but point-in-time re-grading of the pilot requires a
 re-run. Verification of extracted claims is fully deterministic.
 
@@ -842,8 +842,8 @@ fails the run. This pair of runs is the pack's smoke test, regenerated
 deterministically with:
 
 \begin{verbatim}
-  python -m safeagenteval run --domain banking --agent session-reference
-  python -m safeagenteval run --domain banking --agent session-unsafe
+  python -m agentsafetyrecord run --domain banking --agent session-reference
+  python -m agentsafetyrecord run --domain banking --agent session-unsafe
 \end{verbatim}
 
 (exit codes 0 and 1 respectively under the default
@@ -1145,8 +1145,8 @@ benign-control scenarios, domain-specific failure modes and an independent
 domain review, so that extension does not dilute the standard set by the
 released banking pack.
 
-\paragraph{Release.} SafeAgentEval will be released on PyPI as
-\code{safeagenteval} under the Apache-2.0 license, and SafeOrderBench on Hugging
+\paragraph{Release.} AgentSafetyRecord will be released on PyPI as
+\code{agentsafetyrecord} under the Apache-2.0 license, and SafeOrderBench on Hugging
 Face under CC BY 4.0 with a datasheet~\cite{gebru2021datasheets}. This version
 contains the black-box harness (session runner, state scoring, claim
 extraction and verification, LLM judge with a \code{judge} command, and
@@ -1166,8 +1166,8 @@ blind. Scenarios contain no real customer or patient data.
 full suite. The released black-box demonstration is regenerated
 deterministically with
 \begin{verbatim}
-  python -m safeagenteval run --domain banking --agent session-reference
-  python -m safeagenteval run --domain banking --agent session-unsafe
+  python -m agentsafetyrecord run --domain banking --agent session-reference
+  python -m agentsafetyrecord run --domain banking --agent session-unsafe
 \end{verbatim}
 (exit codes 0 and 1 respectively; the safe demonstrator passes 16/16, the
 hazard demonstrator passes the 7 benign controls and fails the 9 adversarial
@@ -1187,7 +1187,7 @@ which reports unlabeled rows as unlabeled rather than as agreement.
 
 Evaluating an agent that can act requires checking both what it did to the
 system of record and whether it told the user the truth about it.
-SafeAgentEval makes that check reproducible. SafeOrderBench applies it
+AgentSafetyRecord makes that check reproducible. SafeOrderBench applies it
 first to agentic payments, where an unauthorized commit can move money
 irreversibly; the same authorization model is designed to extend to other
 regulated consumer domains, which remain roadmap. On the released black-box banking pack, a safe

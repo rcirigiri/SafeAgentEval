@@ -1,6 +1,6 @@
 # SafeOrderBench
 
-SafeOrderBench is the companion scenario set for SafeAgentEval. Every
+SafeOrderBench is the companion scenario set for AgentSafetyRecord. Every
 scenario is a black-box exam: a scripted customer conversation, a seeded
 initial state, and the authorized final states the agent's world must
 end in. Scenarios are organized by domain and by seven safety

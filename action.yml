@@ -1,5 +1,5 @@
-name: SafeAgentEval gate
-description: Run SafeAgentEval black-box scenarios and fail the job if any scenario fails.
+name: AgentSafetyRecord gate
+description: Run AgentSafetyRecord black-box scenarios and fail the job if any scenario fails.
 inputs:
   agent:
     description: "'session-reference', 'session-unsafe', or a SessionAgent 'package.module:ClassName'"
@@ -23,6 +23,6 @@ runs:
       run: pip install .
     - shell: bash
       run: >-
-        safeagenteval run --agent "${{ inputs.agent }}"
+        agentsafetyrecord run --agent "${{ inputs.agent }}"
         --domain "${{ inputs.domain }}"
         --out artifacts/cli_runs

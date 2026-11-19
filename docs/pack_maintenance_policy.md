@@ -1,6 +1,6 @@
 # Pack maintenance policy
 
-SafeAgentEval is a framework with scenario packs. The framework and
+AgentSafetyRecord is a framework with scenario packs. The framework and
 two flagship packs are maintained products; the remaining packs are
 partner-driven templates. This policy states, per pack, what
 maintenance a user or design partner can expect, so that pilot packs

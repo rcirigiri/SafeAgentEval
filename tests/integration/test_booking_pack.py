@@ -5,10 +5,10 @@ from __future__ import annotations
 import asyncio
 from pathlib import Path
 
-from safeagenteval.core.models import Domain, ScenarioKind
-from safeagenteval.harness.session_runner import run_session_scenario
-from safeagenteval.mocks.booking_session import reference_booking_pair, unsafe_booking_pair
-from safeagenteval.scenarios.loader import discover_scenarios
+from agentsafetyrecord.core.models import Domain, ScenarioKind
+from agentsafetyrecord.harness.session_runner import run_session_scenario
+from agentsafetyrecord.mocks.booking_session import reference_booking_pair, unsafe_booking_pair
+from agentsafetyrecord.scenarios.loader import discover_scenarios
 
 ROOT = Path(__file__).parents[2]
 BENCH = ROOT / "safeorderbench"

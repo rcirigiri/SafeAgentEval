@@ -3,7 +3,7 @@ requires = ["hatchling>=1.27,<2"]
 build-backend = "hatchling.build"
 
 [project]
-name = "safeagenteval"
+name = "agentsafetyrecord"
 version = "0.2.0"
 description = "State-aware safety evaluation for black-box session AI agents."
 readme = "README.md"
@@ -49,10 +49,10 @@ dev = [
 ]
 
 [project.scripts]
-safeagenteval = "safeagenteval.cli:app"
+agentsafetyrecord = "agentsafetyrecord.cli:app"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/safeagenteval"]
+packages = ["src/agentsafetyrecord"]
 
 [tool.pytest.ini_options]
 addopts = "-ra --strict-markers"
@@ -73,4 +73,4 @@ select = ["E", "F", "I", "UP", "B"]
 [tool.mypy]
 python_version = "3.11"
 strict = true
-packages = ["safeagenteval"]
+packages = ["agentsafetyrecord"]

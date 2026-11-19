@@ -1,4 +1,4 @@
-# SafeAgentEval brand assets
+# AgentSafetyRecord brand assets
 
 Master mark: **Concept A — Speech vs. Ledger.** A speech bubble (what the
 agent said) verified against a ledger block (the recorded final state),
@@ -10,7 +10,7 @@ tier), never as badges.
 
 **Lockup tagline:** "State-Verified Agent Safety" — deliberately free of
 any domain name, so the identity survives new scenario packs. The vision
-sentence it compresses: SafeAgentEval evaluates whether AI agents act
+sentence it compresses: AgentSafetyRecord evaluates whether AI agents act
 within their authorized mandate and report their actions truthfully,
 verified against independently observed system state, across payments,
 commerce, and other state-changing workflows.
@@ -19,11 +19,11 @@ commerce, and other state-changing workflows.
 
 | File | Use |
 |---|---|
-| `safeagenteval-icon.svg` / `.png` (512/256/128/64/32) | Icon only — slides, favicons, avatars |
-| `safeagenteval-icon-dark.png` | Icon recoloured for dark backgrounds |
-| `safeagenteval-logo-horizontal.svg` / `.png` | Primary lockup (light backgrounds) |
-| `safeagenteval-logo-horizontal-dark.svg` / `.png` | Lockup for dark backgrounds |
-| `safeagenteval-logo-horizontal-mono.svg` / `.png` | Single-colour lockup (print, watermarks) |
+| `agentsafetyrecord-icon.svg` / `.png` (512/256/128/64/32) | Icon only — slides, favicons, avatars |
+| `agentsafetyrecord-icon-dark.png` | Icon recoloured for dark backgrounds |
+| `agentsafetyrecord-logo-horizontal.svg` / `.png` | Primary lockup (light backgrounds) |
+| `agentsafetyrecord-logo-horizontal-dark.svg` / `.png` | Lockup for dark backgrounds |
+| `agentsafetyrecord-logo-horizontal-mono.svg` / `.png` | Single-colour lockup (print, watermarks) |
 | `github-social-preview.png` | GitHub repository social preview (1280×640) |
 | `author-card.png` | Author card at the bottom of the repository README (1600×560; regenerate with `python scripts/build_author_card.py`) |
 | `github-avatar.png` | Padded icon (512×512, white) sized for circular avatar crops |
@@ -41,7 +41,7 @@ commerce, and other state-changing workflows.
 
 ## Rules
 
-- Render the name exactly as `SafeAgentEval` (one word, that capitalisation).
+- Render the name exactly as `AgentSafetyRecord` (one word, that capitalisation).
 - Do not place the mark beside OWASP, NIST, or payment-network logos in a
   way that implies endorsement.
 - Do not create "certified" seals or pass/fail badges from the checkmark.

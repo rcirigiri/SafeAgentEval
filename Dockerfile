@@ -4,5 +4,5 @@ WORKDIR /app
 COPY . /app
 RUN pip install --no-cache-dir .
 
-ENTRYPOINT ["safeagenteval"]
+ENTRYPOINT ["agentsafetyrecord"]
 CMD ["version"]

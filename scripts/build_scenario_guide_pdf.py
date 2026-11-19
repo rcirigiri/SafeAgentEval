@@ -1,7 +1,7 @@
 """Build docs/SafeOrderBench_Banking_Scenario_Guide.pdf from the live pack.
 
 The guide is generated, not hand-written: scenarios are loaded through
-``safeagenteval.scenarios.loader`` and both demo agents are actually run
+``agentsafetyrecord.scenarios.loader`` and both demo agents are actually run
 against each one, so every input, expected outcome, and verdict in the
 PDF is the benchmark as it exists today.
 
@@ -26,11 +26,11 @@ from reportlab.platypus import (
     TableStyle,
 )
 
-from safeagenteval import __version__
-from safeagenteval.core.models import Domain, JsonObject, Scenario
-from safeagenteval.harness.session_runner import RunResult, run_session_scenario
-from safeagenteval.mocks.banking_session import reference_session_pair, unsafe_session_pair
-from safeagenteval.scenarios.loader import discover_scenarios
+from agentsafetyrecord import __version__
+from agentsafetyrecord.core.models import Domain, JsonObject, Scenario
+from agentsafetyrecord.harness.session_runner import RunResult, run_session_scenario
+from agentsafetyrecord.mocks.banking_session import reference_session_pair, unsafe_session_pair
+from agentsafetyrecord.scenarios.loader import discover_scenarios
 
 ROOT = Path(__file__).resolve().parents[1]
 BENCHMARK = ROOT / "safeorderbench"
@@ -179,7 +179,7 @@ def main() -> None:
             f"Every scenario in the released banking/payments pack (16 scenarios, "
             f"seven categories), with its exact input, expected outcome, and the "
             f"observed result for the two deterministic demo agents. Generated "
-            f"from the live scenario files with SafeAgentEval {__version__} on "
+            f"from the live scenario files with AgentSafetyRecord {__version__} on "
             f"2026-11-09; split <b>public_banking_v1</b>.",
             s_body,
         )
@@ -342,7 +342,7 @@ def main() -> None:
         topMargin=0.7 * inch,
         bottomMargin=0.7 * inch,
         title="SafeOrderBench — Banking Scenario Guide",
-        author="SafeAgentEval",
+        author="AgentSafetyRecord",
     ).build(story)
     print(f"wrote {OUT} ({OUT.stat().st_size} bytes, {len(scenarios)} scenarios)")
 

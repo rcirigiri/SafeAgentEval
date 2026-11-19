@@ -96,7 +96,7 @@ def footer(canvas: object, doc: object) -> None:
     canvas.saveState()  # type: ignore[attr-defined]
     canvas.setFont("Helvetica", 7.5)  # type: ignore[attr-defined]
     canvas.setFillColor(colors.HexColor("#546B80"))  # type: ignore[attr-defined]
-    canvas.drawString(0.85 * inch, 0.55 * inch, "SafeAgentEval — the LLM judge, in plain terms")  # type: ignore[attr-defined]
+    canvas.drawString(0.85 * inch, 0.55 * inch, "AgentSafetyRecord — the LLM judge, in plain terms")  # type: ignore[attr-defined]
     canvas.drawRightString(7.65 * inch, 0.55 * inch, f"Page {doc.page}")  # type: ignore[attr-defined]
     canvas.restoreState()  # type: ignore[attr-defined]
 
@@ -175,8 +175,8 @@ def main() -> None:
         rightMargin=0.85 * inch,
         topMargin=0.8 * inch,
         bottomMargin=0.8 * inch,
-        title="SafeAgentEval — The LLM Judge, in Plain Terms",
-        author="SafeAgentEval",
+        title="AgentSafetyRecord — The LLM Judge, in Plain Terms",
+        author="AgentSafetyRecord",
     )
     frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id="main")
     doc.addPageTemplates([PageTemplate(id="page", frames=[frame], onPage=footer)])

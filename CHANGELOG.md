@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — renamed to AgentSafetyRecord
+
+- The project was formerly named SafeAgentEval. The Python package,
+  CLI command, and documentation now use `agentsafetyrecord` /
+  AgentSafetyRecord; scenario packs (SafeOrderBench, SafePayBench,
+  and the pilot packs) keep their names.
+
 ## Unreleased — provider trust controls
 
 - Trust model for the StateProvider, the verdict's trust root
@@ -16,7 +23,7 @@
   `RunResult.state_passed` exposes the pass rule without the claim clause.
 - Claim verifier v2: claims are verified against the snapshots from
   their own turn onward (no longer only end-of-run) with key-aware
-  identifier matching; `safeagenteval regrade` re-verifies saved records
+  identifier matching; `agentsafetyrecord regrade` re-verifies saved records
   offline with no model calls.
 - Records carry `snapshot_hash` and `scenario_sha256` provenance hashes.
 
