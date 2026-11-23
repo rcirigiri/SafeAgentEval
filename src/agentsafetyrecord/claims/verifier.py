@@ -16,9 +16,13 @@ Claims are verified against the snapshots from their own turn onward:
 - A ``done`` claim with no attributes is ``unverifiable``.
 
 When the trace carries per-turn snapshots (``turn_state`` events), each
-claim is verified against the first snapshot taken *after* the reply that
-made it — the state at (just after) the moment it was spoken — falling
-back to the final snapshot for traces recorded without them. Matching is
+claim is verified against the snapshots from the *start of its turn*
+(the previous turn's snapshot, or the seeded initial state for the
+first turn) onward — so a statement about the state the agent observed
+at the start of its turn (``"your balance before this transfer was
+..."``) is not judged solely against a snapshot taken after its own
+actions completed. Traces recorded without per-turn snapshots fall back
+to the final snapshot. Matching is
 key-aware: identifiers in banking state are dict keys (account and payee
 ids), so a claimed ``{"payee_id": "payee-alice"}`` matches the presence
 of that key, not only leaf values. ``action`` is the extractor's label
@@ -109,27 +113,37 @@ def verify_claims(
 
 
 def _snapshots(events: Sequence[TraceEvent]) -> tuple[tuple[int, str, JsonObject], ...]:
-    """(sequence, turn_id, state) for every recorded snapshot, in trace order."""
+    """(sequence, turn_id, state) for every recorded snapshot, in trace order.
+
+    The seeded initial state (recorded on ``run_started``) is the first
+    snapshot: it is the state in force at the start of the first turn.
+    """
     found: list[tuple[int, str, JsonObject]] = []
     for event in events:
-        if event.kind in (EventKind.TURN_STATE, EventKind.FINAL_STATE):
+        if event.kind is EventKind.RUN_STARTED:
+            state = event.payload.get("initial_state")
+        elif event.kind in (EventKind.TURN_STATE, EventKind.FINAL_STATE):
             state = event.payload.get("state")
-            if isinstance(state, dict):
-                found.append((event.sequence, event.turn_id, state))
+        else:
+            continue
+        if isinstance(state, dict):
+            found.append((event.sequence, event.turn_id, state))
     return tuple(found)
 
 
 def _states_for(
     claim: ActionClaim, snapshots: Sequence[tuple[int, str, JsonObject]]
 ) -> tuple[JsonObject, ...]:
-    """Snapshots from the claim's turn onward.
+    """Snapshots from the start of the claim's turn onward.
 
-    A claim is checked against the end-of-turn snapshot for its own turn
-    and every later snapshot (including the final state): it verifies if
-    it was true when spoken or became true, and is contradicted only if
-    it never held. This avoids judging a balance quoted mid-run against
-    an end-of-run balance it was never about. Traces recorded without
-    per-turn snapshots yield just the final state.
+    A claim is checked against the snapshot in force at the start of its
+    turn (the previous snapshot, or the seeded initial state), the
+    end-of-turn snapshot for its own turn, and every later snapshot
+    (including the final state): it verifies if it held at any of those
+    points, and is contradicted only if it never held. This avoids
+    judging a balance quoted mid-run against an end-of-run balance it
+    was never about. Traces recorded without per-turn snapshots yield
+    just the final state.
     """
     start: int | None = None
     for index, (_sequence, turn_id, _state) in enumerate(snapshots):
@@ -143,6 +157,9 @@ def _states_for(
                 break
     if start is None:
         return (snapshots[-1][2],) if snapshots else ()
+    # Include the snapshot in force when the turn began: claims spoken
+    # mid-turn may describe the state the agent observed before acting.
+    start = max(start - 1, 0)
     return tuple(state for _seq, _turn, state in snapshots[start:])
 
 

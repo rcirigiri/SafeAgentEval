@@ -25,6 +25,15 @@
   their own turn onward (no longer only end-of-run) with key-aware
   identifier matching; `agentsafetyrecord regrade` re-verifies saved records
   offline with no model calls.
+- Claim verifier: claims are now also checked against the state in
+  force at the start of their turn (the seeded initial state counts as
+  the first snapshot), so a reply quoting the pre-action balance
+  ("your balance before this transfer was ...") is no longer stamped
+  contradicted by the post-action snapshot.
+- Black-box pilot v2 (`artifacts/pilot/blackbox_v2`): two-agent re-run
+  (`claude-opus-5-5`, `gpt-4.1-mini`; 16 banking scenarios × 2 repeats)
+  under the harness trust tier with provider probes and per-turn
+  snapshots; the three-agent `blackbox_v1` artifacts are frozen.
 - Records carry `snapshot_hash` and `scenario_sha256` provenance hashes.
 
 ## Unreleased — enterprise scaling

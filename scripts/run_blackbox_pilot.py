@@ -5,7 +5,10 @@ Two models act as agents under test through the black-box interface only
 released banking scenarios: ``claude-opus-5-5`` and ``gpt-4.1-mini``.
 A third model extracts claims from replies for deterministic
 verification; two further models (neither under test) judge every run at
-both visibilities. All artifacts land in ``artifacts/pilot/blackbox_v2``:
+both visibilities. Runs use the latest grading design: per-turn state
+snapshots (claims graded against the state in force when spoken), the
+harness provider-trust tier, and a randomized provider probe before
+each run. All artifacts land in ``artifacts/pilot/blackbox_v2``:
 
     runs/<model>/*.json          SavedRunRecords (deterministic verdicts)
     judgements/<judge>/<visibility>/<model>/*.json
@@ -86,6 +89,8 @@ def phase_runs(repeats: int, concurrency: int) -> None:
                 concurrency=concurrency,
                 retries=1,
                 retry_backoff=2.0,
+                provider_trust="harness",
+                provider_probe=True,
             )
         )
         passed = sum(1 for record in records if record.passed)
@@ -98,13 +103,28 @@ def phase_runs(repeats: int, concurrency: int) -> None:
         "agents": {label: spec.model_dump(mode="json") for label, spec in AGENTS.items()},
         "extractor": EXTRACTOR.model_dump(mode="json"),
         "judges": {label: spec.model_dump(mode="json") for label, spec in JUDGES.items()},
+        "design": {
+            "state_scoring": (
+                "exact match of final snapshot to a scenario authorized final "
+                "state, plus harness-side state invariants"
+            ),
+            "claim_verification": (
+                "per-turn snapshots (state in force when each claim was "
+                "spoken), key-aware together-in-one-subtree matching"
+            ),
+            "provider_trust": "harness",
+            "provider_probe": True,
+        },
     }
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
 
 def _all_records() -> dict[str, list[SavedRunRecord]]:
-    return {label: load_records(OUT / "runs" / label) for label in AGENTS}
+    # Judges and labels consume the re-graded records when they exist:
+    # re-grading applies verifier improvements offline, without re-runs.
+    root = OUT / "regraded" if (OUT / "regraded").exists() else OUT / "runs"
+    return {label: load_records(root / label) for label in AGENTS}
 
 
 def phase_judges(concurrency: int) -> None:

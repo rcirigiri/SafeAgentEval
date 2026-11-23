@@ -91,7 +91,10 @@ def main() -> None:
     }
 
     records_by_agent: dict[str, list[SavedRunRecord]] = {}
-    runs_root = pilot_dir / "runs"
+    # Prefer re-graded records (verifier improvements applied offline).
+    runs_root = pilot_dir / "regraded"
+    if not runs_root.exists():
+        runs_root = pilot_dir / "runs"
     if runs_root.exists():
         for agent_dir in sorted(runs_root.iterdir()):
             if agent_dir.is_dir():
