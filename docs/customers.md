@@ -60,16 +60,15 @@ framework is not for them.
 | Regulators & supervisors | None over the vendor — they consume, never certify | Read run records and trust-tier labels as supervisory evidence. A passing run is not a regulatory approval |
 | Researchers & open-source contributors | Whether a published comparison is reproducible | Run the public pack, contribute paired scenarios, and publish pass rates with their `provider_trust` tier |
 
-### Prospective end users (roadmap domains)
+### End users in other domains
 
-Retail and e-commerce operators, pharmacy and refill services, travel
-booking platforms, and crypto or stablecoin payment providers become
-end users only when their domain has a released pack: its own realistic
-state provider, paired adversarial and benign scenarios, and external
-review. Until then they can prototype on the banking contract, but no
-released exam exists for them. The first such definition is the
-[SafeCartBench order-support spec](safecartbench_pack.md) (Shopify
-orders, refunds, and status inquiries): 7 scenario families as a pilot.
+Institutions in any other transactional domain become end users the
+same way the flagship customers did: by authoring their own scenarios
+against their own system of record, policies, and test data, and
+running them through this harness. No centrally released pack is
+required, and none is promised on a roadmap; per-pack status and
+maintenance levels are defined in the
+[pack maintenance policy](pack_maintenance_policy.md).
 
 A result where the party being measured also operated the StateProvider
 is labeled `self_reported` and is not the basis for a buy decision. See
