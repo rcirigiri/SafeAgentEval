@@ -1,16 +1,20 @@
-"""Run the black-box pilot: real LLM session agents on the released pack.
+"""Run the black-box pilot v2: real LLM session agents on the released pack.
 
-Replaces the retired mediated pilot. Three models act as agents under
-test through the black-box interface only (one utterance in, one reply
-out; their tool use is internal), on the 16 released banking scenarios.
-A fourth model extracts claims from replies for deterministic
+Two models act as agents under test through the black-box interface only
+(one utterance in, one reply out; their tool use is internal), on the 16
+released banking scenarios: ``claude-opus-5-5`` and ``gpt-4.1-mini``.
+A third model extracts claims from replies for deterministic
 verification; two further models (neither under test) judge every run at
-both visibilities. All artifacts land in ``artifacts/pilot/blackbox_v1``:
+both visibilities. All artifacts land in ``artifacts/pilot/blackbox_v2``:
 
     runs/<model>/*.json          SavedRunRecords (deterministic verdicts)
     judgements/<judge>/<visibility>/<model>/*.json
     labels/{claims,replies,runs}.csv   blank human-labeling sheets
     manifest.json
+
+The frozen ``artifacts/pilot/blackbox_v1`` pilot (three agents,
+including ``claude-haiku-5-5``) is historical paper evidence; this
+script never writes there.
 
 Phases are resumable: ``--phase runs|judges|labels|all``. Keys come from
 the environment / local ``.env`` (OPENAI_API_KEY, ANTHROPIC_API_KEY).
@@ -24,6 +28,7 @@ import argparse
 import asyncio
 import csv
 import json
+from datetime import date
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -39,7 +44,7 @@ from agentsafetyrecord.reporting import FileRecordSink, SavedRunRecord, load_rec
 from agentsafetyrecord.scenarios.loader import discover_scenarios
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "artifacts" / "pilot" / "blackbox_v1"
+OUT = ROOT / "artifacts" / "pilot" / "blackbox_v2"
 
 
 def _spec(name: str, provider: str, model: str, key_env: str) -> ModelSpec:
@@ -54,9 +59,6 @@ def _spec(name: str, provider: str, model: str, key_env: str) -> ModelSpec:
 
 
 AGENTS: dict[str, ModelSpec] = {
-    "claude-haiku-5-5": _spec(
-        "claude-haiku-5-5", "anthropic", "claude-haiku-5-5", "ANTHROPIC_API_KEY"
-    ),
     "claude-opus-5-5": _spec(
         "claude-opus-5-5", "anthropic", "claude-opus-5-5", "ANTHROPIC_API_KEY"
     ),
@@ -89,8 +91,8 @@ def phase_runs(repeats: int, concurrency: int) -> None:
         passed = sum(1 for record in records if record.passed)
         print(f"{label}: {passed}/{len(records)} passed")
     manifest = {
-        "pilot": "blackbox_v1",
-        "date": "2026-11-09",
+        "pilot": "blackbox_v2",
+        "date": date.today().isoformat(),
         "scenarios": [scenario.scenario_id for scenario in scenarios],
         "repeats": repeats,
         "agents": {label: spec.model_dump(mode="json") for label, spec in AGENTS.items()},

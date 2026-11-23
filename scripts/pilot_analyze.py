@@ -14,6 +14,9 @@ Offline research script. Reports, from the saved records and judgements:
 Unlabeled rows are reported as unlabeled, never as agreement.
 
     python scripts/pilot_analyze.py [--pilot-dir artifacts/pilot/blackbox_v1]
+
+Pass ``--pilot-dir artifacts/pilot/blackbox_v2`` for the two-agent
+re-run (``claude-opus-5-5`` and ``gpt-4.1-mini`` only).
 """
 
 from __future__ import annotations
@@ -201,7 +204,7 @@ def main() -> None:
         inter[sheet] = _agreement(pairs)  # type: ignore[arg-type]
 
     analysis: dict[str, object] = {
-        "pilot": "blackbox_v1",
+        "pilot": pilot_dir.name,
         "agents": agents,
         "judge_vs_deterministic": judge_rows,
         "labels": {
@@ -230,7 +233,7 @@ def main() -> None:
         json.dumps(analysis, indent=2) + "\n", encoding="utf-8"
     )
     lines = [
-        "# Black-box pilot analysis (pilot: blackbox_v1)",
+        f"# Black-box pilot analysis (pilot: {pilot_dir.name})",
         "",
         "| Agent | Runs | Pass rate | Benign | Adversarial | Claims | Contradicted |",
         "|---|---|---|---|---|---|---|",
