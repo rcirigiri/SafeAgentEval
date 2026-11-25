@@ -2,13 +2,13 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/agenticsafetyeval-logo-horizontal-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="docs/assets/brand/agenticsafetyeval-logo-horizontal.svg">
-    <img src="docs/assets/brand/agenticsafetyeval-logo-horizontal.svg" alt="AgenticSafetyEval — State-Verified Agent Safety" width="640">
+    <img src="docs/assets/brand/agenticsafetyeval-logo-horizontal.svg" alt="agentic-safety-eval — State-Verified Agent Safety" width="640">
   </picture>
 </p>
 
-# AgenticSafetyEval
+# agentic-safety-eval
 
-AgenticSafetyEval is a state-verified evaluation harness for **black-box AI
+agentic-safety-eval is a state-verified evaluation harness for **black-box AI
 agents that change state**. It drives an agent with a scripted scenario
 — customer utterances for conversational agents; events such as
 data-feed updates, configuration or settings changes, scheduled
@@ -27,7 +27,7 @@ record and evaluates both:
 
 SafeOrderBench is the companion scenario set used to exercise the harness.
 
-AgenticSafetyEval is **framework-first**: organizations are expected to
+agentic-safety-eval is **framework-first**: organizations are expected to
 evaluate their own agents by authoring their own scenarios — against
 their own systems, policies, and test data — and running them through
 this harness. The domain packs shipped in this repository are
@@ -50,7 +50,7 @@ website lives in [`site/`](site/README.md) (static, no build step).
 
 ## Who this is for
 
-AgenticSafetyEval is for any institution that will let an agent commit a
+agentic-safety-eval is for any institution that will let an agent commit a
 change on a system of record — and has to decide whether that agent may
 do so. The grade is the sandbox ledger after the conversation, not the
 chat transcript. Every end user below owns the go/no-go decision, the
@@ -130,7 +130,7 @@ nondeterministic agents; the leaderboard reports per-scenario pass rates.
 ## Repository layout
 
 ```text
-AgenticSafetyEval/
+agentic-safety-eval/
 ├── .github/workflows/       Continuous integration
 ├── docs/                    Agent contract, guides, use-case catalog
 ├── examples/                Black-box usage examples
@@ -200,14 +200,14 @@ agenticsafetyeval --help
 
 ## Research boundary
 
-AgenticSafetyEval evaluates an agent during a controlled benchmark run
+agentic-safety-eval evaluates an agent during a controlled benchmark run
 against a sandbox. It does not intercept, block, or repair anything in
 production, and it cannot see the agent's internal actions — only the
 utterances it receives, the replies it returns, and the final state.
 
 ## Vision
 
-> AgenticSafetyEval evaluates whether AI agents act within their authorized
+> agentic-safety-eval evaluates whether AI agents act within their authorized
 > mandate and report their actions truthfully — verified against
 > independently observed system state — across payments, commerce, and
 > other state-changing workflows.
@@ -235,5 +235,5 @@ finalized before the first public dataset release.
   </a>
 </p>
 
-**Rammohan Srikanth Cirigiri** — Creator & maintainer, AgenticSafetyEval
+**Rammohan Srikanth Cirigiri** — Creator & maintainer, agentic-safety-eval
 ([ram.cirigiri@gmail.com](mailto:ram.cirigiri@gmail.com))

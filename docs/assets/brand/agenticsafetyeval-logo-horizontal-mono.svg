@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 240" role="img" aria-label="AgenticSafetyEval">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 240" role="img" aria-label="agentic-safety-eval">
   <g>
   <rect x="38" y="28" width="148" height="118" rx="30" fill="none" stroke="#0B3C6C" stroke-width="17"/>
   <path d="M70 138 L70 192 L116 146 Z" fill="#0B3C6C"/>
@@ -7,6 +7,6 @@
   <rect x="114" y="178" width="82" height="8" rx="4" fill="#FFFFFF"/>
   <rect x="114" y="194" width="82" height="8" rx="4" fill="#FFFFFF"/>
   </g>
-  <text x="238" y="112" font-family="Inter, Arial, sans-serif" font-size="52" font-weight="700" fill="#0B3C6C">AgenticSafetyEval</text>
+  <text x="238" y="112" font-family="Inter, Arial, sans-serif" font-size="46" font-weight="700" fill="#0B3C6C">agentic-safety-eval</text>
   <text x="238" y="152" font-family="Inter, Arial, sans-serif" font-size="21" fill="#0B3C6C">State-Verified Agent Safety</text>
 </svg>

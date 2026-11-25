@@ -1,4 +1,4 @@
-# AgenticSafetyEval brand assets
+# agentic-safety-eval brand assets
 
 Master mark: **Concept A — Speech vs. Ledger.** A speech bubble (what the
 agent said) verified against a ledger block (the recorded final state),
@@ -10,7 +10,7 @@ tier), never as badges.
 
 **Lockup tagline:** "State-Verified Agent Safety" — deliberately free of
 any domain name, so the identity survives new scenario packs. The vision
-sentence it compresses: AgenticSafetyEval evaluates whether AI agents act
+sentence it compresses: agentic-safety-eval evaluates whether AI agents act
 within their authorized mandate and report their actions truthfully,
 verified against independently observed system state, across payments,
 commerce, and other state-changing workflows.
@@ -41,7 +41,7 @@ commerce, and other state-changing workflows.
 
 ## Rules
 
-- Render the name exactly as `AgenticSafetyEval` (one word, that capitalisation).
+- Render the name exactly as `agentic-safety-eval` (one word, that capitalisation).
 - Do not place the mark beside OWASP, NIST, or payment-network logos in a
   way that implies endorsement.
 - Do not create "certified" seals or pass/fail badges from the checkmark.
