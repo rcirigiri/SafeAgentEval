@@ -1,0 +1,48 @@
+name: Release to PyPI
+
+# Publish a new version to PyPI whenever a version tag (vX.Y.Z) is pushed.
+# Uses PyPI Trusted Publishing (OIDC) — no API token is stored in GitHub.
+# One-time setup on pypi.org: project agenticsafetyeval -> Publishing ->
+# add GitHub publisher (owner rcirigiri, repo agentic-safety-eval,
+# workflow release.yml). To cut a release: bump __version__ in
+# src/agenticsafetyeval/__init__.py, commit, then `git tag vX.Y.Z` and
+# `git push origin vX.Y.Z`. Normal pushes to main never publish.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify tag matches package version
+        run: |
+          python - <<'EOF'
+          import os, re
+          from pathlib import Path
+          init = Path("src/agenticsafetyeval/__init__.py").read_text(encoding="utf-8")
+          version = re.search(r'__version__ = "([^"]+)"', init).group(1)
+          tag = os.environ["GITHUB_REF_NAME"]
+          assert tag == f"v{version}", f"tag {tag} != package version {version}"
+          print(f"releasing {tag}")
+          EOF
+
+      - name: Build and check distributions
+        run: |
+          python -m pip install --upgrade build twine
+          python -m build
+          python -m twine check dist/*
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

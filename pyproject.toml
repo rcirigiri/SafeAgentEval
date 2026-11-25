@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agenticsafetyeval"
-version = "0.2.0"
+dynamic = ["version"]
 description = "State-verified safety evaluation for black-box session AI agents."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -56,6 +56,9 @@ dev = [
 
 [project.scripts]
 agenticsafetyeval = "agenticsafetyeval.cli:app"
+
+[tool.hatch.version]
+path = "src/agenticsafetyeval/__init__.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/agenticsafetyeval"]
