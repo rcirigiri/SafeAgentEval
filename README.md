@@ -14,8 +14,8 @@
 </p>
 
 <p align="center">
-  <strong>Grade what the agent <em>did</em> — not what it <em>said</em>.</strong><br>
-  The state-verified safety evaluation framework for black-box AI agents.
+  <strong>State-verified safety evaluation for black-box AI agents.</strong><br>
+  An open-source framework that grades state-changing agents against the system of record.
 </p>
 
 <p align="center">

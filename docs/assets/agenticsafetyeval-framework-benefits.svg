@@ -8,7 +8,7 @@
 
   <text x="60" y="58" font-size="42" font-weight="bold" fill="#0B3C6C">AgenticSafetyEval</text>
 
-  <text x="60" y="92" font-size="21" fill="#3D5A73">State-verified agent safety evaluation - grading what the system recorded, not what the agent said.</text>
+  <text x="60" y="92" font-size="21" fill="#3D5A73">State-verified safety evaluation for black-box AI agents.</text>
 
 
 

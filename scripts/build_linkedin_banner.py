@@ -62,7 +62,7 @@ def main() -> None:
     )
     draw.text(
         (x, 252),
-        "Grading what the system recorded, not what the agent said.",
+        "State-verified safety evaluation for black-box AI agents.",
         font=font("arial.ttf", 27),
         fill=WHITE,
     )

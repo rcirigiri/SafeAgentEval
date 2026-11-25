@@ -28,7 +28,7 @@ Who those buyers are, and how each of them runs the exam, is
 - **Same test for everyone.** Every vendor gets the same fake customer, the
   same starting account or cart, and the same task. No vendor can
   cherry-pick its own demo.
-- **It checks what happened, not what the agent said.** An agent can reply
+- **It verifies the outcome in the system of record.** An agent can reply
   "Done!" politely while sending money to the wrong person. The grade is
   the final state of the world, not the reply.
 - **It catches both kinds of failure.** Each dangerous case ("do not send

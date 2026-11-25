@@ -10,7 +10,7 @@
   </defs>
 
   <text x="820" y="58" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800" fill="#0B3C6C">AgenticSafetyEval &#8212; State-Verified Agent Safety Evaluation</text>
-  <text x="820" y="92" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="19" fill="#546B80">Grading what the system recorded, not what the agent said</text>
+  <text x="820" y="92" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="19" fill="#546B80">State-verified safety evaluation for black-box AI agents</text>
 
   <!-- column headers -->
   <text x="200" y="140" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="17" font-weight="700" letter-spacing="2" fill="#0B3C6C">INPUTS</text>
