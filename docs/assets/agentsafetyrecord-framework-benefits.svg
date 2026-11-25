@@ -172,67 +172,33 @@
 
 
 
-  <!-- BENEFITS -->
+  <!-- AUDIENCE VALUE -->
 
-  <text x="60" y="684" font-size="19" font-weight="bold" fill="#0B3C6C">WHY IT MATTERS - BENEFITS FOR A FIRST-TIME READER</text>
+  <text x="60" y="684" font-size="19" font-weight="bold" fill="#0B3C6C">KEY VALUE ADDED - BY AUDIENCE</text>
 
+  <rect x="60" y="704" width="482" height="196" rx="10" fill="#FFFFFF" stroke="#B9C9D6" stroke-width="2"/>
+  <text x="84" y="742" font-size="19" font-weight="bold" fill="#0B3C6C">ENTERPRISES</text>
+  <text x="84" y="768" font-size="17" fill="#333333">- Release-gate agents in CI: pass/fail</text>
+  <text x="84" y="793" font-size="17" fill="#333333">from the record before production,</text>
+  <text x="84" y="818" font-size="17" fill="#333333">not from demos.</text>
+  <text x="84" y="850" font-size="17" fill="#333333">- Grade vendor agents black-box;</text>
+  <text x="84" y="875" font-size="17" fill="#333333">audit-ready traces for risk teams.</text>
 
+  <rect x="559" y="704" width="482" height="196" rx="10" fill="#FFFFFF" stroke="#B9C9D6" stroke-width="2"/>
+  <text x="583" y="742" font-size="19" font-weight="bold" fill="#0B6E73">AI RESEARCHERS</text>
+  <text x="583" y="768" font-size="17" fill="#333333">- One reproducible yardstick: same</text>
+  <text x="583" y="793" font-size="17" fill="#333333">seed, script, and answer key for</text>
+  <text x="583" y="818" font-size="17" fill="#333333">every model tested.</text>
+  <text x="583" y="850" font-size="17" fill="#333333">- Failures split into seven named</text>
+  <text x="583" y="875" font-size="17" fill="#333333">categories; per-claim error analysis.</text>
 
-  <rect x="60" y="704" width="356" height="196" rx="10" fill="#FFFFFF" stroke="#B9C9D6" stroke-width="2"/>
-
-  <text x="84" y="742" font-size="19" font-weight="bold" fill="#0B3C6C">Verdicts you can defend</text>
-
-  <text x="84" y="774" font-size="17" fill="#333333">Pass/fail comes from the record,</text>
-
-  <text x="84" y="800" font-size="17" fill="#333333">not a model's opinion - usable</text>
-
-  <text x="84" y="826" font-size="17" fill="#333333">as a CI release gate for agents</text>
-
-  <text x="84" y="852" font-size="17" fill="#333333">that change state.</text>
-
-
-
-  <rect x="432" y="704" width="356" height="196" rx="10" fill="#FFFFFF" stroke="#B9C9D6" stroke-width="2"/>
-
-  <text x="456" y="742" font-size="19" font-weight="bold" fill="#0B3C6C">Catches both failure kinds</text>
-
-  <text x="456" y="774" font-size="17" fill="#333333">Wrong actions - wrong amount,</text>
-
-  <text x="456" y="800" font-size="17" fill="#333333">wrong payee, duplicate, sent</text>
-
-  <text x="456" y="826" font-size="17" fill="#333333">without confirmation - and false</text>
-
-  <text x="456" y="852" font-size="17" fill="#333333">words: "done" that never happened.</text>
-
-
-
-  <rect x="804" y="704" width="356" height="196" rx="10" fill="#FFFFFF" stroke="#B9C9D6" stroke-width="2"/>
-
-  <text x="828" y="742" font-size="19" font-weight="bold" fill="#0B3C6C">Fair, comparable tests</text>
-
-  <text x="828" y="774" font-size="17" fill="#333333">Same seed, script, and answer</text>
-
-  <text x="828" y="800" font-size="17" fill="#333333">key for every agent. Swap the</text>
-
-  <text x="828" y="826" font-size="17" fill="#333333">model or vendor; the test and</text>
-
-  <text x="828" y="852" font-size="17" fill="#333333">the grading stay identical.</text>
-
-
-
-  <rect x="1176" y="704" width="364" height="196" rx="10" fill="#FFFFFF" stroke="#B9C9D6" stroke-width="2"/>
-
-  <text x="1200" y="742" font-size="19" font-weight="bold" fill="#0B3C6C">Audit-ready evidence</text>
-
-  <text x="1200" y="774" font-size="17" fill="#333333">Every verdict traces to snapshots,</text>
-
-  <text x="1200" y="800" font-size="17" fill="#333333">claim reasons, and a tamper-</text>
-
-  <text x="1200" y="826" font-size="17" fill="#333333">evident trace - reviewers can</text>
-
-  <text x="1200" y="852" font-size="17" fill="#333333">re-check any grade themselves.</text>
-
-
+  <rect x="1058" y="704" width="482" height="196" rx="10" fill="#FFFFFF" stroke="#B9C9D6" stroke-width="2"/>
+  <text x="1082" y="742" font-size="19" font-weight="bold" fill="#8A5E0B">ACADEMIA</text>
+  <text x="1082" y="768" font-size="17" fill="#333333">- Open framework, scenario packs,</text>
+  <text x="1082" y="793" font-size="17" fill="#333333">and run artifacts to teach with</text>
+  <text x="1082" y="818" font-size="17" fill="#333333">and replicate.</text>
+  <text x="1082" y="850" font-size="17" fill="#333333">- Deterministic ground truth with</text>
+  <text x="1082" y="875" font-size="17" fill="#333333">human labeling and agreement scores.</text>
 
   <!-- Footer -->
 
