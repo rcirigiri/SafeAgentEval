@@ -1,11 +1,7 @@
 # Changelog
 
-## Unreleased — renamed to AgentSafetyRecord
+## Unreleased — AgentSafetyRecord
 
-- The project was formerly named SafeAgentEval. The Python package,
-  CLI command, and documentation now use `agentsafetyrecord` /
-  AgentSafetyRecord; the shipped scenario pack keeps its name
-  (SafeOrderBench).
 - Removed every shipped scenario pack except SafeOrderBench: the
   payments, booking, and healthcare pilot packs, the shared
   policy-gate pack (including its CLI command and demo agents), and

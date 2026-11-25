@@ -8,10 +8,6 @@
 
 # AgentSafetyRecord
 
-> **Renamed:** AgentSafetyRecord was formerly named SafeAgentEval.
-> Earlier talks, submissions, issues, and releases under that name
-> refer to this project.
-
 AgentSafetyRecord is a state-verified evaluation harness for **black-box AI
 agents that change state**. It drives an agent with a scripted scenario
 — customer utterances for conversational agents; events such as

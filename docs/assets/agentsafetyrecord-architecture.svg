@@ -117,5 +117,5 @@
 
   <text x="820" y="878" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" fill="#546B80">Interfaces: Agent Contract v1 (Profile C) &#183; SessionAgent.say(text) or HTTP &#183; StateProvider.seed / snapshot / reset</text>
   <text x="820" y="910" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" fill="#546B80">Reference pack: SafeOrderBench (banking) &#183; Enterprises author their own scenarios against their own systems</text>
-  <text x="820" y="948" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" fill="#8496A5">AgentSafetyRecord (formerly SafeAgentEval) &#183; Open source, Apache-2.0 &#183; github.com/rcirigiri/SafeAgentEval</text>
+  <text x="820" y="948" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" fill="#8496A5">AgentSafetyRecord &#183; Open source, Apache-2.0 &#183; github.com/rcirigiri/SafeAgentEval</text>
 </svg>
