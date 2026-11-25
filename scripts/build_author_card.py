@@ -56,7 +56,7 @@ def main() -> None:
     )
     draw.text(
         (x, 248),
-        "Creator & maintainer, AgenticSafetyEval",
+        "Creator & maintainer, agentic-safety-eval",
         font=font("arial.ttf", 40),
         fill=MUTED,
     )
@@ -69,7 +69,7 @@ def main() -> None:
     )
     draw.text(
         (x, 452),
-        "AgenticSafetyEval - State-Verified Agent Safety",
+        "agentic-safety-eval - State-verified safety evaluation",
         font=font("arial.ttf", 34),
         fill=MUTED,
     )
