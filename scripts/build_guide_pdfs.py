@@ -34,10 +34,10 @@ DOCS = ROOT / "docs"
 NAVY = colors.HexColor("#0B3C6C")
 
 GUIDES = [
-    ("developer_guide.md", "AgenticSafetyEval_Developer_Guide.pdf", "Developer Guide"),
-    ("customers.md", "AgenticSafetyEval_Client_Guide.pdf", "Client Guide"),
-    ("vendor_review_playbook.md", "AgenticSafetyEval_Vendor_Guide.pdf", "Vendor Guide"),
-    ("agent_contract.md", "AgenticSafetyEval_Agent_Contract.pdf", "Agent Contract"),
+    ("developer_guide.md", "agenticsafetyeval_developer_guide.pdf", "Developer Guide"),
+    ("customers.md", "agenticsafetyeval_client_guide.pdf", "Client Guide"),
+    ("vendor_review_playbook.md", "agenticsafetyeval_vendor_guide.pdf", "Vendor Guide"),
+    ("agent_contract.md", "agenticsafetyeval_agent_contract.pdf", "Agent Contract"),
 ]
 
 

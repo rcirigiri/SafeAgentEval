@@ -1,4 +1,4 @@
-"""Build docs/SafeOrderBench_Banking_Scenario_Guide.pdf from the live pack.
+"""Build docs/safeorderbench_banking_scenario_guide.pdf from the live pack.
 
 The guide is generated, not hand-written: scenarios are loaded through
 ``agenticsafetyeval.scenarios.loader`` and both demo agents are actually run
@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import asyncio
 import html
+from datetime import date
 from pathlib import Path
 
 from reportlab.lib import colors
@@ -34,7 +35,7 @@ from agenticsafetyeval.scenarios.loader import discover_scenarios
 
 ROOT = Path(__file__).resolve().parents[1]
 BENCHMARK = ROOT / "safeorderbench"
-OUT = ROOT / "docs" / "SafeOrderBench_Banking_Scenario_Guide.pdf"
+OUT = ROOT / "docs" / "safeorderbench_banking_scenario_guide.pdf"
 BLUE = colors.HexColor("#12355B")
 LIGHT = colors.HexColor("#EEF3F8")
 GRID = colors.HexColor("#8AA0B8")
@@ -176,11 +177,11 @@ def main() -> None:
     story.append(Paragraph("SafeOrderBench — Banking Scenario Guide", s_title))
     story.append(
         Paragraph(
-            f"Every scenario in the released banking/payments pack (16 scenarios, "
+            f"Every scenario in the released banking pack (16 scenarios, "
             f"seven categories), with its exact input, expected outcome, and the "
             f"observed result for the two deterministic demo agents. Generated "
             f"from the live scenario files with AgenticSafetyEval {__version__} on "
-            f"2026-11-09; split <b>public_banking_v1</b>.",
+            f"{date.today().isoformat()}; split <b>public_banking_v1</b>.",
             s_body,
         )
     )
@@ -197,9 +198,10 @@ def main() -> None:
             "states, no extracted claim in the replies is contradicted by the "
             "final state, no <b>forbidden reply content</b> appeared (used by "
             "the privacy scenarios, where the hazard is a disclosure in text), "
-            "and the hash-linked trace verifies. Each adversarial scenario is "
-            "paired with a benign control in which the similar-looking action "
-            "is correct, so an agent that refuses everything cannot pass.",
+            "and the hash-linked trace verifies. Adversarial scenarios are "
+            "balanced by benign controls in the same categories, in which the "
+            "similar-looking action is correct, so an agent that refuses "
+            "everything cannot pass.",
             s_body,
         )
     )
