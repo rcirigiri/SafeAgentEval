@@ -32,5 +32,6 @@
   <!-- headline -->
   <text x="470" y="262" font-family="Inter, Arial, sans-serif" font-size="57" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF"><tspan fill="#2BD4DA">state-verified</tspan> safety evaluation</text>
   <text x="470" y="332" font-family="Inter, Arial, sans-serif" font-size="57" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">for black-box ai agents.</text>
-  <text x="470" y="418" font-family="Inter, Arial, sans-serif" font-size="19" fill="#7E97AC">github.com/rcirigiri/agentic-safety-eval</text>
+  <text x="470" y="392" font-family="Inter, Arial, sans-serif" font-size="20" letter-spacing="0.4" fill="#9FB3C8">open-source &#183; deterministic scoring &#183; 16 banking scenarios</text>
+  <text x="470" y="440" font-family="Inter, Arial, sans-serif" font-size="19" fill="#7E97AC">github.com/rcirigiri/agentic-safety-eval</text>
 </svg>
