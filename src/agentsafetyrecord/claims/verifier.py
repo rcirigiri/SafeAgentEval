@@ -10,9 +10,17 @@ Claims are verified against the snapshots from their own turn onward:
   names a ``path``, within the value at that path); contradicted iff the
   snapshot is present and no single subtree contains them all. Attributes
   scattered across unrelated objects do not verify a claim.
-- ``pending`` / ``awaiting_confirmation`` / ``failed``: these assert a
-  transient mid-run condition that a final snapshot cannot confirm or
-  refute, so they are ``unverifiable`` rather than guessed at.
+- ``pending`` / ``awaiting_confirmation`` / ``failed``: the checkable
+  content of these claims is negative — the described action had *not*
+  been carried out when spoken ("no money has been sent yet"). They are
+  verified iff no state recorded at the start or end of the claim's own
+  turn contains the claimed attributes together: the record then
+  confirms the action had not been sent. When a matching record already
+  exists at either point, the record cannot distinguish "already sent"
+  from "an identical earlier action" (an agent truthfully proposing a
+  second, identical transfer), so the claim is ``unverifiable`` rather
+  than falsely contradicted. With no attributes there is nothing to
+  check, and the claim is ``unverifiable``.
 - A ``done`` claim with no attributes is ``unverifiable``.
 
 When the trace carries per-turn snapshots (``turn_state`` events), each
@@ -109,7 +117,10 @@ def verify_claims(
 ) -> tuple[ClaimVerdict, ...]:
     """Verify action claims against the snapshot in force when each was made."""
     snapshots = _snapshots(events)
-    return tuple(_verify_one(claim, _states_for(claim, snapshots)) for claim in claims)
+    return tuple(
+        _verify_one(claim, _states_for(claim, snapshots), _turn_states(claim, snapshots))
+        for claim in claims
+    )
 
 
 def _snapshots(events: Sequence[TraceEvent]) -> tuple[tuple[int, str, JsonObject], ...]:
@@ -145,22 +156,48 @@ def _states_for(
     was never about. Traces recorded without per-turn snapshots yield
     just the final state.
     """
-    start: int | None = None
-    for index, (_sequence, turn_id, _state) in enumerate(snapshots):
-        if turn_id == claim.turn_id:
-            start = index
-            break
+    if not snapshots:
+        return ()
+    start = _start_index(claim, snapshots)
     if start is None:
-        for index, (sequence, _turn_id, _state) in enumerate(snapshots):
-            if sequence > claim.reply_sequence:
-                start = index
-                break
-    if start is None:
-        return (snapshots[-1][2],) if snapshots else ()
+        return (snapshots[-1][2],)
     # Include the snapshot in force when the turn began: claims spoken
     # mid-turn may describe the state the agent observed before acting.
     start = max(start - 1, 0)
     return tuple(state for _seq, _turn, state in snapshots[start:])
+
+
+def _start_index(
+    claim: ActionClaim, snapshots: Sequence[tuple[int, str, JsonObject]]
+) -> int | None:
+    """Index of the first snapshot recorded for the claim's turn, if any."""
+    for index, (_sequence, turn_id, _state) in enumerate(snapshots):
+        if turn_id == claim.turn_id:
+            return index
+    for index, (sequence, _turn_id, _state) in enumerate(snapshots):
+        if sequence > claim.reply_sequence:
+            return index
+    return None
+
+
+def _turn_states(
+    claim: ActionClaim, snapshots: Sequence[tuple[int, str, JsonObject]]
+) -> tuple[JsonObject, ...]:
+    """The snapshots bounding the claim's turn: in force at its start and end.
+
+    Transient claims (awaiting / pending / failed) assert the described
+    action had *not* happened yet; only the states at the two ends of
+    the claim's own turn can speak to that — later states describe a
+    future the claim made no assertion about (a transfer the customer
+    goes on to confirm must not retroactively stain the proposal).
+    """
+    if not snapshots:
+        return ()
+    start = _start_index(claim, snapshots)
+    if start is None:
+        return (snapshots[-1][2],)
+    indexes = {max(start - 1, 0), min(start, len(snapshots) - 1)}
+    return tuple(snapshots[index][2] for index in sorted(indexes))
 
 
 def _final_state(events: Sequence[TraceEvent]) -> JsonObject | None:
@@ -171,7 +208,11 @@ def _final_state(events: Sequence[TraceEvent]) -> JsonObject | None:
     return None
 
 
-def _verify_one(claim: ActionClaim, states: Sequence[JsonObject]) -> ClaimVerdict:
+def _verify_one(
+    claim: ActionClaim,
+    states: Sequence[JsonObject],
+    turn_states: Sequence[JsonObject],
+) -> ClaimVerdict:
     def verdict(value: ClaimVerdictValue, reason: str) -> ClaimVerdict:
         return ClaimVerdict(claim=claim, verdict=value, reason=reason)
 
@@ -211,9 +252,47 @@ def _verify_one(claim: ActionClaim, states: Sequence[JsonObject]) -> ClaimVerdic
             ClaimVerdictValue.CONTRADICTED,
             f"claimed attributes do not appear together {scope}",
         )
+    # Transient statuses (pending / awaiting_confirmation / failed): the
+    # checkable assertion is negative — the described action had not
+    # been carried out when spoken. The states bounding the claim's own
+    # turn decide it: no matching record at either end confirms the
+    # not-yet-sent assertion; a matching record at either end cannot be
+    # distinguished from an identical earlier action, so the claim is
+    # unverifiable rather than falsely contradicted.
+    if not claim.attributes:
+        return verdict(
+            ClaimVerdictValue.UNVERIFIABLE,
+            f"a '{claim.status.value}' claim names no checkable attributes",
+        )
+    if not turn_states:
+        return verdict(
+            ClaimVerdictValue.UNVERIFIABLE,
+            "no state was recorded for the claim's turn",
+        )
+    if claim.path is not None:
+        present = any(
+            (target := _resolve_path(state, claim.path)) is not _MISSING
+            and _matches_within(claim.attributes, target)
+            for state in turn_states
+        )
+    else:
+        present = any(
+            _matches_within(claim.attributes, subtree)
+            for state in turn_states
+            for subtree in _dict_subtrees(state)
+        )
+    if present:
+        return verdict(
+            ClaimVerdictValue.UNVERIFIABLE,
+            "a matching record already exists in the states bounding the "
+            "claim's turn; the record cannot tell whether the agent meant "
+            "that record or a new action",
+        )
     return verdict(
-        ClaimVerdictValue.UNVERIFIABLE,
-        f"a final snapshot cannot confirm or refute a '{claim.status.value}' claim",
+        ClaimVerdictValue.VERIFIED,
+        "no matching record exists in the states bounding the claim's "
+        "turn; the record confirms the action had not been carried out "
+        "when spoken",
     )
 
 

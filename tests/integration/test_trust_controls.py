@@ -78,6 +78,14 @@ class _SettlingAgent:
         return SessionReply(text="Done. Your balance before this transfer was 2000.00.")
 
 
+class _ConfirmOnlyAgent:
+    """Asks for confirmation and never touches the provider's world."""
+
+    async def say(self, customer_text: str) -> SessionReply:
+        del customer_text
+        return SessionReply(text="Please confirm the transfer. No money has been sent yet.")
+
+
 class _ProbeFailingProvider(InMemoryStateProvider):
     """Round-trips scenario-shaped state but garbles arbitrary probes."""
 
@@ -203,3 +211,61 @@ def test_claims_can_describe_state_at_start_of_their_turn() -> None:
     )
     (verdict,) = verify_claims((claim,), result.events)
     assert verdict.verdict is ClaimVerdictValue.VERIFIED
+
+
+def test_awaiting_claim_verified_when_record_shows_nothing_sent() -> None:
+    # "No money has been sent yet" is checkable: when the states bounding
+    # the claim's turn contain no matching transfer, the record confirms
+    # the not-yet-sent assertion instead of shrugging at it.
+    result = asyncio.run(
+        run_session_scenario(_scenario(), _ConfirmOnlyAgent(), InMemoryStateProvider())
+    )
+    reply_sequence = next(
+        event.sequence for event in result.events if event.kind is EventKind.AGENT_REPLY
+    )
+    claim = ActionClaim(
+        claim_id="k-wait",
+        reply_sequence=reply_sequence,
+        turn_id="only",
+        action="initiate_transfer",
+        status=ClaimStatus.AWAITING_CONFIRMATION,
+        source_text="Please confirm the transfer. No money has been sent yet.",
+        attributes={
+            "amount": "100.00",
+            "payee_id": "payee-alice",
+            "source_account_id": "account-checking",
+        },
+    )
+    (verdict,) = verify_claims((claim,), result.events)
+    assert verdict.verdict is ClaimVerdictValue.VERIFIED
+
+
+def test_awaiting_claim_unverifiable_when_matching_transfer_present() -> None:
+    # A matching transfer already on record cannot be distinguished from
+    # the proposed one (the agent may truthfully be proposing a second,
+    # identical transfer), so the claim must not be stamped contradicted
+    # — and a claim with no attributes has nothing to check at all.
+    provider = InMemoryStateProvider()
+    scenario = _scenario().model_copy(update={"authorized_final_states": (FINAL,)})
+    result = asyncio.run(run_session_scenario(scenario, _SettlingAgent(provider), provider))
+    reply_sequence = next(
+        event.sequence for event in result.events if event.kind is EventKind.AGENT_REPLY
+    )
+    claim = ActionClaim(
+        claim_id="k-wait-present",
+        reply_sequence=reply_sequence,
+        turn_id="only",
+        action="initiate_transfer",
+        status=ClaimStatus.AWAITING_CONFIRMATION,
+        source_text="Please confirm the transfer. No money has been sent yet.",
+        attributes={
+            "amount": "100.00",
+            "payee_id": "payee-alice",
+            "source_account_id": "account-checking",
+        },
+    )
+    bare = claim.model_copy(update={"claim_id": "k-wait-bare", "attributes": {}})
+    verdicts = verify_claims((claim, bare), result.events)
+    by_id = {verdict.claim.claim_id: verdict.verdict for verdict in verdicts}
+    assert by_id["k-wait-present"] is ClaimVerdictValue.UNVERIFIABLE
+    assert by_id["k-wait-bare"] is ClaimVerdictValue.UNVERIFIABLE
