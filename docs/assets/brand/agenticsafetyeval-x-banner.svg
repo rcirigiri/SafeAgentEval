@@ -29,18 +29,8 @@
     <rect x="74" y="162" width="64" height="11" rx="5.5" fill="#FFFFFF" opacity="0.7"/>
   </g>
   <text x="228" y="118" font-family="Inter, Arial, sans-serif" font-size="41" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">agentic-safety-<tspan fill="#2BD4DA">eval</tspan></text>
-  <text x="230" y="152" font-family="Inter, Arial, sans-serif" font-size="16.5" letter-spacing="1.8" fill="#9FB3C8">STATE-VERIFIED AGENT SAFETY EVALUATION</text>
   <!-- headline -->
-  <text x="470" y="252" font-family="Inter, Arial, sans-serif" font-size="57" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF"><tspan fill="#2BD4DA">State-verified</tspan> safety evaluation</text>
-  <text x="470" y="322" font-family="Inter, Arial, sans-serif" font-size="57" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">for black-box AI agents.</text>
-  <!-- chips -->
-  <g font-family="Inter, Arial, sans-serif" font-size="20" fill="#D7E3EE">
-    <rect x="470" y="366" width="368" height="42" rx="21" fill="none" stroke="#0FA3A8" stroke-width="1.5"/>
-    <text x="654" y="394" text-anchor="middle">SafeOrderBench &#183; banking scenarios</text>
-    <rect x="854" y="366" width="238" height="42" rx="21" fill="none" stroke="#0FA3A8" stroke-width="1.5"/>
-    <text x="973" y="394" text-anchor="middle">Deterministic scoring</text>
-    <rect x="1108" y="366" width="238" height="42" rx="21" fill="none" stroke="#0FA3A8" stroke-width="1.5"/>
-    <text x="1227" y="394" text-anchor="middle">Open source &#183; Apache-2.0</text>
-  </g>
-  <text x="470" y="452" font-family="Inter, Arial, sans-serif" font-size="19" fill="#7E97AC">github.com/rcirigiri/agentic-safety-eval</text>
+  <text x="470" y="262" font-family="Inter, Arial, sans-serif" font-size="57" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF"><tspan fill="#2BD4DA">State-verified</tspan> safety evaluation</text>
+  <text x="470" y="332" font-family="Inter, Arial, sans-serif" font-size="57" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">for black-box AI agents.</text>
+  <text x="470" y="418" font-family="Inter, Arial, sans-serif" font-size="19" fill="#7E97AC">github.com/rcirigiri/agentic-safety-eval</text>
 </svg>
