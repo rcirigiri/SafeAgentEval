@@ -1,10 +1,13 @@
 # agentic-safety-eval brand assets
 
-Master mark: **Concept A — Speech vs. Ledger.** A speech bubble (what the
-agent said) verified against a ledger block (the recorded final state),
-bridged by a checkmark. The checkmark is part of the identity mark only;
-it is **not** a certification seal and must never be used to imply that an
-agent is "certified safe." Conformance results are communicated as dated
+Master mark: **Speech, verified against the record.** A single gradient
+speech bubble (what the agent *said*) carries a bold checkmark over two
+ledger lines (what the system of record *shows*) — the framework's whole
+thesis in one glyph, legible from 512 px down to a 16 px favicon. The
+wordmark is lowercase `agentic-safety-` in navy with `eval` in teal.
+The checkmark is part of the identity mark only; it is **not** a
+certification seal and must never be used to imply that an agent is
+"certified safe." Conformance results are communicated as dated
 run records (framework version, scenario-pack version, `provider_trust`
 tier), never as badges.
 
@@ -34,9 +37,10 @@ commerce, and other state-changing workflows.
 
 ## Colours
 
-- Navy `#0B3C6C` (speech bubble, wordmark)
-- Teal `#0FA3A8` (ledger block)
-- Dark background `#082038`
+- Navy `#0B3C6C` → Teal `#0FA3A8` diagonal gradient (icon; navy end is
+  also the wordmark colour, teal highlights `eval`)
+- Dark background `#082038` (lockup on dark uses white wordmark text
+  with `#2BD4DA` for `eval`)
 - Pack badge: SafeOrderBench `#12355B`
 
 ## Rules

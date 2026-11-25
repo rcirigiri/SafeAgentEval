@@ -2,14 +2,55 @@
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/brand/agenticsafetyeval-logo-horizontal-dark.svg">
     <source media="(prefers-color-scheme: light)" srcset="docs/assets/brand/agenticsafetyeval-logo-horizontal.svg">
-    <img src="docs/assets/brand/agenticsafetyeval-logo-horizontal.svg" alt="agentic-safety-eval — State-Verified Agent Safety" width="640">
+    <img src="docs/assets/brand/agenticsafetyeval-logo-horizontal.svg" alt="agentic-safety-eval — State-Verified Agent Safety Evaluation" width="560">
   </picture>
 </p>
 
-# agentic-safety-eval
+<p align="center">
+  <a href="https://github.com/rcirigiri/agentic-safety-eval/actions/workflows/ci.yml"><img src="https://github.com/rcirigiri/agentic-safety-eval/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue" alt="License: Apache-2.0"></a>
+  <img src="https://img.shields.io/badge/python-3.11%2B-blue" alt="Python 3.11+">
+  <a href="https://github.com/rcirigiri/agentic-safety-eval/stargazers"><img src="https://img.shields.io/github/stars/rcirigiri/agentic-safety-eval?style=social" alt="GitHub stars"></a>
+</p>
 
-agentic-safety-eval is a state-verified evaluation harness for **black-box AI
-agents that change state**. It drives an agent with a scripted scenario
+<p align="center">
+  <strong>Grade what the agent <em>did</em> — not what it <em>said</em>.</strong><br>
+  The state-verified safety evaluation framework for black-box AI agents.
+</p>
+
+<p align="center">
+  <a href="docs/developer_guide.md">Developer Guide</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="paper/">Paper</a> ·
+  <a href="safeorderbench/">SafeOrderBench</a> ·
+  <a href="docs/llm_judge.md">LLM Judge</a> ·
+  <a href="docs/customers.md">Who It's For</a>
+</p>
+
+## Quick start
+
+```bash
+python -m pip install -e .
+agenticsafetyeval run --domain banking --agent session-reference   # 16-scenario demo suite
+```
+
+## Why agentic-safety-eval?
+
+- **State-verified** — the grade is the final state read back from the
+  system of record, never the agent's reply or its tool trace.
+- **Say–do gap, measured** — every verifiable claim an agent makes is
+  extracted and checked against the state in force when it was spoken:
+  `verified`, `contradicted`, or `unverifiable`.
+- **Deterministic** — scoring is plain Python over authorized end
+  states. No model decides pass/fail; LLM judges are advisory and are
+  themselves graded against the deterministic verdict.
+- **Model-agnostic** — OpenAI, Anthropic, Gemini, Azure, Bedrock, local
+  and OpenAI-compatible endpoints through one `TextClient` protocol.
+- **Trust-labeled** — every result carries a `provider_trust` tier
+  (harness / auditor / self-reported), so a pass always says *who ran
+  the ruler*.
+
+agentic-safety-eval drives an agent with a scripted scenario
 — customer utterances for conversational agents; events such as
 data-feed updates, configuration or settings changes, scheduled
 triggers, and the passage of time for event-driven or autonomous
