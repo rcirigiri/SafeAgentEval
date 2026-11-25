@@ -14,6 +14,10 @@
 \usepackage{enumitem}
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
+\hypersetup{
+  pdftitle={AgenticSafetyEval and SafeOrderBench: State-Verified Safety Evaluation for Transactional AI Agents},
+  pdfauthor={Rammohan Srikanth Cirigiri},
+  pdfkeywords={AI agents, agent safety, evaluation, benchmark, state verification, LLM judges}}
 \usepackage{url}
 \usepackage[skip=6pt]{caption}
 
@@ -28,7 +32,7 @@
 
 \title{AgenticSafetyEval and SafeOrderBench: State-Verified Safety Evaluation\\
 for Transactional AI Agents}
-\author{Rammohan Srikanth Cirigiri\\Independent Researcher}
+\author{Rammohan Srikanth Cirigiri\\Independent Researcher\thanks{Code, scenarios, and pilot artifacts: \url{https://github.com/rcirigiri/agentic-safety-eval}}}
 \date{November 2026\\[2pt] \small Version 0.7: banking-only black-box release and black-box pilot with judges}
 
 \begin{document}
@@ -231,6 +235,8 @@ uses a language model to emulate tool execution and a model judge to flag risky
 actions. R-Judge~\cite{yuan2024rjudge} tests whether models can recognize safety
 risks in recorded agent trajectories. Agent-SafetyBench~\cite{zhang2024agentsafetybench}
 covers 349 environments and 2,000 test cases across 8 risk categories.
+AgentHarm~\cite{andriushchenko2024agentharm} measures harmfulness on
+explicitly harmful agent tasks.
 Prompt-injection benchmarks include InjecAgent~\cite{zhan2024injecagent},
 AgentDojo~\cite{debenedetti2024agentdojo} and Agent Security
 Bench~\cite{zhang2025asb}, building on the indirect-injection threat model of
@@ -1130,7 +1136,8 @@ outputs and the completed labeling sheets
 agreement and Cohen's $\kappa$) from the completed sheets. The full traces
 are released with the human labels. Scenarios contain no real customer or patient data.
 
-\paragraph{Reproducibility.} From the repository root, \code{pytest} runs the
+\paragraph{Reproducibility.} From the repository root
+(\url{https://github.com/rcirigiri/agentic-safety-eval}), \code{pytest} runs the
 full suite. The released black-box demonstration is regenerated
 deterministically with
 \begin{verbatim}
@@ -1197,8 +1204,7 @@ S.~Yao, N.~Shinn, P.~Razavi, and K.~Narasimhan.
 V.~Barres, H.~Dong, S.~Ray, X.~Si, and K.~Narasimhan.
 \newblock $\tau^2$-bench: Evaluating conversational agents in a dual-control
   environment.
-\newblock In \emph{ICML}, 2026.
-\newblock arXiv:2506.07982.
+\newblock arXiv:2506.07982, 2025.
 
 \bibitem{debenedetti2024agentdojo}
 E.~Debenedetti, J.~Zhang, M.~Balunovi\'{c}, L.~Beurer-Kellner, M.~Fischer, and
@@ -1262,6 +1268,11 @@ T.~Yuan et~al.
 Z.~Zhang et~al.
 \newblock {Agent-SafetyBench}: Evaluating the safety of {LLM} agents.
 \newblock arXiv:2412.14470, 2024.
+
+\bibitem{andriushchenko2024agentharm}
+M.~Andriushchenko et~al.
+\newblock {AgentHarm}: A benchmark for measuring harmfulness of {LLM} agents.
+\newblock arXiv:2410.09024, 2024.
 
 \bibitem{zhan2024injecagent}
 Q.~Zhan, Z.~Liang, Z.~Ying, and D.~Kang.
