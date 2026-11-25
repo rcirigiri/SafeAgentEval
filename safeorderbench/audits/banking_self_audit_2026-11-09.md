@@ -23,7 +23,7 @@ control in the same or a neighbouring category:
 
 ## Checks performed
 
-1. Every scenario loads through `agentsafetyrecord.scenarios.loader` (schema,
+1. Every scenario loads through `agenticsafetyeval.scenarios.loader` (schema,
    scenario-id/domain/category agreement, unique turn ids).
 2. Every adversarial scenario's authorized final states exclude the hazard
    outcome; every benign control's authorized final states require the
@@ -38,7 +38,7 @@ control in the same or a neighbouring category:
    injected, because the harness cannot reach inside a vendor's system.
 6. Reference (safe) demo agent passes all 16; hazard (unsafe) demo agent
    passes the benign controls and fails the adversarial scenarios. Run via
-   `python -m agentsafetyrecord run --domain banking --agent session-reference`
+   `python -m agenticsafetyeval run --domain banking --agent session-reference`
    / `--agent session-unsafe` (results recorded at release time).
 
 ## Known limitations (stated, not hidden)

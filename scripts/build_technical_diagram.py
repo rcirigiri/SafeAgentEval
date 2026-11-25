@@ -1,9 +1,9 @@
-"""Build the detailed technical diagram for AgentSafetyRecord.
+"""Build the detailed technical diagram for AgenticSafetyEval.
 
 Companion to the paper's overview Figure 1 (architecture.png). This one is
 for engineers: protocol signatures, state/scenario schemas, the runner
 sequence, claim-verification semantics, the hash chain, and the single
-deterministic pass rule — all taken from the source in src/agentsafetyrecord/.
+deterministic pass rule — all taken from the source in src/agenticsafetyeval/.
 
     python scripts/build_technical_diagram.py
 """
@@ -104,7 +104,7 @@ def main() -> None:
     ax.text(
         17.5,
         24.6,
-        "AgentSafetyRecord — technical diagram (black-box protocol, schemas, deterministic grading)",
+        "AgenticSafetyEval — technical diagram (black-box protocol, schemas, deterministic grading)",
         ha="center",
         fontsize=12.5,
         fontweight="bold",

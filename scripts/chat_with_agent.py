@@ -24,11 +24,11 @@ from types import ModuleType
 
 from dotenv import load_dotenv
 
-from agentsafetyrecord.agents.llm_session import LLMSessionAgent
-from agentsafetyrecord.backends.state_provider import InMemoryStateProvider
-from agentsafetyrecord.core.models import Domain, JsonObject
-from agentsafetyrecord.llm.client import ModelSpec, build_client
-from agentsafetyrecord.scenarios.loader import discover_scenarios
+from agenticsafetyeval.agents.llm_session import LLMSessionAgent
+from agenticsafetyeval.backends.state_provider import InMemoryStateProvider
+from agenticsafetyeval.core.models import Domain, JsonObject
+from agenticsafetyeval.llm.client import ModelSpec, build_client
+from agenticsafetyeval.scenarios.loader import discover_scenarios
 
 ROOT = Path(__file__).resolve().parents[1]
 SEED_SCENARIO = "banking.confirmation_gate.benign_transfer_001"

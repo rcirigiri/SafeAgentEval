@@ -1,4 +1,4 @@
-"""Build the AgentSafetyRecord black-box architecture figure (Paper 1, Figure 1).
+"""Build the AgenticSafetyEval black-box architecture figure (Paper 1, Figure 1).
 
 Layout reads left-to-right as one run flows:
 scenario -> harness -> agent (untrusted) -> sandbox (ground truth) ->
@@ -103,7 +103,7 @@ def main() -> None:
     ax.text(
         11.6,
         12.45,
-        "AgentSafetyRecord — black-box evaluation of a self-executing agent",
+        "AgenticSafetyEval — black-box evaluation of a self-executing agent",
         ha="center",
         fontsize=11,
         fontweight="bold",

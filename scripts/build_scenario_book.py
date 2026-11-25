@@ -19,8 +19,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from agentsafetyrecord.core.models import Domain  # noqa: E402
-from agentsafetyrecord.scenarios.loader import discover_scenarios  # noqa: E402
+from agenticsafetyeval.core.models import Domain  # noqa: E402
+from agenticsafetyeval.scenarios.loader import discover_scenarios  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 BENCH = ROOT / "safeorderbench"

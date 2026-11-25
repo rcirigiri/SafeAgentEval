@@ -1,6 +1,6 @@
 # Trust model: who may hold the measuring instrument
 
-AgentSafetyRecord grades an agent by the final state read through a
+AgenticSafetyEval grades an agent by the final state read through a
 StateProvider. That makes the provider the **trust root** of every
 verdict: a snapshot that lies produces a verdict that lies, and no
 scoring rule downstream can detect it. This document states who must

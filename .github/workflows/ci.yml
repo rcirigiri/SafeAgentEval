@@ -28,4 +28,4 @@ jobs:
       # scripts/ holds one-off figure/book builders (not shipped code);
       # strict typing is enforced on the package, examples, and tests.
       - run: mypy --strict examples tests
-      - run: pytest --cov=agentsafetyrecord --cov-report=term-missing
+      - run: pytest --cov=agenticsafetyeval --cov-report=term-missing

@@ -1,6 +1,6 @@
 # Pack maintenance policy
 
-AgentSafetyRecord is a framework with scenario packs. The framework and
+AgenticSafetyEval is a framework with scenario packs. The framework and
 one flagship pack (SafeOrderBench, banking) are the maintained
 products; no other packs are shipped. This policy states what
 maintenance a user can expect, so the flagship pack is never

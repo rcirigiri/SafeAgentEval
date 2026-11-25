@@ -14,8 +14,8 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "docs" / "assets" / "brand" / "agentsafetyrecord-linkedin-banner.png"
-ICON = ROOT / "docs" / "assets" / "brand" / "agentsafetyrecord-icon-dark.png"
+OUT = ROOT / "docs" / "assets" / "brand" / "agenticsafetyeval-linkedin-banner.png"
+ICON = ROOT / "docs" / "assets" / "brand" / "agenticsafetyeval-icon-dark.png"
 
 W, H = 1584, 396
 NAVY = (11, 60, 108)  # #0B3C6C
@@ -53,7 +53,7 @@ def main() -> None:
     draw.rounded_rectangle([x, 52, x + tw + 44, 98], radius=23, outline=TEAL, width=2)
     draw.text((x + 22, 62), pill_text, font=pill_font, fill=TEAL)
 
-    draw.text((x, 116), "AgentSafetyRecord", font=font("arialbd.ttf", 66), fill=WHITE)
+    draw.text((x, 116), "AgenticSafetyEval", font=font("arialbd.ttf", 66), fill=WHITE)
     draw.text(
         (x, 204),
         "Open-source, state-verified agent safety evaluation",
@@ -68,7 +68,7 @@ def main() -> None:
     )
     draw.text(
         (x, 312),
-        "github.com/rcirigiri/AgentSafetyRecord",
+        "github.com/rcirigiri/AgenticSafetyEval",
         font=font("arial.ttf", 24),
         fill=MUTED,
     )

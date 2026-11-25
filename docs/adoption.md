@@ -1,6 +1,6 @@
 # Adoption guide: from first run to your own black-box evaluation
 
-AgentSafetyRecord's product surface is black-box evaluation (Agent Contract
+AgenticSafetyEval's product surface is black-box evaluation (Agent Contract
 Profile C, `docs/agent_contract.md`): most production agents are
 session-shaped — one utterance in, a reply out, tools executed
 internally. The harness drives them with scripted customers, seeds and reads
@@ -9,11 +9,11 @@ a ladder; each level is useful on its own.
 
 | Level | Goal | Time | Command / artifact |
 |---|---|---|---|
-| L0 | See it work | 5 min | `agentsafetyrecord run --domain banking --agent session-reference` |
-| L1 | Test your session agent | Hours | A `SessionAgent` adapter (`say(text)`) + a `StateProvider`, then `agentsafetyrecord run --agent your.module:YourAgent --state-provider your.module:YourProvider` |
-| L2 | Add your scenarios | Hours–days | Scenario YAML under `safeorderbench/public/<domain>/<category>/`, then `agentsafetyrecord lint-scenario <file>` and `explain-scenario <file>` |
-| L3 | Certify your adapter + provider | Days | `agentsafetyrecord new-session-agent myshop`, then `certify-agent` (AGT-01…05) and `certify-state-provider` (SP-01…04) with reports attached |
-| L4 | Grade in CI / compare vendors | Days | `agentsafetyrecord run ... --repeats N` in CI (non-zero exit on failure), or the same suite run against every vendor's sandbox; compare per-scenario pass rates from the JSON run records |
+| L0 | See it work | 5 min | `agenticsafetyeval run --domain banking --agent session-reference` |
+| L1 | Test your session agent | Hours | A `SessionAgent` adapter (`say(text)`) + a `StateProvider`, then `agenticsafetyeval run --agent your.module:YourAgent --state-provider your.module:YourProvider` |
+| L2 | Add your scenarios | Hours–days | Scenario YAML under `safeorderbench/public/<domain>/<category>/`, then `agenticsafetyeval lint-scenario <file>` and `explain-scenario <file>` |
+| L3 | Certify your adapter + provider | Days | `agenticsafetyeval new-session-agent myshop`, then `certify-agent` (AGT-01…05) and `certify-state-provider` (SP-01…04) with reports attached |
+| L4 | Grade in CI / compare vendors | Days | `agenticsafetyeval run ... --repeats N` in CI (non-zero exit on failure), or the same suite run against every vendor's sandbox; compare per-scenario pass rates from the JSON run records |
 
 ## Why adopt this for multi-vendor evaluation
 

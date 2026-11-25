@@ -1,6 +1,6 @@
 cff-version: 1.2.0
-message: "If you use AgentSafetyRecord or SafeOrderBench, please cite it as below."
-title: "AgentSafetyRecord and SafeOrderBench: State-Verified Safety Evaluation for Transactional AI Agents"
+message: "If you use AgenticSafetyEval or SafeOrderBench, please cite it as below."
+title: "AgenticSafetyEval and SafeOrderBench: State-Verified Safety Evaluation for Transactional AI Agents"
 authors:
   - name: "Cirigiri, Rammohan Srikanth"
 version: 0.2.0

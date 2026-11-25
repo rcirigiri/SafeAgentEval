@@ -1,8 +1,8 @@
-# AgentSafetyRecord developer guide
+# AgenticSafetyEval developer guide
 
 This guide is for engineers who want to evaluate a black-box session
 agent, add scenarios, or grade an LLMJudge against deterministic truth.
-AgentSafetyRecord implements exactly one evaluation model — Agent Contract
+AgenticSafetyEval implements exactly one evaluation model — Agent Contract
 Profile C. There is no other mode.
 
 ## 1. How it works
@@ -52,13 +52,13 @@ the provider for results to count as certified.
 Python 3.11 or later.
 
 ```bash
-git clone <repository-url> AgentSafetyRecord
-cd AgentSafetyRecord
+git clone <repository-url> AgenticSafetyEval
+cd AgenticSafetyEval
 python -m venv .venv
 # Windows: .venv\Scripts\activate    macOS/Linux: source .venv/bin/activate
 python -m pip install -e ".[dev]"            # add ,models for the judge/extractor clients
 pytest
-agentsafetyrecord run --domain banking --agent session-reference
+agenticsafetyeval run --domain banking --agent session-reference
 ```
 
 The last command runs the built-in safe demo agent through the banking
@@ -70,18 +70,18 @@ demo agent and exits 1.
 Connect two things:
 
 1. **Session agent** — `async say(text) -> SessionReply`
-   (`src/agentsafetyrecord/agents/session.py`; `HttpSessionAgentAdapter`
+   (`src/agenticsafetyeval/agents/session.py`; `HttpSessionAgentAdapter`
    covers HTTP services that take `{session_id, transcript}` and return
    a reply).
 2. **StateProvider** — `seed(state)` / `snapshot()` / `reset()` against
-   your sandbox (`src/agentsafetyrecord/backends/state_provider.py`). Never
+   your sandbox (`src/agenticsafetyeval/backends/state_provider.py`). Never
    production.
 
 ```bash
-agentsafetyrecord new-session-agent myshop          # scaffold adapter + provider
-agentsafetyrecord certify-agent --agent myshop.agent:StarterSessionAgent          # AGT-01…05
-agentsafetyrecord certify-state-provider --provider myshop.agent:StarterStateProvider  # SP-01…04
-agentsafetyrecord run --agent myshop.agent:StarterSessionAgent \
+agenticsafetyeval new-session-agent myshop          # scaffold adapter + provider
+agenticsafetyeval certify-agent --agent myshop.agent:StarterSessionAgent          # AGT-01…05
+agenticsafetyeval certify-state-provider --provider myshop.agent:StarterStateProvider  # SP-01…04
+agenticsafetyeval run --agent myshop.agent:StarterSessionAgent \
   --state-provider myshop.agent:StarterStateProvider --repeats 5 --out runs/
 ```
 
@@ -91,7 +91,7 @@ state before each run) and `--provider-trust harness|auditor` to
 record who operated the provider; the default label is
 `self_reported`. Records also carry `snapshot_hash` and
 `scenario_sha256` provenance hashes. If the claim verifier improves,
-`agentsafetyrecord regrade <records> --out <dir>` re-verifies saved claims
+`agenticsafetyeval regrade <records> --out <dir>` re-verifies saved claims
 deterministically — no agent re-runs, no model calls.
 
 Certify before trusting scores: AGT-01…05 check reply shape, empty-input
@@ -113,10 +113,10 @@ From Python:
 ```python
 import asyncio
 from pathlib import Path
-from agentsafetyrecord.core.models import Domain
-from agentsafetyrecord.harness.session_runner import run_session_scenario
-from agentsafetyrecord.scenarios.loader import discover_scenarios
-from agentsafetyrecord.trace.recorder import verify_trace
+from agenticsafetyeval.core.models import Domain
+from agenticsafetyeval.harness.session_runner import run_session_scenario
+from agenticsafetyeval.scenarios.loader import discover_scenarios
+from agenticsafetyeval.trace.recorder import verify_trace
 
 
 async def main() -> None:
@@ -202,8 +202,8 @@ Rules that keep scenarios valid:
 Validate with:
 
 ```bash
-agentsafetyrecord lint-scenario safeorderbench/public/banking/confirmation_gate/my_scenario_001.yaml
-agentsafetyrecord explain-scenario safeorderbench/public/banking/confirmation_gate/my_scenario_001.yaml
+agenticsafetyeval lint-scenario safeorderbench/public/banking/confirmation_gate/my_scenario_001.yaml
+agenticsafetyeval explain-scenario safeorderbench/public/banking/confirmation_gate/my_scenario_001.yaml
 pytest   # the banking suite must stay green for the demo agents
 ```
 
@@ -223,7 +223,7 @@ that may use a model.
 - **Inline.** Pass a `ClaimExtractor` as the third argument of
   `run_session_scenario`. `LLMClaimExtractor(client, prompt, reference)`
   in `claims/llm_extractor.py` is ready-made; build its client with
-  `agentsafetyrecord.llm.build_client`.
+  `agenticsafetyeval.llm.build_client`.
 
 The extractor must never see the run's outcome. Validate its precision
 and recall against human labels before reporting contradiction rates.
@@ -234,7 +234,7 @@ and recall against human labels before reporting contradiction rates.
 > never do: [docs/llm_judge.md](llm_judge.md).
 
 A judge is a language model that grades a run as a deployment's
-evaluator would, without the answer key. `agentsafetyrecord.judges` renders
+evaluator would, without the answer key. `agenticsafetyeval.judges` renders
 a saved trace at one of two visibility levels and asks a judge model for
 a JSON verdict:
 
@@ -246,7 +246,7 @@ a JSON verdict:
 No level shows the scenario's description or authorized final states.
 
 ```python
-from agentsafetyrecord.judges import JudgeVisibility, LLMJudge
+from agenticsafetyeval.judges import JudgeVisibility, LLMJudge
 
 judge = LLMJudge(client, rubric_text, JudgeVisibility.REPLIES)
 judgement = await judge.judge(result.events)  # judgement.passed is True, False or None
@@ -260,14 +260,14 @@ the deterministic state verdict afterwards:
 - **False alarm** — judge failed a run whose final state was correct.
 
 Use judges from more than one model family, none of them the agent under
-test. Build judge clients with `agentsafetyrecord.llm.build_client`
+test. Build judge clients with `agenticsafetyeval.llm.build_client`
 (`pip install -e ".[models]"`, or `.[litellm]` for Bedrock/Vertex/other
 LiteLLM routes — see "Model-agnostic by design" in Section 7a).
 
 ## 7. Use it as a CI deployment gate
 
 ```bash
-agentsafetyrecord run --agent your.module:YourSessionAgent \
+agenticsafetyeval run --agent your.module:YourSessionAgent \
   --state-provider your.module:YourProvider --repeats 5 --out runs/
 ```
 
@@ -286,7 +286,7 @@ Runs are independent units of work — fresh agent/provider pair, own
 `run_id`, one self-contained record — so they parallelize safely:
 
 ```bash
-agentsafetyrecord run --agent ... --repeats 10 --concurrency 8 \
+agenticsafetyeval run --agent ... --repeats 10 --concurrency 8 \
   --retries 2 --retry-backoff 1.0 --sink sqlite --out runs.sqlite
 ```
 
@@ -302,7 +302,7 @@ agentsafetyrecord run --agent ... --repeats 10 --concurrency 8 \
 - `--sink sqlite` stores records in one indexed database (query by
   scenario/agent/passed) instead of a directory of JSON files; `report`,
   `build-site`, and `judge` accept either a directory or the DB path.
-- Compare vendors with the same exam: `agentsafetyrecord matrix
+- Compare vendors with the same exam: `agenticsafetyeval matrix
   --agent acme=acme.module:Agent --agent globex=globex.module:Agent`
   writes per-agent records and one pass-rate table, gated by
   `--min-pass-rate` across all agents.
@@ -313,12 +313,12 @@ Two evaluation-side options complete the picture:
 
 ```bash
 # Extract and verify claims made in agent replies (say-do gap):
-agentsafetyrecord run --agent ... --extractor-model anthropic:claude-sonnet-5-5
+agenticsafetyeval run --agent ... --extractor-model anthropic:claude-sonnet-5-5
 # Gemini also works as the claim extractor (via its OpenAI-compatible
 # endpoint); it only extracts claims — verification stays deterministic:
-agentsafetyrecord run --agent ... --extractor-model gemini:gemini-2.5-flash
+agenticsafetyeval run --agent ... --extractor-model gemini:gemini-2.5-flash
 # Grade saved records with an LLM judge; reports judge-vs-deterministic agreement:
-agentsafetyrecord judge runs/ --model openai:gpt-6.2-sol --visibility with_state
+agenticsafetyeval judge runs/ --model openai:gpt-6.2-sol --visibility with_state
 ```
 
 Model keys are read from `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` /
@@ -328,7 +328,7 @@ Model keys are read from `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` /
 
 The deterministic scorer uses no model at all. Everywhere a model *is*
 used — agent under test, claim extractor, LLMJudge — it is reached
-through the `TextClient` protocol (`agentsafetyrecord.llm`), never through
+through the `TextClient` protocol (`agenticsafetyeval.llm`), never through
 a vendor SDK in the harness, so providers swap without touching
 scenarios or scoring:
 
@@ -345,7 +345,7 @@ Programmatically, the same three patterns cover custom and local
 models for the extractor, the judge, **and** an LLM agent under test:
 
 ```python
-from agentsafetyrecord.llm import (
+from agenticsafetyeval.llm import (
     CallableTextClient, ModelSpec, build_client, register_text_client_factory,
 )
 

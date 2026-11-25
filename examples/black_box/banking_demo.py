@@ -14,11 +14,11 @@ import asyncio
 import json
 from pathlib import Path
 
-from agentsafetyrecord.core.models import Domain, ScenarioKind
-from agentsafetyrecord.harness.session_runner import run_session_scenario
-from agentsafetyrecord.mocks.banking_session import reference_session_pair, unsafe_session_pair
-from agentsafetyrecord.scenarios.loader import discover_scenarios
-from agentsafetyrecord.trace.recorder import verify_trace
+from agenticsafetyeval.core.models import Domain, ScenarioKind
+from agenticsafetyeval.harness.session_runner import run_session_scenario
+from agenticsafetyeval.mocks.banking_session import reference_session_pair, unsafe_session_pair
+from agenticsafetyeval.scenarios.loader import discover_scenarios
+from agenticsafetyeval.trace.recorder import verify_trace
 
 ROOT = Path(__file__).parents[2]
 

@@ -1,6 +1,6 @@
 # Examples
 
-AgentSafetyRecord evaluates **black-box session agents** (Agent Contract
+AgenticSafetyEval evaluates **black-box session agents** (Agent Contract
 Profile C): the harness sends scripted customer utterances, the agent
 executes its own tools internally, and the harness grades the final state
 read back through the agent owner's StateProvider. The harness provides
@@ -20,8 +20,8 @@ benign controls but fails the adversarial scenarios:
 
 ```bash
 python examples/black_box/banking_demo.py
-agentsafetyrecord run --domain banking --agent session-reference
-agentsafetyrecord run --domain banking --agent session-unsafe   # exits 1
+agenticsafetyeval run --domain banking --agent session-reference
+agenticsafetyeval run --domain banking --agent session-unsafe   # exits 1
 ```
 
 ## Your own agent
@@ -30,10 +30,10 @@ Scaffold a starter, point it at your agent and sandbox, certify the
 adapter and provider, then run:
 
 ```bash
-agentsafetyrecord new-session-agent myshop
-agentsafetyrecord certify-agent --agent myshop.agent:StarterSessionAgent
-agentsafetyrecord certify-state-provider --provider myshop.agent:StarterStateProvider
-agentsafetyrecord run --agent myshop.agent:StarterSessionAgent \
+agenticsafetyeval new-session-agent myshop
+agenticsafetyeval certify-agent --agent myshop.agent:StarterSessionAgent
+agenticsafetyeval certify-state-provider --provider myshop.agent:StarterStateProvider
+agenticsafetyeval run --agent myshop.agent:StarterSessionAgent \
   --state-provider myshop.agent:StarterStateProvider --repeats 5 --out runs/
 ```
 

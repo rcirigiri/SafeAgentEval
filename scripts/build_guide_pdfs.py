@@ -34,10 +34,10 @@ DOCS = ROOT / "docs"
 NAVY = colors.HexColor("#0B3C6C")
 
 GUIDES = [
-    ("developer_guide.md", "AgentSafetyRecord_Developer_Guide.pdf", "Developer Guide"),
-    ("customers.md", "AgentSafetyRecord_Client_Guide.pdf", "Client Guide"),
-    ("vendor_review_playbook.md", "AgentSafetyRecord_Vendor_Guide.pdf", "Vendor Guide"),
-    ("agent_contract.md", "AgentSafetyRecord_Agent_Contract.pdf", "Agent Contract"),
+    ("developer_guide.md", "AgenticSafetyEval_Developer_Guide.pdf", "Developer Guide"),
+    ("customers.md", "AgenticSafetyEval_Client_Guide.pdf", "Client Guide"),
+    ("vendor_review_playbook.md", "AgenticSafetyEval_Vendor_Guide.pdf", "Vendor Guide"),
+    ("agent_contract.md", "AgenticSafetyEval_Agent_Contract.pdf", "Agent Contract"),
 ]
 
 
@@ -71,7 +71,7 @@ def build(source: Path, output: Path, label: str) -> None:
         canvas.saveState()  # type: ignore[attr-defined]
         canvas.setFont("Helvetica", 7.5)  # type: ignore[attr-defined]
         canvas.setFillColor(colors.HexColor("#546B80"))  # type: ignore[attr-defined]
-        canvas.drawString(0.85 * inch, 0.55 * inch, f"AgentSafetyRecord — {label}")  # type: ignore[attr-defined]
+        canvas.drawString(0.85 * inch, 0.55 * inch, f"AgenticSafetyEval — {label}")  # type: ignore[attr-defined]
         canvas.drawRightString(7.65 * inch, 0.55 * inch, f"Page {doc.page}")  # type: ignore[attr-defined]
         canvas.restoreState()  # type: ignore[attr-defined]
 
@@ -137,8 +137,8 @@ def build(source: Path, output: Path, label: str) -> None:
         rightMargin=0.85 * inch,
         topMargin=0.8 * inch,
         bottomMargin=0.8 * inch,
-        title=f"AgentSafetyRecord — {label}",
-        author="AgentSafetyRecord",
+        title=f"AgenticSafetyEval — {label}",
+        author="AgenticSafetyEval",
     )
     frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id="main")
     doc.addPageTemplates([PageTemplate(id="page", frames=[frame], onPage=footer)])

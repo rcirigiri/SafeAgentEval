@@ -1,7 +1,7 @@
 from typer.testing import CliRunner
 
-from agentsafetyrecord import __version__
-from agentsafetyrecord.cli import app
+from agenticsafetyeval import __version__
+from agenticsafetyeval.cli import app
 
 
 def test_version_command_reports_package_version() -> None:

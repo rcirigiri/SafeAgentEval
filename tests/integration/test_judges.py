@@ -13,31 +13,31 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-import agentsafetyrecord.cli.judge_cmd as judge_cmd
-import agentsafetyrecord.cli.run_cmd as run_cmd
-from agentsafetyrecord.backends.state_provider import InMemoryStateProvider
-from agentsafetyrecord.claims.llm_extractor import LLMClaimExtractor, parse_claims
-from agentsafetyrecord.claims.verifier import (
+import agenticsafetyeval.cli.judge_cmd as judge_cmd
+import agenticsafetyeval.cli.run_cmd as run_cmd
+from agenticsafetyeval.backends.state_provider import InMemoryStateProvider
+from agenticsafetyeval.claims.llm_extractor import LLMClaimExtractor, parse_claims
+from agenticsafetyeval.claims.verifier import (
     ActionClaim,
     ClaimStatus,
     ClaimVerdictValue,
     verify_claims,
 )
-from agentsafetyrecord.cli import app
-from agentsafetyrecord.cli.common import parse_model_spec
-from agentsafetyrecord.core.models import Domain
-from agentsafetyrecord.harness.session_runner import RunResult, run_session_scenario
-from agentsafetyrecord.judges.llm_judge import LLMJudge, parse_judgement
-from agentsafetyrecord.judges.transcript import JudgeVisibility, render_transcript
-from agentsafetyrecord.llm.client import (
+from agenticsafetyeval.cli import app
+from agenticsafetyeval.cli.common import parse_model_spec
+from agenticsafetyeval.core.models import Domain
+from agenticsafetyeval.harness.session_runner import RunResult, run_session_scenario
+from agenticsafetyeval.judges.llm_judge import LLMJudge, parse_judgement
+from agenticsafetyeval.judges.transcript import JudgeVisibility, render_transcript
+from agenticsafetyeval.llm.client import (
     GEMINI_OPENAI_BASE_URL,
     OpenAITextClient,
     TextResponse,
     build_client,
 )
-from agentsafetyrecord.mocks.banking_session import reference_session_pair, unsafe_session_pair
-from agentsafetyrecord.reporting import SavedRunRecord
-from agentsafetyrecord.scenarios.loader import discover_scenarios
+from agenticsafetyeval.mocks.banking_session import reference_session_pair, unsafe_session_pair
+from agenticsafetyeval.reporting import SavedRunRecord
+from agenticsafetyeval.scenarios.loader import discover_scenarios
 
 ROOT = Path(__file__).parents[2]
 BENCHMARK = ROOT / "safeorderbench"

@@ -1,7 +1,10 @@
 # Changelog
 
-## Unreleased — AgentSafetyRecord
+## Unreleased — AgenticSafetyEval
 
+- The framework is named AgenticSafetyEval (package and CLI:
+  `agenticsafetyeval`); the shipped scenario pack keeps its name
+  (SafeOrderBench).
 - Removed every shipped scenario pack except SafeOrderBench: the
   payments, booking, and healthcare pilot packs, the shared
   policy-gate pack (including its CLI command and demo agents), and
@@ -25,7 +28,7 @@
   `RunResult.state_passed` exposes the pass rule without the claim clause.
 - Claim verifier: claims are verified against the snapshots from
   their own turn onward (no longer only end-of-run) with key-aware
-  identifier matching; `agentsafetyrecord regrade` re-verifies saved records
+  identifier matching; `agenticsafetyeval regrade` re-verifies saved records
   offline with no model calls.
 - Claim verifier: claims are now also checked against the state in
   force at the start of their turn (the seeded initial state counts as

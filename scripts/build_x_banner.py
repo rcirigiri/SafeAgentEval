@@ -20,10 +20,10 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 ROOT = Path(__file__).resolve().parents[1]
 BRAND = ROOT / "docs" / "assets" / "brand"
-OUT = BRAND / "agentsafetyrecord-x-banner.png"  # 3000x1000, upload this one
-OUT_1X = BRAND / "agentsafetyrecord-x-banner-1500.png"  # 1500x500 fallback
-PREVIEW = BRAND / "agentsafetyrecord-x-banner-preview.png"  # avatar mock, do not upload
-ICON = BRAND / "agentsafetyrecord-icon-dark.png"
+OUT = BRAND / "agenticsafetyeval-x-banner.png"  # 3000x1000, upload this one
+OUT_1X = BRAND / "agenticsafetyeval-x-banner-1500.png"  # 1500x500 fallback
+PREVIEW = BRAND / "agenticsafetyeval-x-banner-preview.png"  # avatar mock, do not upload
+ICON = BRAND / "agenticsafetyeval-icon-dark.png"
 
 S = 2  # supersample: logical canvas is 1500x500
 W, H = 1500 * S, 500 * S
@@ -133,7 +133,7 @@ def main() -> None:
     )
     draw.text(
         (x * S, 372 * S),
-        "github.com/rcirigiri/AgentSafetyRecord",
+        "github.com/rcirigiri/AgenticSafetyEval",
         font=font("arial.ttf", 22),
         fill=MUTED,
     )

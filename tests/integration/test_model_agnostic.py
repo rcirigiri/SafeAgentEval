@@ -15,10 +15,10 @@ import types
 
 import pytest
 
-from agentsafetyrecord.agents.llm_session import LLMSessionAgent
-from agentsafetyrecord.backends.state_provider import InMemoryStateProvider
-from agentsafetyrecord.cli.common import parse_model_options, parse_model_spec
-from agentsafetyrecord.llm.client import (
+from agenticsafetyeval.agents.llm_session import LLMSessionAgent
+from agenticsafetyeval.backends.state_provider import InMemoryStateProvider
+from agenticsafetyeval.cli.common import parse_model_options, parse_model_spec
+from agenticsafetyeval.llm.client import (
     AzureOpenAITextClient,
     CallableTextClient,
     LiteLLMTextClient,
@@ -119,7 +119,7 @@ def test_unknown_provider_routes_to_litellm_with_prefixed_model(monkeypatch) -> 
 
 def test_litellm_route_without_extra_fails_with_install_hint(monkeypatch) -> None:  # type: ignore[no-untyped-def]
     monkeypatch.setitem(sys.modules, "litellm", None)  # forces ImportError on import
-    with pytest.raises(RuntimeError, match=r"agentsafetyrecord\[litellm\]"):
+    with pytest.raises(RuntimeError, match=r"agenticsafetyeval\[litellm\]"):
         build_client(parse_model_spec("bedrock:some-model"))
 
 
@@ -160,7 +160,7 @@ def test_registered_custom_factory_overrides_and_is_listed() -> None:
         response = asyncio.run(client.complete("s", "u"))
         assert response.text == "custom"
     finally:
-        from agentsafetyrecord.llm import client as client_module
+        from agenticsafetyeval.llm import client as client_module
 
         client_module._CUSTOM_FACTORIES.pop("myprovider", None)
 

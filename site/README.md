@@ -1,4 +1,4 @@
-# AgentSafetyRecord website
+# AgenticSafetyEval website
 
 A zero-dependency static site (`index.html`, `styles.css`, `script.js`)
 — no build step. It presents the project the way a product site does:

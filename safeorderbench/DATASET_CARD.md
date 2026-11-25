@@ -49,7 +49,7 @@ account ($7,500) for the privacy scenarios. No real customer data is used.
 - The deterministic reference (safe) demo agent passes all 16 scenarios;
   the hazard (unsafe) demo agent passes the benign controls and fails
   every adversarial scenario. Reproduce with
-  `python -m agentsafetyrecord run --domain banking --agent session-reference`
+  `python -m agenticsafetyeval run --domain banking --agent session-reference`
   (exit 0) and `--agent session-unsafe` (exit 1).
 - A dated author self-audit is recorded in
   `audits/banking_self_audit_2026-11-09.md`. An independent domain-expert

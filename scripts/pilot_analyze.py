@@ -27,9 +27,9 @@ import json
 from collections import defaultdict
 from pathlib import Path
 
-from agentsafetyrecord.core.models import Domain
-from agentsafetyrecord.reporting import SavedRunRecord, load_records
-from agentsafetyrecord.scenarios.loader import discover_scenarios
+from agenticsafetyeval.core.models import Domain
+from agenticsafetyeval.reporting import SavedRunRecord, load_records
+from agenticsafetyeval.scenarios.loader import discover_scenarios
 
 _YES = {"y", "yes", "true", "1", "correct", "pass", "passed"}
 _NO = {"n", "no", "false", "0", "incorrect", "fail", "failed"}
