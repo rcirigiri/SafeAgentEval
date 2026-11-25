@@ -81,8 +81,9 @@ The framework is the product; packs are how a domain is expressed in
 it. A **domain pack** defines one world — its state, its
 StateProvider, its authorized outcomes — and organizations author
 packs (or private scenario sets) for their own domains, systems, and
-test data. The packs below are the shipped references: two actively
-maintained flagship benchmarks, partner-driven pilots that advance
+test data. The packs below are the shipped references: one actively
+maintained flagship benchmark (SafeOrderBench, banking — the pack
+behind the paper and the pilots), supporting pilot packs that advance
 when their design partner validates them, and compatibility-only
 pilots. **SafeGateBench** defines no world: it is a framework
 component of policy gates, instantiated inside each domain pack's
@@ -91,7 +92,7 @@ world and run in addition to it.
 | Pack | World / scope | Status |
 |---|---|---|
 | SafeOrderBench | Banking / payments ledger | Released — 16 scenarios · **Actively maintained** (flagship) |
-| SafePayBench | Agent payments (settlement rail vs issuance/provenance registry) | Pilot implemented — [14 scenarios](docs/safepaybench_pack.md) · **Actively maintained** (flagship) |
+| SafePayBench | Agent payments (settlement rail vs issuance/provenance registry) | Supporting pilot — [14 scenarios](docs/safepaybench_pack.md) · advances with design-partner validation |
 
 > Additional partner-driven and compatibility-only pilot packs, and a
 > framework set of policy, compliance, safety & PII conformance gates,
@@ -233,8 +234,9 @@ utterances it receives, the replies it returns, and the final state.
 > other state-changing workflows.
 
 That is the direction the framework generalizes toward. The flagship
-reference benchmarks today are banking (SafeOrderBench) and agent
-payments (SafePayBench); further domains are expressed as packs
+reference benchmark today is banking (SafeOrderBench) — the pack
+behind the paper and the pilots; agent payments (SafePayBench) ships
+as a supporting pilot pack, and further domains are expressed as packs
 authored by the organizations that own them — with their own state
 providers, paired adversarial and benign scenarios, and test data —
 rather than as centrally maintained packs in this repository. Provider

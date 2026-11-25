@@ -46,8 +46,8 @@
         <a class="btn ghost" href="#demo">See a graded run</a>
       </div>
       <div class="stats">
-        <div><strong>2</strong><span>flagship benchmarks</span></div>
-        <div><strong>58</strong><span>executable scenarios</span></div>
+        <div><strong>1</strong><span>flagship benchmark</span></div>
+        <div><strong>16</strong><span>scenarios in the flagship pack</span></div>
         <div><strong>16</strong><span>shared policy gates</span></div>
         <div><strong>0</strong><span>LLM judges in grading</span></div>
       </div>
@@ -122,7 +122,7 @@ payments.partial_failure...     <b>FAIL</b>  claim contradicted:
     </div>
     <div class="pillars">
       <div class="pillar"><h4>Deterministic</h4><p>No LLM judge. The same state always earns the same verdict, so results hold up in CI and in audits.</p></div>
-      <div class="pillar"><h4>Paired by design</h4><p>Every adversarial scenario ships with a benign twin where the similar action is correct — an agent that refuses everything fails.</p></div>
+      <div class="pillar"><h4>Paired by design</h4><p>Adversarial scenarios ship with benign controls where the similar action is correct — an agent that refuses everything fails.</p></div>
       <div class="pillar"><h4>Black-box</h4><p>No access to prompts, weights, or internals. If it takes text and changes state, it can be examined — vendor or in-house.</p></div>
       <div class="pillar"><h4>Audit-ready</h4><p>Hash-linked traces label who operated the StateProvider (<code>harness</code> / <code>auditor</code> / <code>self_reported</code>), so evidence means what it says.</p></div>
     </div>
@@ -131,7 +131,7 @@ payments.partial_failure...     <b>FAIL</b>  claim contradicted:
   <!-- ============ PACKS ============ -->
   <section id="packs" class="section">
     <h2>Reference benchmarks</h2>
-    <p class="section-lede">AgentSafetyRecord is a framework, not a pack catalog: your organization authors scenarios against <strong>your own systems, policies, and test data</strong>, and runs them through the harness. The packs below are shipped references — two actively maintained flagships and partner-driven pilots. <strong>SafeGateBench</strong> defines no world: it is a framework component of 16 policy, compliance, safety, and PII gates applied inside every pack.</p>
+    <p class="section-lede">AgentSafetyRecord is a framework, not a pack catalog: your organization authors scenarios against <strong>your own systems, policies, and test data</strong>, and runs them through the harness. The packs below are shipped references — one flagship (SafeOrderBench, banking, the pack behind the paper and the pilots) and supporting partner-driven pilot packs. <strong>SafeGateBench</strong> defines no world: it is a framework component of 16 policy, compliance, safety, and PII gates applied inside every pack.</p>
     <div class="table-wrap">
     <table>
       <thead><tr><th>Pack</th><th>Track</th><th>World</th><th>Status</th></tr></thead>

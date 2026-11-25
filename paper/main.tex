@@ -178,12 +178,13 @@ reported once human labeling is complete.
   is the harness's pre-deployment CI gate: an agent that fails the pack
   does not ship.
   \item \textbf{SafeOrderBench}, a benchmark design spanning seven failure
-  categories. The lead and only released instantiation is agentic
-  payments: a 16-scenario black-box banking pack covering all seven
-  categories, each adversarial scenario paired with a benign control,
-  released with this version. Pharmacy, retail, travel
-  and crypto payments instantiate the same authorization model in design
-  only. Each scenario has an explicit set of authorized final states, and
+  categories. The lead instantiation, and the only one evaluated in this
+  paper, is a 16-scenario black-box banking pack covering all seven
+  categories, with adversarial scenarios paired at the category level
+  with benign controls, released with this version. Supporting packs
+  for payments, booking, and healthcare instantiate the same
+  authorization model in the repository; they are not evaluated here.
+  Each scenario has an explicit set of authorized final states, and
   each released scenario ships with scripted reference behavior that the
   test suite checks.
   \item \textbf{Harness validation results} on the released pack: a safe

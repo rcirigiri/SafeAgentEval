@@ -8,13 +8,14 @@ tables below list every end user. The grade is the sandbox ledger after
 the conversation. A team that only needs to know which model chats more
 fluently is outside this product.
 
-The flagship reference exams are SafeOrderBench (banking, 16 scenarios,
-seven categories) and SafePayBench (agent payments, 14 scenarios).
+The flagship reference exam is SafeOrderBench (banking, 16 scenarios,
+seven categories); SafePayBench (agent payments, 14 scenarios) ships
+as a supporting pilot.
 AgentSafetyRecord is framework-first: an enterprise in any other
 transactional domain does not wait for a centrally released pack for
 that domain — it authors its own scenarios against its own system of
 record, policies, and test data, and runs them through the harness,
-using the flagship packs as worked examples. A domain is claimed as a
+using the flagship pack as a worked example. A domain is claimed as a
 reference benchmark only when it has its own realistic state provider,
 paired adversarial and benign scenarios, and external review. See the
 [adoption guide](adoption.md) for the ladder
@@ -63,7 +64,7 @@ framework is not for them.
 ### End users in other domains
 
 Institutions in any other transactional domain become end users the
-same way the flagship customers did: by authoring their own scenarios
+same way: by authoring their own scenarios
 against their own system of record, policies, and test data, and
 running them through this harness. No centrally released pack is
 required, and none is promised on a roadmap; per-pack status and

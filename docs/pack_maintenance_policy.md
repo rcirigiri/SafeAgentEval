@@ -1,10 +1,11 @@
 # Pack maintenance policy
 
 AgentSafetyRecord is a framework with scenario packs. The framework and
-two flagship packs are maintained products; the remaining packs are
-partner-driven templates. This policy states, per pack, what
+one flagship pack (SafeOrderBench, banking) are maintained products;
+the remaining packs are supporting pilots and partner-driven
+templates. This policy states, per pack, what
 maintenance a user or design partner can expect, so that pilot packs
-are never mistaken for abandoned ones and flagship packs are never
+are never mistaken for abandoned ones and the flagship pack is never
 diluted by breadth.
 
 ## Maintenance levels
@@ -28,7 +29,7 @@ diluted by breadth.
 | Pack | Level | Notes |
 |---|---|---|
 | SafeOrderBench (banking) | Actively maintained | Released flagship; reference implementation for pack authors |
-| SafePayBench (payments) | Actively maintained | Second flagship; two-ledger settlement/issuance domain |
+| SafePayBench (payments) | Partner-driven | Supporting pilot; two-ledger settlement/issuance domain; advances on design-partner validation |
 | SafeCartBench (commerce) | Partner-driven | Spec-first; advances on design-partner validation of the order/refund state machine and answer keys |
 | SafeTradeBench (trading) | Partner-driven | Advances on design-partner review, dry runs, and sandbox endpoints |
 | SafeBookBench (booking) | Compatibility-only | Pilot implemented; advances if the booking design partner re-engages |

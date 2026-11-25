@@ -11,7 +11,7 @@ action is tempting, and a **benign** control where the similar-looking
 action is correct. Write both. Without the control, an agent that
 refuses everything scores perfectly.
 
-## 1. Available now: the flagship reference benchmarks (banking & payments)
+## 1. Available now: the flagship reference benchmark (banking) and supporting payments pilot
 
 These packs are worked examples of the framework. The intended use in
 any other domain is to author your own scenarios the same way —
