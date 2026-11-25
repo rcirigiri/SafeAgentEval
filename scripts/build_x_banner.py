@@ -133,7 +133,7 @@ def main() -> None:
     )
     draw.text(
         (x * S, 372 * S),
-        "github.com/rcirigiri/AgenticSafetyEval",
+        "github.com/rcirigiri/agentic-safety-eval",
         font=font("arial.ttf", 22),
         fill=MUTED,
     )

@@ -68,7 +68,7 @@ def main() -> None:
     )
     draw.text(
         (x, 312),
-        "github.com/rcirigiri/AgenticSafetyEval",
+        "github.com/rcirigiri/agentic-safety-eval",
         font=font("arial.ttf", 24),
         fill=MUTED,
     )
