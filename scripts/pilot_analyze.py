@@ -1,4 +1,4 @@
-"""Analyze the black-box pilot artifacts (``artifacts/pilot/blackbox_v1``).
+"""Analyze the black-box pilot artifacts (``artifacts/pilot/blackbox_v3``).
 
 Offline research script. Reports, from the saved records and judgements:
 
@@ -13,10 +13,10 @@ Offline research script. Reports, from the saved records and judgements:
 
 Unlabeled rows are reported as unlabeled, never as agreement.
 
-    python scripts/pilot_analyze.py [--pilot-dir artifacts/pilot/blackbox_v1]
+    python scripts/pilot_analyze.py [--pilot-dir artifacts/pilot/blackbox_v3]
 
-Pass ``--pilot-dir artifacts/pilot/blackbox_v2`` for the two-agent
-re-run (``claude-opus-5-5`` and ``gpt-4.1-mini`` only).
+The default pilot directory holds the current two-agent pilot
+(``claude-opus-5-5`` and ``gpt-6-luna``).
 """
 
 from __future__ import annotations
@@ -82,7 +82,7 @@ def _rate(records: list[SavedRunRecord]) -> float | None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--pilot-dir", type=Path, default=Path("artifacts/pilot/blackbox_v1"))
+    parser.add_argument("--pilot-dir", type=Path, default=Path("artifacts/pilot/blackbox_v3"))
     args = parser.parse_args()
     pilot_dir: Path = args.pilot_dir
     root = Path(__file__).resolve().parents[1]

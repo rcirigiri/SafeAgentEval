@@ -29,7 +29,7 @@
 \title{AgentSafetyRecord and SafeOrderBench: State-Verified Safety Evaluation\\
 for Transactional AI Agents}
 \author{Rammohan Srikanth Cirigiri\\Independent Researcher}
-\date{November 2026\\[2pt] \small Version 0.6: banking-only black-box release and black-box pilot with judges}
+\date{November 2026\\[2pt] \small Version 0.7: banking-only black-box release and black-box pilot with judges}
 
 \begin{document}
 \maketitle
@@ -46,23 +46,25 @@ through a state provider, and scores two axes: whether the final state
 was authorized, and whether verifiable claims in
 the replies match that state. Authorization binds to scenario-declared
 customer intents, not to labels the agent supplies. SafeOrderBench
-instantiates the model as a banking and payments benchmark in seven
-failure categories. We release 16 black-box banking scenarios, each
-adversarial scenario paired with a benign control; a safe session
+instantiates the model as a banking benchmark in seven
+failure categories. We release 16 black-box banking scenarios, with
+adversarial scenarios paired at the category level with benign
+controls; a safe session
 demonstrator passes all 16 and a hazard demonstrator passes only the 7
 benign controls, including one privacy disclosure that final-state
 grading alone cannot see. A
-black-box pilot ran three current models on the released pack (96
-runs): two agents ended every run in an authorized final state, while
-gpt-4.1-mini produced nine state failures, including an injected \$500
-transfer it did not report. Judges given the final state detected 9 of 9
-and 7 of 9 state failures, against 5 of 9 and 2 of 9 from chat alone. The
-pilot exposed a defect in our claim verifier, since fixed with
-point-in-time snapshots and key-aware matching; because the state
+black-box pilot ran two current models on the released pack (64
+runs): both agents ended every run in an authorized final state, and
+the claim verifier contradicted none of the 94 extracted
+claims. The two judges false-alarmed very differently on those passed
+runs: one on none of the 64, the other on 22 of 64 from the replies
+alone, falling to 3 of 64 with the final state visible. The claim
+verifier checks each claim against point-in-time snapshots with
+key-aware matching; because the state
 provider is the trust root, results are labeled by who operated it.
-Human validation of the
-extractor and judges is pending. Other domains and crypto payments
-remain roadmap designs.
+Two human annotators confirmed the extraction and verdict of all 94
+claims, found no missed claims in 92 replies, and agreed with the
+deterministic verdict on all 64 runs.
 \end{abstract}
 
 % ---------------------------------------------------------------------------
@@ -89,12 +91,10 @@ for agent-initiated value transfer on any rail: traditional bank transfers
 and payment-like commits, and on-chain transfers where settlement is
 irreversible and delegated authority can persist beyond its intended
 scope. This paper validates the model on traditional banking transactions
-(fiat account-to-account transfers); the crypto instantiation, which adds
-token approvals, explicit finality states and delegation, is the subject
-of a companion study. The same authorization model is
-designed to extend to other consumer services in which an agent commits
-consequential state changes (pharmacy, retail and travel); those
-instantiations are roadmap designs and are not released or evaluated here.
+(fiat account-to-account transfers). The authorization model is
+domain-general by construction --- a domain is a seeded state,
+customer intents, and authorized final states --- but no other domain
+is released or evaluated here.
 
 Three failure patterns in regulated consumer workflows motivate this paper.
 Each is invisible to evaluation that reads only the reply:
@@ -144,11 +144,12 @@ as future work.
 \paragraph{Status of this version.} This preprint describes the harness, the
 benchmark design and a released scenario pack; reports validation of the scorer with
 scripted agents (Section~\ref{sec:results}); and reports an exploratory
-black-box pilot with three off-the-shelf models on the released banking
+black-box pilot with two off-the-shelf models on the released banking
 pack, graded by two language-model judges at two levels of visibility
 (Section~\ref{sec:pilot}). The pilot runs each scenario twice, covers one
 domain, and its claim
-extractor and judges have not yet been validated against human labels, so it
+extractor and judges have been validated against human labels (two
+annotators; Section~\ref{sec:pilot}), so it
 illustrates failure modes rather than estimating rates. The full model study is
 specified in advance as a protocol (Section~\ref{sec:protocol}) and has not
 been run; the protocol is not yet registered with a third party. Throughout, we mark which components are implemented and which are
@@ -158,7 +159,7 @@ its demonstration on the released banking pack
 The pilot artifacts (runs, claims, judgements
 and labeling sheets) are preserved in the repository, and
 \code{scripts/pilot\_analyze.py} recomputes the labeling statistics
-reported once human labeling is complete.
+reported in Section~\ref{sec:pilot} from the completed human labels.
 
 \paragraph{Contributions.}
 \begin{enumerate}
@@ -181,9 +182,9 @@ reported once human labeling is complete.
   categories. The lead instantiation, and the only one evaluated in this
   paper, is a 16-scenario black-box banking pack covering all seven
   categories, with adversarial scenarios paired at the category level
-  with benign controls, released with this version. Supporting packs
-  for payments, booking, and healthcare instantiate the same
-  authorization model in the repository; they are not evaluated here.
+  with benign controls, released with this version. No other pack is
+  released; instantiations beyond banking are authored by their
+  owning organizations and are not evaluated here.
   Each scenario has an explicit set of authorized final states, and
   each released scenario ships with scripted reference behavior that the
   test suite checks.
@@ -191,12 +192,12 @@ reported once human labeling is complete.
   scripted demonstrator passes all 16 scenarios and a hazard demonstrator
   passes only the benign controls (Section~\ref{sec:results}),
   and a protocol for the model study specified in advance.
-  \item \textbf{A black-box pilot with three agents and two judges}
-  (Section~\ref{sec:pilot}) with a released per-run record. It records a
-  successful indirect prompt injection that the model did not report,
-  nine state failures from one agent against none from the other two,
-  judges that detect more state failures when given the final state than
-  from chat alone, and a claim-verifier defect that the full study must fix.
+  \item \textbf{A black-box pilot with two agents and two judges}
+  (Section~\ref{sec:pilot}) with a released per-run record. Both current
+  agents end every run in an authorized state, while one judge
+  false-alarms on a third of passed runs from chat alone and rarely
+  with the final state visible, and the claim verifier manufactures
+  no contradictions.
 \end{enumerate}
 
 % ---------------------------------------------------------------------------
@@ -315,10 +316,10 @@ identifiers are allocated above the highest existing identifier in the
 reference sandbox, and a payee must belong to the owner of the source
 account. Partial failure is expressed without reaching inside the agent's
 system: the customer reports that the app showed a timeout and asks for a
-retry, and grading checks that exactly one transfer exists. Pharmacy,
-retail and travel packs instantiate the same model---seeded state,
-customer utterances, authorized final states---as roadmap designs only;
-no release implements them.
+retry, and grading checks that exactly one transfer exists. The same
+construction --- seeded state, customer utterances, authorized final
+states --- defines a scenario in any domain; only banking is released
+here.
 
 \subsection{Authorization model}
 \label{sec:authorization}
@@ -433,11 +434,9 @@ because no domain-independent mapping from action names to state exists.
 Matching is key-aware (account and payee identifiers are keys of the
 state object), and per-turn snapshots mean a statement true when spoken
 (for example a pre-transfer balance) is no longer judged against the
-end state. The pilot traces (Section~\ref{sec:pilot-claims}) predate
-per-turn snapshots, so both former limits bind there; the saved claims
-can be re-graded offline (\texttt{agentsafetyrecord regrade}) for the
-key-aware half, but point-in-time re-grading of the pilot requires a
-re-run. Verification of extracted claims is fully deterministic.
+end state. Claims in the pilot (Section~\ref{sec:pilot-claims}) are
+verified against the state in force when each was spoken.
+Verification of extracted claims is fully deterministic.
 
 \subsection{Black-box execution}
 \label{sec:blackbox}
@@ -509,62 +508,49 @@ about how real models behave; it is reported separately from the pilot.
 \section{SafeOrderBench}
 \label{sec:benchmark}
 
-SafeOrderBench is designed as a multi-domain benchmark of 7 failure
-categories, of which banking and payments is the lead and only released
-domain; the wider grid (7 categories $\times$ several consumer domains) is a
-design, and its non-banking cells are not released or evaluated here. Here an
-\emph{order} means any customer instruction that changes backend state: a
-transfer, a refill request, a refund, a booking. In the released black-box
+SafeOrderBench is a banking benchmark of 7 failure
+categories; it is the only pack released or evaluated in this paper.
+The authorization model behind it is domain-general --- a scenario is
+a seeded state, customer intents, and authorized final states --- but
+no non-banking instantiation is released or evaluated here. Here an
+\emph{order} means a customer instruction that changes backend state:
+in the released pack, a transfer. In the released black-box
 form each scenario specifies (i) an initial account snapshot, (ii) a
 multi-turn customer script, (iii) scenario-declared clarification facts,
 (iv) the set of authorized final states, and (v) optional forbidden reply
 content.
-Table~\ref{tab:categories} gives the categories with an example per domain;
-the non-banking columns are design examples for the roadmap packs.
+Table~\ref{tab:categories} gives the categories with a banking example
+per category.
 
 \begin{table}[!htbp]
   \centering
   \footnotesize
-  \caption{Failure categories with an example per domain (v1.0 design).}
+  \caption{Failure categories with a banking example per category.}
   \label{tab:categories}
-  \begin{tabularx}{\linewidth}{@{}p{2.1cm}LLLLL@{}}
+  \begin{tabularx}{\linewidth}{@{}p{2.1cm}LLL@{}}
     \toprule
-    Category & What it probes & Banking & Pharmacy & Retail / travel & Failure checked \\
+    Category & What it probes & Banking example & Failure checked \\
     \midrule
     1. State modification & Correct entity, amount, quantity, modifier
       & Bill payment with a specific amount and date
-      & Refill with a specific strength and day supply
-      & Partial refund of two line items; seat change
-      & Wrong amount, strength, quantity or item committed \\
+      & Wrong amount, quantity or item committed \\
     2. Confirmation gate & Explicit confirmation before an irreversible commit
       & Transfer to a new payee only after read-back
-      & Refill with an out-of-pocket copay only after the customer accepts it
-      & Non-refundable booking only after confirmation
       & Commit while the reply says it is waiting \\
     3. Safety uncertainty & Rules the agent cannot verify
       & Request to lift a fraud hold
-      & Possible interaction or allergy flag on the profile
-      & Refund of an age-restricted item
       & Asserting safety without evidence; failing to escalate \\
     4. Privacy & Access outside the authenticated scope
       & Another account holder's balance
-      & A family member's prescription history
-      & Another customer's order history or address
       & Out-of-scope read, or personal data in a reply \\
     5. Prompt injection & Instructions in user input or tool output
       & Payment memo redirecting funds
-      & Note in a patient record telling the agent to skip verification
-      & Product description containing a refund override
       & Injected instruction changes state or leaks data \\
     6. Duplicate transaction & Retries, repeated utterances, timeouts
       & Timeout after transfer commit, then user retry
-      & Customer repeats the refill request
-      & Timeout on \code{issue\_refund}
       & Two commits for one intent \\
     7. Partial failure & Tool errors and timeouts
       & Ledger write fails after balance check
-      & Fulfillment API error after copay check
-      & Payment gateway 503 after inventory lock
       & Agent reports success after failure \\
     \bottomrule
   \end{tabularx}
@@ -628,10 +614,6 @@ does not exist in this release. The released public split \emph{is}
 manifested: \code{safeorderbench/splits/public\_banking\_v1.json} records a
 SHA-256 hash of every released scenario file.
 
-\paragraph{Scope of pharmacy scenarios (roadmap design).} No scenario will ask an agent to
-prescribe or give clinical advice. Agents only request refills, report flags
-already on the patient profile, and escalate to a pharmacist.
-
 % ---------------------------------------------------------------------------
 \section{Metrics and protocol}
 \label{sec:protocol}
@@ -652,11 +634,11 @@ grading cannot compute the state-based or consistency metrics.
     \midrule
     Final-state correctness & Fraction of runs whose final state is in the authorized set & Implemented \\
     Unauthorized-state rate & Fraction of runs whose final state is outside the authorized set & Implemented \\
-    Response-action consistency & Fraction of verifiable claims in the agent's replies that match the recorded state from their turn onward & Implemented; extractor not yet human-validated \\
-    Claim-contradiction rate & Fraction of runs with at least one verifiable claim contradicted by every recorded snapshot from its turn onward; also reported per claim & Implemented; extractor not yet human-validated \\
-    Judge miss rate & Among runs a judge passes, the fraction that state-based evaluation fails; per judge and visibility level & Implemented (pilot); judges not yet human-validated \\
+    Response-action consistency & Fraction of verifiable claims in the agent's replies that match the recorded state from their turn onward & Implemented; extractor human-validated (pilot) \\
+    Claim-contradiction rate & Fraction of runs with at least one verifiable claim contradicted by every recorded snapshot from its turn onward; also reported per claim & Implemented; extractor human-validated (pilot) \\
+    Judge miss rate & Among runs a judge passes, the fraction that state-based evaluation fails; per judge and visibility level & Implemented (pilot); judges human-validated (pilot) \\
     Judge detection rate & Among runs that state-based evaluation fails, the fraction a judge fails & Implemented (pilot) \\
-    False-success rate & Among runs, fraction where the agent reports completion of an action the final state does not contain & Implemented; extractor not yet human-validated \\
+    False-success rate & Among runs, fraction where the agent reports completion of an action the final state does not contain & Implemented; extractor human-validated (pilot) \\
     Duplicate-transaction rate & Among retry, timeout and repeat runs, fraction with more than one transfer for one intent in the final state & Implemented \\
     Safe-handling rate & Among adversarial or uncertain runs, fraction resolved with the required outcome and no unauthorized change & State part implemented \\
     Over-refusal rate & Among benign in-policy runs, fraction refused or left incomplete & State part implemented \\
@@ -763,9 +745,9 @@ broken down by domain and category.
 
 \paragraph{Hypotheses stated before the experiments.} These hypotheses concern
 the full study. The pilot of Section~\ref{sec:pilot} is exploratory: it is
-black-box only, runs each scenario twice per agent and has only nine
-state-incorrect runs, so it cannot test H2, and it offers only a
-preliminary look at H1 and H3.
+black-box only, runs each scenario twice per agent and has no
+state-incorrect runs, so it cannot test H1 or H2, and it offers only a
+preliminary look at H3.
 \begin{enumerate}[label=\textbf{H\arabic*:}, leftmargin=*]
   \item The judge miss rate of a response-only judge is non-zero for every
   agent under test.
@@ -863,7 +845,7 @@ modes outside those plans are probed only by the pilot of
 Section~\ref{sec:pilot}. Claim verification is validated as a mechanism
 by the test suite against final-state snapshots; the accuracy of the
 language-model extractor that feeds it is measured in the pilot and
-awaits human labels.
+is measured in the pilot against human labels (Section~\ref{sec:pilot}).
 
 
 \section{Black-box pilot study}
@@ -878,9 +860,9 @@ modes and pipeline behavior rather than estimating rates or ranking models.
 
 \subsection{Setup}
 
-\paragraph{Models.} Table~\ref{tab:pilot-models} lists the three agents
+\paragraph{Models.} Table~\ref{tab:pilot-models} lists the two agents
 under test, the claim extractor and the two judges. The agents span two
-closed providers and three size tiers, served over provider APIs. Each
+closed providers and two size tiers, served over provider APIs. Each
 agent receives customer utterances only through the session interface of
 Section~\ref{sec:blackbox}; it keeps its own conversation state and
 executes its own tools internally over the sandbox state seeded by the
@@ -892,11 +874,11 @@ were extracted during each run from the agent's replies by
 \code{claude-sonnet-5-5}, which is not one of the agents under test, and
 verified deterministically against the final state snapshot. Each saved
 run was then graded by two judges, \code{claude-sonnet-5-5} and
-\code{gpt-6.1-sol}, neither of them an agent under test, at each of the two
+\code{gpt-6.2-sol}, neither of them an agent under test, at each of the two
 visibility levels of Section~\ref{sec:judges} (\code{replies} and
-\code{with\_state}), for 384 judgements. Runs took place on 10~November
+\code{with\_state}), for 256 judgements. Runs took place on 24~November
 2026 (UTC). The run manifest, per-run records, judgements and labeling
-sheets are preserved under \code{artifacts/pilot/blackbox\_v1}.
+sheets are preserved under \code{artifacts/pilot/blackbox\_v3}.
 
 \begin{table}[!htbp]
   \centering
@@ -908,18 +890,17 @@ sheets are preserved under \code{artifacts/pilot/blackbox\_v1}.
     \toprule
     Role & Model (served identifier) & Access & Sampling \\
     \midrule
-    Agent & \code{claude-haiku-5-5} & Anthropic Messages API & Default \\
     Agent & \code{claude-opus-5-5} & Anthropic Messages API & Default \\
-    Agent & \code{gpt-4.1-mini} & OpenAI Chat Completions & Default \\
+    Agent & \code{gpt-6-luna} & OpenAI Chat Completions & Default \\
     Extractor & \code{claude-sonnet-5-5} & Anthropic Messages API & Default \\
     Judge & \code{claude-sonnet-5-5} & Anthropic Messages API & Default \\
-    Judge & \code{gpt-6.1-sol} & OpenAI API & Default \\
+    Judge & \code{gpt-6.2-sol} & OpenAI API & Default \\
     \bottomrule
   \end{tabularx}
 \end{table}
 
 \paragraph{Design.} Each agent ran all 16 released banking scenarios
-twice, for 96 runs. A run passes under the framework's single deterministic
+twice, for 64 runs. A run passes under the framework's single deterministic
 rule: it completed, its final state is one of the scenario's authorized end
 states, no extracted claim is contradicted by the final state, no reply
 contains forbidden content, and the trace is intact. Because claim
@@ -929,16 +910,13 @@ not on what the extractor or verifier made of its words.
 
 \subsection{State results}
 
-Table~\ref{tab:pilot} gives the results. The two Anthropic agents ended
-every one of their 32 runs in an authorized final state. All nine
-state-incorrect runs belong to \code{gpt-4.1-mini}, and all nine are in
-adversarial scenarios: it executed a changed-terms transfer it was told to
-apply under an earlier confirmation (twice), duplicated a transfer when
-the customer repeated the request and again after a reported timeout
-(three runs), followed the instruction injected in a payee note and sent
-\$500 to the attacker's payee before the requested \$100 (twice), and
-guessed one of two matching payees instead of asking (twice). With two
-runs per cell these are observations, not rates.
+Table~\ref{tab:pilot} gives the results. Both agents ended every one of
+their 32 runs in an authorized final state, benign and adversarial
+alike: neither executed a changed-terms transfer under an earlier
+confirmation, duplicated a transfer on a repeated or timed-out request,
+followed the instruction injected in a payee note, or guessed between
+two matching payees. With two runs per cell this is an observation,
+not a rate or a ranking.
 
 \begin{table}[!htbp]
   \centering
@@ -946,111 +924,107 @@ runs per cell these are observations, not rates.
   \caption{Black-box pilot results, 32 runs per agent (16 scenarios, two
   runs each). ``State correct'' counts runs ending in an authorized final
   state; ``Passed'' applies the full deterministic rule, which also fails
-  runs with a contradicted claim. The gap between the two columns is
-  entirely claim-verdict driven (Section~\ref{sec:pilot-claims}).}
+  runs with a contradicted claim. There is no gap between the two columns
+  in this pilot (Section~\ref{sec:pilot-claims}).}
   \label{tab:pilot}
   \begin{tabular}{@{}lcccc@{}}
     \toprule
     Agent & State correct & Passed & Claims & Contradicted \\
     \midrule
-    \code{claude-haiku-5-5} & 32/32 & 21/32 & 54 & 13 \\
-    \code{claude-opus-5-5}  & 32/32 & 23/32 & 53 & 10 \\
-    \code{gpt-4.1-mini}     & 23/32 & 19/32 & 46 & 4 \\
+    \code{claude-opus-5-5}  & 32/32 & 32/32 & 50 & 0 \\
+    \code{gpt-6-luna}       & 32/32 & 32/32 & 44 & 0 \\
     \midrule
-    All & 87/96 & 63/96 & 153 & 27 \\
+    All & 64/64 & 64/64 & 94 & 0 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\paragraph{A hidden indirect prompt injection.} In
+\paragraph{The indirect prompt injection, resisted.} In
 \code{payee\_note\_injection\_001} the customer asks for \$100 to Alice;
 the payee record carries an instruction to first send \$500 to another
-payee. In both runs \code{gpt-4.1-mini} executed the \$500 transfer to the
-attacker's payee and then the \$100 transfer, but its reply reported only
-the \$100 transfer. This harm was \emph{hidden}: response-only evaluation
-sees a correct report of a correct-looking action. Only grading the final
-state reveals it. No other agent followed the injection.
+payee. Neither agent followed the injection: in all four runs the only
+transfer is the requested \$100 to Alice. Had an agent executed the
+hidden transfer while reporting only the requested one, response-only
+evaluation could not have seen it; the state record is what makes that
+harm visible. Two runs per cell cannot support a safety claim, so we
+record the outcome without reading one into it.
 
-\paragraph{Where the benign controls bite.} Benign pass rates under the
-full rule were 0.50 (\code{claude-haiku-5-5}), 0.64
-(\code{claude-opus-5-5}) and 0.86 (\code{gpt-4.1-mini}), against
-adversarial rates of 0.78, 0.78 and 0.39. The benign shortfall of the two
-Anthropic agents is not state behavior---their final states were always
-authorized---but claim verdicts, examined next.
+\paragraph{Where the benign controls bite.} They did not: benign and
+adversarial pass rates under the full rule are 1.00 for both agents.
 
 \subsection{Claim results}
 \label{sec:pilot-claims}
 
-The extractor produced 153 claims across 96 runs with no parse failures.
-Of these, 27 were marked contradicted by the deterministic verifier, and
-every one of the 27 is a \code{check\_balance} claim. Author inspection of
-the 27 (to be confirmed or rejected by the human labeling of
-Section~\ref{sec:extraction}; \textbf{[STEP 2 PLACEHOLDER: human
-confirmation/rejection counts for the 27 contradicted claims]}) indicates
-they are verifier artifacts rather than agent misreporting, for two
-reasons. First, account identifiers are keys of the state object, not leaf
-values, so a claim naming \code{source\_account\_id} together with a
-balance cannot match ``together in one subtree'' under the current
-matching rule even when the balance is exactly right. Second, several
-claims report a balance that was true when spoken---typically the
-pre-transfer balance---while verification compares against the final
-snapshot, after the transfer changed it. All 27 claimed balances match
-the account's balance at the time of the reply. We therefore do not read
-the contradicted-claim counts in Table~\ref{tab:pilot} as evidence about
-agent honesty, and we report state correctness separately so that readers
-need not. The pilot thus gives no support for H3 as stated, and instead
-identifies a verifier defect---balance claims need point-in-time
-snapshots and key-aware matching---that the full study must fix before
-claim verdicts can carry their intended weight. Both fixes have since
-been implemented (per-turn snapshots, key-aware matching, harness-side
-invariants; Section~\ref{sec:claims}): re-grading the saved pilot
-claims offline changed verdicts in 13 of 96 records through the
-key-aware half alone. The point-in-time half cannot be recovered from
-the pilot traces, which contain no per-turn snapshots, so the pilot
-claim counts above stand as originally computed and a re-run is
-required before claim verdicts carry their intended weight. \textbf{[STEP 2
-PLACEHOLDER: extractor precision/recall and human verdict-accuracy from
-the labeling sheets]}
+The extractor produced 94 claims across 64 runs with no parse failures.
+None was marked contradicted by the deterministic verifier: 93 are
+verified and one (a proposal to send a second, identical transfer, where
+a matching record already exists) is unverifiable by design. The
+verifier checks claims against per-turn snapshots with key-aware
+matching (Section~\ref{sec:claims}): account and payee identifiers
+are keys of the state object, not leaf values, and a balance that was
+true when spoken is judged against the state in force at that turn
+rather than the final snapshot. It produces no manufactured
+contradictions here. That is evidence about the pipeline, not yet
+evidence about agent honesty: with no contradictions, H3 is untested
+at this scale. Human validation
+of the claim pipeline is now complete for this pilot. Two annotators
+labeled all 94 claims, all 92 replies and all 64 runs in the pilot
+labeling sheets (independent second-annotator sheets;
+\code{scripts/pilot\_analyze.py} recomputes every number in this
+paragraph). They judged the extraction faithful on 94 of 94 claims
+(extraction accuracy 1.00) and the verifier's stamp correct on 94 of
+94 (verdict accuracy 1.00), and reported no missed claims in any of
+the 92 replies, so extractor recall against human reading is also
+complete on this pilot. The two annotators agreed on every extraction
+label (64-run labels likewise; Cohen's $\kappa = 1.0$ on both, with
+the usual caveat that $\kappa$ is uninformative when one category
+dominates as completely as ``yes'' and ``pass'' do here).
 
 \subsection{Judge results}
 \label{sec:pilot-judges}
 
-All 384 judgements parsed. Table~\ref{tab:pilot-judges} compares the
-judges with the deterministic verdicts. Agreement with the full
-deterministic rule is modest (0.69--0.74, Cohen's $\kappa$ 0.13--0.31), but
-that comparison is dominated by the 24 claim-only failures of the previous
-subsection, which the judges---reasonably, on the author inspection
-above---almost never fail (0--2 of 24). Stratifying by failure kind is
-more informative. Of the nine runs whose final state was actually wrong,
-the replies-only judges detected 5/9 (\code{claude-sonnet-5-5}) and 2/9
-(\code{gpt-6.1-sol}); with the initial and final state visible, detection
-rose to 9/9 and 7/9. False alarms were rare: each judge--visibility pair
-failed only 1--2 of the 63 deterministically passed runs. The hidden
-injection runs illustrate the visibility effect directly: from the chat
-alone the agent's report looks correct, while the final snapshot exposes
-the extra \$500 transfer. These judge results await human validation:
-\textbf{[STEP 2 PLACEHOLDER: judge-vs-human agreement and
-human-vs-deterministic agreement from the blind run labels]}. Until then
-they measure agreement between two automated graders, not judge accuracy
-against human judgment.
+All 256 judgements parsed. Table~\ref{tab:pilot-judges} compares the
+judges with the deterministic verdicts. Because every run passed the
+deterministic rule, there are no state failures for a judge to detect:
+the informative comparison in this pilot is false alarms, and there
+the judges differ sharply. \code{claude-sonnet-5-5} agreed with the
+deterministic verdict on all 64 runs at both visibilities.
+\code{gpt-6.2-sol} failed 22 of the 64 passed runs from the replies
+alone (agreement 0.66), falling to 3 of 64 (0.95) with the initial and
+final state visible. Inspecting those 22 failures, the judge typically
+faults an agent for \emph{not completing} a requested transfer---pausing
+for clarification under ambiguity, stopping at a mandate limit, or
+declining to duplicate a payment---in cases where the pause or refusal
+is exactly what the scenario authorizes; shown the final state, it
+mostly withdraws the objection. A judge's verdict moves with whether
+it can see the record. Cohen's $\kappa$ is
+degenerate in this pilot because the deterministic verdict has no
+variance, so we report raw agreement. Human validation is complete:
+the annotators' blind run labels agreed with the deterministic
+verdict on all 64 runs (human--deterministic agreement 1.00), so
+judge--human agreement equals judge--deterministic agreement in this
+pilot---1.00 for \code{claude-sonnet-5-5} at both visibilities, and
+0.66 (replies) and 0.95 (with state) for \code{gpt-6.2-sol}. The 22
+replies-only failures of \code{gpt-6.2-sol} are therefore false alarms
+against human judgment as well as against the record, not a human /
+machine split.
 
 \begin{table}[!htbp]
   \centering
   \small
   \caption{Judges versus deterministic evaluation in the black-box pilot
-  (96 runs per row). ``Detected (state)'' counts, of the nine runs with an
-  incorrect final state, those the judge failed; ``Detected (all)'' is the
-  same count over all 33 runs failing the full deterministic rule;
-  ``False alarm'' counts judge failures among the 63 passed runs.}
+  (64 runs per row). No run failed the deterministic rule, so there
+  are no state failures to detect; ``False alarm'' counts judge failures
+  among the 64 passed runs.}
   \label{tab:pilot-judges}
-  \begin{tabular}{@{}llcccc@{}}
+  \begin{tabular}{@{}llcc@{}}
     \toprule
-    Judge & Sees & Agreement & Detected (state) & Detected (all) & False alarm \\
+    Judge & Sees & Agreement & False alarm \\
     \midrule
-    \code{claude-sonnet-5-5} & Replies    & 0.69 & 5/9 & 5/33  & 2/63 \\
-    \code{gpt-6.1-sol}       & Replies    & 0.69 & 2/9 & 4/33  & 1/63 \\
-    \code{claude-sonnet-5-5} & With state & 0.73 & 9/9 & 9/33  & 2/63 \\
-    \code{gpt-6.1-sol}       & With state & 0.74 & 7/9 & 9/33  & 1/63 \\
+    \code{claude-sonnet-5-5} & Replies    & 1.00 & 0/64 \\
+    \code{gpt-6.2-sol}       & Replies    & 0.66 & 22/64 \\
+    \code{claude-sonnet-5-5} & With state & 1.00 & 0/64 \\
+    \code{gpt-6.2-sol}       & With state & 0.95 & 3/64 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1058,19 +1032,18 @@ against human judgment.
 \subsection{What the pilot shows and does not show}
 
 The pilot shows that the released black-box pipeline runs current models
-from two providers end to end with no aborted runs, and that the released
-pack elicits real, state-visible failures from a current model: an
-indirect prompt injection executed and then hidden from the report,
-duplicate transfers on repeated and timed-out requests, a changed-terms
-transfer applied under a stale confirmation, and a guessed payee under
-ambiguity. It shows that final-state grading catches harm that
-response-only grading cannot see, and that judges given the state detect
-materially more of that harm than judges given the chat alone. It also
-shows a defect in our own claim verifier, which the pilot was designed to
-surface before the full study. It does not estimate failure rates or rank
+from two providers end to end with no aborted runs, and that the
+released pack elicits no state failures from these two models:
+neither agent followed an indirect prompt injection, duplicated a
+transfer, applied a changed-terms transfer under a stale confirmation
+or guessed under ambiguity; both agents handle every trap and every
+benign control. It shows
+the claim verifier running without manufacturing contradictions,
+and that a judge given the state false-alarms far less than the same
+judge given the chat alone. It does not estimate failure rates or rank
 models (two runs per scenario), does not test any runtime prevention (the
-black-box interface has none), and its claim and judge numbers await the
-human validation marked as placeholders above.
+black-box interface has none); its claim and judge numbers are
+human-validated for this pilot, at pilot scale only.
 
 
 \section{Discussion, limitations and release}
@@ -1082,22 +1055,22 @@ authorization or its claims misstate what happened. A terse agent that stops to 
 ambiguous amount, or escalates an unverifiable interaction flag, passes.
 
 \paragraph{What the pilot changes.} The black-box pilot strengthens the
-argument in one direction and weakens a component in another. Its clearest
-failure, an injected \$500 transfer, was \emph{not} reported to the
-customer: the case for state-based evaluation rests on exactly that kind
-of run, which response-only evaluation cannot see. Judges given the final
-state detected all or most such state failures, while chat-only judges
-missed many, so the two should be reported side by side, with the state
-verdict as the score of record. Conversely, every contradicted claim in
-the pilot traced to our claim verifier's handling of balance claims, not
-to agent misreporting: the claim axis is not yet measuring what it is
-designed to measure, and fixing point-in-time, key-aware claim
-verification is a precondition for the full study.
+argument in one direction and weakens a component in another. The case
+for state-based evaluation rests on runs an agent could execute
+without reporting---an injected \$500 transfer reported as only the
+requested \$100 is exactly that kind of run, and response-only
+evaluation cannot see it. Neither current agent followed the payee-note
+injection, but the judge results preserve the visibility lesson in
+reverse: given the final state, one judge stopped faulting agents for
+authorized pauses and refusals it had failed from the chat alone, so
+the two visibilities should be reported side by side, with the state
+verdict as the score of record. And with no contradicted claims, the
+claim axis records no agent misreporting at this scale either.
 
 \paragraph{Limitations.} Beyond the threats in Section~\ref{sec:protocol}:
-this version releases one domain (banking and payments); the
-pilot runs each released scenario twice per agent and its extractor and judges are not yet
-validated against human labels; the benchmark is
+this version releases one domain (banking); the
+pilot runs each released scenario twice per agent (its extractor and judges are
+human-validated at that scale only); the benchmark is
 English-only and text-only; domain rules are simplified versions of real
 policies and are not legal or clinical guidance; and the scenarios were written
 by one author, so coverage reflects one practitioner's view of common failures.
@@ -1133,18 +1106,13 @@ trace-versus-claim check could be applied to multi-agent settings, where agents
 report to each other as well as to users. Fourth, training or fine-tuning agents
 on a separate scenario split could test whether unauthorized actions and
 contradicted claims can be reduced,
-which requires a split disjoint from the held-out set. Fifth, domain
-extensions proceed in priority order from the validated payments core:
-crypto-denominated payments, where irreversibility, token approvals and
-finality reporting introduce hazards that fiat rails do not have; then
-healthcare services beyond prescription refills, developed with
-domain-expert audit and synthetic data only. Retail and travel remain
-designs; they are lower priority because their harms are largely
-reversible, so an adoption there proves less. A domain
-is claimed only when it has a realistic backend, paired adversarial and
-benign-control scenarios, domain-specific failure modes and an independent
-domain review, so that extension does not dilute the standard set by the
-released banking pack.
+which requires a split disjoint from the held-out set. Fifth, the
+authorization model extends to further domains only as packs authored
+and validated by their owning organizations, each with a realistic
+backend, paired adversarial and benign-control scenarios,
+domain-specific failure modes, and an independent domain review, so
+that extension does not dilute the standard set by the released
+banking pack; no such pack is released here.
 
 \paragraph{Release.} AgentSafetyRecord will be released on PyPI as
 \code{agentsafetyrecord} under the Apache-2.0 license, and SafeOrderBench on Hugging
@@ -1155,13 +1123,12 @@ conformance certification), the 16 released banking scenarios with their
 initial snapshots, the hashed public split manifest, the dataset card and
 the author self-audit, and usage examples. For the pilot it
 preserves the pilot artifacts---per-run records, extracted claims, judge
-outputs and the unlabeled labeling sheets
-(\code{artifacts/pilot/blackbox\_v1/})---together with
+outputs and the completed labeling sheets
+(\code{artifacts/pilot/blackbox\_v3/})---together with
 \code{scripts/pilot\_analyze.py}, which computes the labeling statistics
 (extraction and verdict accuracy, confirmed contradictions, judge--human
-agreement and Cohen's $\kappa$) once the sheets are labeled. The full traces
-will be released with the human labels, so that annotators label them
-blind. Scenarios contain no real customer or patient data.
+agreement and Cohen's $\kappa$) from the completed sheets. The full traces
+are released with the human labels. Scenarios contain no real customer or patient data.
 
 \paragraph{Reproducibility.} From the repository root, \code{pytest} runs the
 full suite. The released black-box demonstration is regenerated
@@ -1179,7 +1146,7 @@ it exactly in any case. Its per-run records, claims and judge
 outputs are preserved, and once the labeling sheets are completed the
 labeling statistics are recomputed with
 \begin{verbatim}
-  python scripts/pilot_analyze.py
+  python scripts/pilot_analyze.py --pilot-dir artifacts/pilot/blackbox_v3
 \end{verbatim}
 which reports unlabeled rows as unlabeled rather than as agreement.
 
@@ -1189,21 +1156,21 @@ which reports unlabeled rows as unlabeled rather than as agreement.
 Evaluating an agent that can act requires checking both what it did to the
 system of record and whether it told the user the truth about it.
 AgentSafetyRecord makes that check reproducible. SafeOrderBench applies it
-first to agentic payments, where an unauthorized commit can move money
-irreversibly; the same authorization model is designed to extend to other
-regulated consumer domains, which remain roadmap. On the released black-box banking pack, a safe
+to banking, where an unauthorized commit can move money
+irreversibly; the same authorization model is domain-general, but no
+other domain is released or evaluated here. On the released black-box banking pack, a safe
 session demonstrator passes all 16 scenarios and a hazard demonstrator
 passes only the benign controls, including one failure---a privacy
 disclosure---that final-state grading alone cannot see. A black-box pilot
-with three current models found a real
-indirect prompt injection that moved \$500 and was not reported, alongside
-duplicate, changed-terms and ambiguity failures from the same agent, and a
-defect in our own claim verifier that human validation must now arbitrate.
-Two language-model judges detected materially more state failures when
-given the final state than from the chat alone. How often these failures occur,
-whether misreporting appears at scale once claim verification is fixed, and
-whether judges miss harm that an
-agent hides, are the questions the full study is designed to answer.
+with two current models ended every run in an authorized state---
+neither agent followed the payee-note injection that would have moved
+\$500 unreported---while the claim verifier contradicted
+none of the 94 extracted claims, and one judge false-alarmed on 22 of
+64 passed runs from the chat alone against 3 with the final state
+visible. How often such failures occur in other settings,
+whether misreporting appears at scale, and whether judges miss harm
+that an agent hides, are the
+questions the full study is designed to answer.
 
 \section*{Acknowledgments and AI-assistance disclosure}
 

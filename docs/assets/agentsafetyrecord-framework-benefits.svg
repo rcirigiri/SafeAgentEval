@@ -202,7 +202,7 @@
 
   <!-- Footer -->
 
-  <text x="800" y="950" font-size="19" text-anchor="middle" fill="#3D5A73">One idea: the agent's words are claims; the ledger is the evidence. Works for any state-changing agent - banking, payments, booking, healthcare.</text>
+  <text x="800" y="950" font-size="19" text-anchor="middle" fill="#3D5A73">One idea: the agent's words are claims; the ledger is the evidence. Works for any state-changing agent that acts on a system of record.</text>
 
   <text x="800" y="984" font-size="16" text-anchor="middle" fill="#7A8FA3">AgentSafetyRecord  github.com/rcirigiri/SafeAgentEval</text>
 

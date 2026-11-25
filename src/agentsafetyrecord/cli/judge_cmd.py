@@ -18,7 +18,11 @@ from typing import Annotated
 
 import typer
 
-from agentsafetyrecord.cli.common import parse_model_spec
+from agentsafetyrecord.cli.common import (
+    MODEL_SPEC_HELP,
+    parse_model_options,
+    parse_model_spec,
+)
 from agentsafetyrecord.judges.llm_judge import LLMJudge
 from agentsafetyrecord.judges.transcript import JudgeVisibility
 from agentsafetyrecord.llm.client import ModelSpec, build_client
@@ -79,7 +83,10 @@ def register(app: typer.Typer) -> None:
         runs: Annotated[Path, typer.Argument(help="Directory of saved run records")],
         model: Annotated[
             str,
-            typer.Option(help="'provider:model' (key from OPENAI_API_KEY / ANTHROPIC_API_KEY)"),
+            typer.Option(
+                help=f"{MODEL_SPEC_HELP} (key from the provider's env var; "
+                "never on the command line)"
+            ),
         ],
         visibility: Annotated[
             str, typer.Option(help="What the judge sees: replies | with_state")
@@ -95,8 +102,19 @@ def register(app: typer.Typer) -> None:
         ] = None,
         base_url: Annotated[
             str | None,
-            typer.Option(help="OpenAI-compatible endpoint URL (e.g. a hosted open-weight model)"),
+            typer.Option(help="Endpoint URL (e.g. a hosted open-weight model, Azure, local)"),
         ] = None,
+        api_version: Annotated[
+            str | None,
+            typer.Option(help="API version for the endpoint (e.g. Azure OpenAI)"),
+        ] = None,
+        model_option: Annotated[
+            list[str],
+            typer.Option(
+                help="Provider option as 'key=value' (repeatable, "
+                "e.g. aws_region_name=us-east-1 for bedrock)"
+            ),
+        ] = [],  # noqa: B006
         out: Annotated[
             Path | None, typer.Option(help="Optional file for the JSON judgements")
         ] = None,
@@ -120,7 +138,13 @@ def register(app: typer.Typer) -> None:
         rows = asyncio.run(
             _judge_all(
                 records,
-                parse_model_spec(model, api_key_env, base_url),
+                parse_model_spec(
+                    model,
+                    api_key_env,
+                    base_url,
+                    api_version,
+                    parse_model_options(model_option),
+                ),
                 visibility_value,
                 concurrency,
             )

@@ -9,8 +9,7 @@ the conversation. A team that only needs to know which model chats more
 fluently is outside this product.
 
 The flagship reference exam is SafeOrderBench (banking, 16 scenarios,
-seven categories); SafePayBench (agent payments, 14 scenarios) ships
-as a supporting pilot.
+seven categories) — the only pack shipped with the framework.
 AgentSafetyRecord is framework-first: an enterprise in any other
 transactional domain does not wait for a centrally released pack for
 that domain — it authors its own scenarios against its own system of

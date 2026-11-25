@@ -261,7 +261,8 @@ the deterministic state verdict afterwards:
 
 Use judges from more than one model family, none of them the agent under
 test. Build judge clients with `agentsafetyrecord.llm.build_client`
-(`pip install -e ".[models]"`).
+(`pip install -e ".[models]"`, or `.[litellm]` for Bedrock/Vertex/other
+LiteLLM routes — see "Model-agnostic by design" in Section 7a).
 
 ## 7. Use it as a CI deployment gate
 
@@ -312,16 +313,62 @@ Two evaluation-side options complete the picture:
 
 ```bash
 # Extract and verify claims made in agent replies (say-do gap):
-agentsafetyrecord run --agent ... --extractor-model anthropic:claude-sonnet-5
+agentsafetyrecord run --agent ... --extractor-model anthropic:claude-sonnet-5-5
 # Gemini also works as the claim extractor (via its OpenAI-compatible
 # endpoint); it only extracts claims — verification stays deterministic:
 agentsafetyrecord run --agent ... --extractor-model gemini:gemini-2.5-flash
 # Grade saved records with an LLM judge; reports judge-vs-deterministic agreement:
-agentsafetyrecord judge runs/ --model openai:gpt-5.5 --visibility with_state
+agentsafetyrecord judge runs/ --model openai:gpt-6.2-sol --visibility with_state
 ```
 
 Model keys are read from `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` /
 `GEMINI_API_KEY`; they are never passed on the command line.
+
+### Model-agnostic by design (no provider lock-in)
+
+The deterministic scorer uses no model at all. Everywhere a model *is*
+used — agent under test, claim extractor, LLMJudge — it is reached
+through the `TextClient` protocol (`agentsafetyrecord.llm`), never through
+a vendor SDK in the harness, so providers swap without touching
+scenarios or scoring:
+
+| Route | CLI form | Needs |
+|---|---|---|
+| OpenAI / Anthropic / Gemini | `openai:gpt-6.2-sol`, `anthropic:claude-sonnet-5-5`, `gemini:gemini-2.5-flash` | `.[models]`, provider key env var |
+| Azure OpenAI | `azure:<deployment>` + `--model-base-url https://<resource>.openai.azure.com/` (judge) / `--extractor-base-url ...` (run), `--api-version` | `AZURE_OPENAI_API_KEY` |
+| Local (Ollama) | `ollama:llama3.1` (defaults to `http://localhost:11434/v1`) | No API key; Ollama running |
+| Any OpenAI-compatible server (vLLM, LM Studio, hosted open-weight) | `openai-compatible:<model>` + `--*-base-url <url>` (+ `--*-api-key-env <VAR>` if it needs a key) | `.[models]` |
+| LiteLLM routes: AWS Bedrock, Vertex AI, Cohere, Together, Groq, 100+ others | `bedrock:anthropic.claude-sonnet-4-5`, `vertex_ai:gemini-2.5-pro`, `litellm:<any-litellm-model-string>`; provider options via `--model-option key=value` / `--extractor-model-option key=value` (e.g. `aws_region_name=us-east-1`) | `.[litellm]`; credentials from the environment (AWS chain, Google ADC, provider keys) |
+| Your own model | `custom:package.module:Factory`, a registered factory, or a plain callable (below) | Your code only |
+
+Programmatically, the same three patterns cover custom and local
+models for the extractor, the judge, **and** an LLM agent under test:
+
+```python
+from agentsafetyrecord.llm import (
+    CallableTextClient, ModelSpec, build_client, register_text_client_factory,
+)
+
+# 1. Any provider string -> a client (built-in, LiteLLM, or registered).
+client = build_client(ModelSpec(
+    name="judge", provider="bedrock", model="anthropic.claude-sonnet-4-5",
+))
+
+# 2. Wrap any sync/async callable — e.g. a local model via Ollama's
+#    Python API, an in-house endpoint, or a test stub.
+client = CallableTextClient(lambda system, user: my_local_model(system, user))
+
+# 3. Register a factory once; afterwards "myprovider:model" works
+#    everywhere, including the CLI.
+register_text_client_factory("myprovider", lambda spec: CallableTextClient(my_fn))
+```
+
+A custom model may also implement the `TextClient` protocol directly
+(one `async complete(system, user) -> TextResponse` method — structural
+typing, no base class required). The agent under test has the same
+freedom: it only ever implements `SessionAgent.say()`, and
+`LLMSessionAgent` accepts any of the clients above — swap the model
+behind an agent without changing a single scenario.
 
 ## 8. Interpreting results
 
@@ -357,4 +404,5 @@ Model keys are read from `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` /
 | Public scenarios | Banking/payments pack (16 scenarios, 7 categories); write your own for other workflows |
 | Scoring | Deterministic final-state + claim verification; hash-linked traces |
 | LLM roles | Agent under test (inside the vendor system), claim extractor, LLMJudge — never the scorer |
+| Model providers | Model-agnostic: OpenAI, Anthropic, Gemini, Azure, Ollama/local, any OpenAI-compatible endpoint, LiteLLM routes (Bedrock, Vertex, ...), and custom `TextClient` implementations |
 | Conformance | AGT-01…05 (session agent), SP-01…04 (state provider) |

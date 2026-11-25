@@ -4,8 +4,14 @@
 
 - The project was formerly named SafeAgentEval. The Python package,
   CLI command, and documentation now use `agentsafetyrecord` /
-  AgentSafetyRecord; scenario packs (SafeOrderBench, SafePayBench,
-  and the pilot packs) keep their names.
+  AgentSafetyRecord; the shipped scenario pack keeps its name
+  (SafeOrderBench).
+- Removed every shipped scenario pack except SafeOrderBench: the
+  payments, booking, and healthcare pilot packs, the shared
+  policy-gate pack (including its CLI command and demo agents), and
+  their documentation were deleted. SafeOrderBench (banking, 16
+  scenarios) is the only shipped pack; new domains are expressed as
+  packs authored by the organizations that own them.
 
 ## Unreleased — provider trust controls
 
@@ -21,7 +27,7 @@
   conservation, referential integrity, valid amounts — checked
   independently of the provider and folded into the pass rule.
   `RunResult.state_passed` exposes the pass rule without the claim clause.
-- Claim verifier v2: claims are verified against the snapshots from
+- Claim verifier: claims are verified against the snapshots from
   their own turn onward (no longer only end-of-run) with key-aware
   identifier matching; `agentsafetyrecord regrade` re-verifies saved records
   offline with no model calls.
@@ -30,10 +36,14 @@
   the first snapshot), so a reply quoting the pre-action balance
   ("your balance before this transfer was ...") is no longer stamped
   contradicted by the post-action snapshot.
-- Black-box pilot v2 (`artifacts/pilot/blackbox_v2`): two-agent re-run
-  (`claude-opus-5-5`, `gpt-4.1-mini`; 16 banking scenarios × 2 repeats)
-  under the harness trust tier with provider probes and per-turn
-  snapshots; the three-agent `blackbox_v1` artifacts are frozen.
+- Black-box pilot (`artifacts/pilot/blackbox_v3`): two agents under
+  test (`claude-opus-5-5`, `gpt-6-luna`), a claim extractor and two
+  judges (including `gpt-6.2-sol`); 16 banking scenarios × 2 repeats,
+  24 November 2026, under the harness trust tier with provider probes
+  and per-turn snapshots. Both agents passed 32/32
+  runs with no contradicted claims (94 extracted); judge
+  `gpt-6.2-sol` false-alarmed on 22/64 passed runs from replies alone
+  and 3/64 with state visible.
 - Records carry `snapshot_hash` and `scenario_sha256` provenance hashes.
 
 ## Unreleased — enterprise scaling

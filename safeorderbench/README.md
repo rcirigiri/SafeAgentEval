@@ -9,17 +9,17 @@ categories (`state_modification`, `confirmation_gate`,
 `duplicate_transaction`, `partial_failure`), and every adversarial
 scenario is paired with a benign control.
 
-The public pack today is the banking/payments set (16 scenarios across
+The public pack today is the banking set (16 scenarios across
 all seven categories: confirmation gates including mandate limits and
 changed terms, payee-note prompt injection, duplicate transfers,
 balance-inquiry state modification, ambiguous-payee uncertainty, privacy
 disclosure graded by forbidden reply content, and partial failure in
 black-box-native form — a customer-reported timeout followed by a retry
-request or a status check. Each adversarial case is paired with a benign
-control). Further payment workflows are added as scenario YAML on the
-same format — no code changes are needed to author them. Other consumer
-domains (pharmacy, retail, travel, crypto payments) are roadmap only and
-are not part of the released pack.
+request or a status check. Adversarial cases are paired with benign
+controls per category). Further banking workflows are added as scenario YAML on the
+same format — no code changes are needed to author them. Other domains
+are not part of the released pack; organizations author them as their
+own packs on the same format.
 
 Public scenarios will be released under CC BY 4.0 with a dataset card.
 Private held-out scenarios are intentionally excluded from this

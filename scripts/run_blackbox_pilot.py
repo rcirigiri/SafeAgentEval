@@ -1,23 +1,19 @@
-"""Run the black-box pilot v2: real LLM session agents on the released pack.
+"""Run the black-box pilot: real LLM session agents on the released pack.
 
 Two models act as agents under test through the black-box interface only
 (one utterance in, one reply out; their tool use is internal), on the 16
-released banking scenarios: ``claude-opus-5-5`` and ``gpt-4.1-mini``.
+released banking scenarios: ``claude-opus-5-5`` and ``gpt-6-luna``.
 A third model extracts claims from replies for deterministic
 verification; two further models (neither under test) judge every run at
 both visibilities. Runs use the latest grading design: per-turn state
 snapshots (claims graded against the state in force when spoken), the
 harness provider-trust tier, and a randomized provider probe before
-each run. All artifacts land in ``artifacts/pilot/blackbox_v2``:
+each run. All artifacts land in ``artifacts/pilot/blackbox_v3``:
 
     runs/<model>/*.json          SavedRunRecords (deterministic verdicts)
     judgements/<judge>/<visibility>/<model>/*.json
     labels/{claims,replies,runs}.csv   blank human-labeling sheets
     manifest.json
-
-The frozen ``artifacts/pilot/blackbox_v1`` pilot (three agents,
-including ``claude-haiku-5-5``) is historical paper evidence; this
-script never writes there.
 
 Phases are resumable: ``--phase runs|judges|labels|all``. Keys come from
 the environment / local ``.env`` (OPENAI_API_KEY, ANTHROPIC_API_KEY).
@@ -47,7 +43,7 @@ from agentsafetyrecord.reporting import FileRecordSink, SavedRunRecord, load_rec
 from agentsafetyrecord.scenarios.loader import discover_scenarios
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "artifacts" / "pilot" / "blackbox_v2"
+OUT = ROOT / "artifacts" / "pilot" / "blackbox_v3"
 
 
 def _spec(name: str, provider: str, model: str, key_env: str) -> ModelSpec:
@@ -65,12 +61,12 @@ AGENTS: dict[str, ModelSpec] = {
     "claude-opus-5-5": _spec(
         "claude-opus-5-5", "anthropic", "claude-opus-5-5", "ANTHROPIC_API_KEY"
     ),
-    "gpt-4.1-mini": _spec("gpt-4.1-mini", "openai", "gpt-4.1-mini-2025-04-14", "OPENAI_API_KEY"),
+    "gpt-6-luna": _spec("gpt-6-luna", "openai", "gpt-6-luna", "OPENAI_API_KEY"),
 }
 EXTRACTOR = _spec("claude-sonnet-5-5", "anthropic", "claude-sonnet-5-5", "ANTHROPIC_API_KEY")
 JUDGES: dict[str, ModelSpec] = {
     "claude-sonnet-5-5": EXTRACTOR,
-    "gpt-6.1-sol": _spec("gpt-6.1-sol", "openai", "gpt-6.1-sol", "OPENAI_API_KEY"),
+    "gpt-6.2-sol": _spec("gpt-6.2-sol", "openai", "gpt-6.2-sol", "OPENAI_API_KEY"),
 }
 
 
@@ -96,7 +92,7 @@ def phase_runs(repeats: int, concurrency: int) -> None:
         passed = sum(1 for record in records if record.passed)
         print(f"{label}: {passed}/{len(records)} passed")
     manifest = {
-        "pilot": "blackbox_v2",
+        "pilot": "blackbox_v3",
         "date": date.today().isoformat(),
         "scenarios": [scenario.scenario_id for scenario in scenarios],
         "repeats": repeats,

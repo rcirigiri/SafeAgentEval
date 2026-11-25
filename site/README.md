@@ -2,8 +2,8 @@
 
 A zero-dependency static site (`index.html`, `styles.css`, `script.js`)
 — no build step. It presents the project the way a product site does:
-hero, an interactive graded-run demo (three flagship hazards from the
-public packs), how evaluation works, the reference-benchmark catalog,
+hero, an interactive graded-run demo (a flagship hazard from the
+public pack), how evaluation works, the reference-benchmark catalog,
 the state-vs-output comparison, and a quickstart.
 
 ## Preview locally

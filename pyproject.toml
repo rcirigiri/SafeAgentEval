@@ -40,6 +40,12 @@ models = [
   "openai>=1.50,<3",
   "python-dotenv>=1,<2",
 ]
+# Any LiteLLM provider route (AWS Bedrock, Vertex AI, Cohere, Together,
+# Groq, ...) for the claim extractor / LLMJudge. Optional on purpose:
+# the deterministic scorer and the built-in providers never need it.
+litellm = [
+  "litellm>=1.50,<2",
+]
 dev = [
   "mypy>=1.11,<2",
   "pytest>=8.3,<9",

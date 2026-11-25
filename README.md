@@ -81,34 +81,17 @@ The framework is the product; packs are how a domain is expressed in
 it. A **domain pack** defines one world — its state, its
 StateProvider, its authorized outcomes — and organizations author
 packs (or private scenario sets) for their own domains, systems, and
-test data. The packs below are the shipped references: one actively
-maintained flagship benchmark (SafeOrderBench, banking — the pack
-behind the paper and the pilots), supporting pilot packs that advance
-when their design partner validates them, and compatibility-only
-pilots. **SafeGateBench** defines no world: it is a framework
-component of policy gates, instantiated inside each domain pack's
-world and run in addition to it.
+test data. One pack ships with this repository:
 
 | Pack | World / scope | Status |
 |---|---|---|
-| SafeOrderBench | Banking / payments ledger | Released — 16 scenarios · **Actively maintained** (flagship) |
-| SafePayBench | Agent payments (settlement rail vs issuance/provenance registry) | Supporting pilot — [14 scenarios](docs/safepaybench_pack.md) · advances with design-partner validation |
+| SafeOrderBench | Banking ledger (accounts, payees, transfers) | Released — 16 scenarios · **Actively maintained** (flagship; the pack behind the paper and the pilots) |
 
-> Additional partner-driven and compatibility-only pilot packs, and a
-> framework set of policy, compliance, safety & PII conformance gates,
-> are kept green against framework changes and advance when their
-> design partners validate them; full per-pack status, prospective
-> design partners, and maintenance levels are in the
-> [pack maintenance policy](docs/pack_maintenance_policy.md), and
-> naming a prospective design partner there does not claim a customer
-> relationship, adoption, or endorsement by any organization named.
-
-SafeGateBench is not another domain: it has no state or provider of
-its own, and categorizing it as one would force it to duplicate a
-domain's world. It is a framework component — a shared set of
-conformance gates that every current and future domain pack inherits
-unchanged, and that is maintained once, centrally, with the
-framework.
+No other domain packs are shipped or maintained. Organizations
+express new domains as packs (or private scenario sets) that they
+author and own themselves; maintenance levels for the shipped pack
+are stated in the
+[pack maintenance policy](docs/pack_maintenance_policy.md).
 
 ## How evaluation works
 
@@ -235,8 +218,7 @@ utterances it receives, the replies it returns, and the final state.
 
 That is the direction the framework generalizes toward. The flagship
 reference benchmark today is banking (SafeOrderBench) — the pack
-behind the paper and the pilots; agent payments (SafePayBench) ships
-as a supporting pilot pack, and further domains are expressed as packs
+behind the paper and the pilots; further domains are expressed as packs
 authored by the organizations that own them — with their own state
 providers, paired adversarial and benign scenarios, and test data —
 rather than as centrally maintained packs in this repository. Provider

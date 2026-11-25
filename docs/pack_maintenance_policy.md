@@ -1,11 +1,9 @@
 # Pack maintenance policy
 
 AgentSafetyRecord is a framework with scenario packs. The framework and
-one flagship pack (SafeOrderBench, banking) are maintained products;
-the remaining packs are supporting pilots and partner-driven
-templates. This policy states, per pack, what
-maintenance a user or design partner can expect, so that pilot packs
-are never mistaken for abandoned ones and the flagship pack is never
+one flagship pack (SafeOrderBench, banking) are the maintained
+products; no other packs are shipped. This policy states what
+maintenance a user can expect, so the flagship pack is never
 diluted by breadth.
 
 ## Maintenance levels
@@ -28,13 +26,11 @@ diluted by breadth.
 
 | Pack | Level | Notes |
 |---|---|---|
-| SafeOrderBench (banking) | Actively maintained | Released flagship; reference implementation for pack authors |
-| SafePayBench (payments) | Partner-driven | Supporting pilot; two-ledger settlement/issuance domain; advances on design-partner validation |
-| SafeCartBench (commerce) | Partner-driven | Spec-first; advances on design-partner validation of the order/refund state machine and answer keys |
-| SafeTradeBench (trading) | Partner-driven | Advances on design-partner review, dry runs, and sandbox endpoints |
-| SafeBookBench (booking) | Compatibility-only | Pilot implemented; advances if the booking design partner re-engages |
-| SafeCareBench (healthcare admin) | Compatibility-only | Pilot implemented, synthetic data only; advances on committed healthcare-partner validation of PHI boundaries |
-| SafeGateBench (16 gates) | Framework component | Cross-domain conformance gates (policy, compliance, safety, PII), bound by each pack; not a domain |
+| SafeOrderBench (banking) | Actively maintained | Released flagship; the only shipped pack; reference implementation for pack authors |
+
+No other packs are shipped. New domains are expressed as packs
+authored and owned by the organizations that need them; they are not
+started, shipped, or maintained from this repository.
 
 ## Rules
 

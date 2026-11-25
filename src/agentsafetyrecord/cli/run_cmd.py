@@ -15,7 +15,12 @@ import typer
 from agentsafetyrecord.agents.session import SessionAgent
 from agentsafetyrecord.backends.state_provider import StateProvider
 from agentsafetyrecord.claims.llm_extractor import LLMClaimExtractor
-from agentsafetyrecord.cli.common import import_object, parse_model_spec
+from agentsafetyrecord.cli.common import (
+    MODEL_SPEC_HELP,
+    import_object,
+    parse_model_options,
+    parse_model_spec,
+)
 from agentsafetyrecord.core.models import Domain, Scenario
 from agentsafetyrecord.harness.session_runner import run_session_scenario
 from agentsafetyrecord.llm.client import ModelSpec, build_client
@@ -199,8 +204,8 @@ def register(app: typer.Typer) -> None:
         extractor_model: Annotated[
             str | None,
             typer.Option(
-                help="Extract reply claims with this 'provider:model' "
-                "(key from OPENAI_API_KEY / ANTHROPIC_API_KEY / GEMINI_API_KEY)"
+                help=f"Extract reply claims with this {MODEL_SPEC_HELP} "
+                "(key from the provider's env var; never on the command line)"
             ),
         ] = None,
         extractor_api_key_env: Annotated[
@@ -209,8 +214,19 @@ def register(app: typer.Typer) -> None:
         ] = None,
         extractor_base_url: Annotated[
             str | None,
-            typer.Option(help="OpenAI-compatible endpoint URL for the extractor model"),
+            typer.Option(help="Endpoint URL for the extractor model (compatible/Azure/local)"),
         ] = None,
+        extractor_api_version: Annotated[
+            str | None,
+            typer.Option(help="API version for the extractor endpoint (e.g. Azure OpenAI)"),
+        ] = None,
+        extractor_model_option: Annotated[
+            list[str],
+            typer.Option(
+                help="Provider option for the extractor as 'key=value' (repeatable, "
+                "e.g. aws_region_name=us-east-1 for bedrock)"
+            ),
+        ] = [],  # noqa: B006
         min_pass_rate: Annotated[
             float,
             typer.Option(
@@ -271,7 +287,13 @@ def register(app: typer.Typer) -> None:
         if provider_trust not in {"harness", "auditor", "self_reported"}:
             raise typer.BadParameter("provider-trust must be harness | auditor | self_reported")
         extractor_spec = (
-            parse_model_spec(extractor_model, extractor_api_key_env, extractor_base_url)
+            parse_model_spec(
+                extractor_model,
+                extractor_api_key_env,
+                extractor_base_url,
+                extractor_api_version,
+                parse_model_options(extractor_model_option),
+            )
             if extractor_model
             else None
         )

@@ -111,11 +111,11 @@
   <g font-family="Inter, Arial, sans-serif">
     <rect x="40" y="706" width="1560" height="118" rx="14" fill="#082038"/>
     <text x="70" y="742" font-size="17" font-weight="700" letter-spacing="1.5" fill="#2BD4DA">DESIGN INVARIANTS</text>
-    <text x="70" y="774" font-size="16" fill="#D8E8F2">The agent is untrusted: its words are claims &#183; No model decides the verdict: LLM judges only measure, post-run &#183; Every trap scenario has a benign twin, so refusing everything cannot pass</text>
+    <text x="70" y="774" font-size="16" fill="#D8E8F2">The agent is untrusted: its words are claims &#183; No model decides the verdict: LLM judges only measure, post-run &#183; Adversarial scenarios pair with benign controls, so refusing everything cannot pass</text>
     <text x="70" y="802" font-size="16" fill="#D8E8F2">Results are labeled by who operated the measuring instrument (provider_trust) &#183; Conformance certifies the integration, never that an agent is &#8220;safe&#8221;</text>
   </g>
 
   <text x="820" y="878" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" fill="#546B80">Interfaces: Agent Contract v1 (Profile C) &#183; SessionAgent.say(text) or HTTP &#183; StateProvider.seed / snapshot / reset</text>
-  <text x="820" y="910" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" fill="#546B80">Reference packs: SafeOrderBench (banking) &#183; SafePayBench (payments) &#183; Enterprises author their own scenarios against their own systems</text>
+  <text x="820" y="910" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="16" fill="#546B80">Reference pack: SafeOrderBench (banking) &#183; Enterprises author their own scenarios against their own systems</text>
   <text x="820" y="948" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="14" fill="#8496A5">AgentSafetyRecord (formerly SafeAgentEval) &#183; Open source, Apache-2.0 &#183; github.com/rcirigiri/SafeAgentEval</text>
 </svg>

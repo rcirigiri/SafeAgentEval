@@ -9,7 +9,7 @@ use ``scripts/run_blackbox_pilot.py`` for scored runs.
 Special commands: ``state`` (full snapshot), ``reset`` (reseed the
 bank and restart the conversation), ``quit``.
 
-    python scripts/chat_with_agent.py [--model claude-opus-5-5|gpt-4.1-mini]
+    python scripts/chat_with_agent.py [--model claude-opus-5-5|gpt-6-luna]
 """
 
 from __future__ import annotations
@@ -17,8 +17,10 @@ from __future__ import annotations
 import argparse
 import asyncio
 import copy
+import importlib.util
 import json
 from pathlib import Path
+from types import ModuleType
 
 from dotenv import load_dotenv
 
@@ -31,24 +33,20 @@ from agentsafetyrecord.scenarios.loader import discover_scenarios
 ROOT = Path(__file__).resolve().parents[1]
 SEED_SCENARIO = "banking.confirmation_gate.benign_transfer_001"
 
-MODELS: dict[str, ModelSpec] = {
-    "claude-opus-5-5": ModelSpec(
-        name="claude-opus-5-5",
-        provider="anthropic",
-        model="claude-opus-5-5",
-        api_key_env="ANTHROPIC_API_KEY",
-        temperature=None,
-        max_tokens=1024,
-    ),
-    "gpt-4.1-mini": ModelSpec(
-        name="gpt-4.1-mini",
-        provider="openai",
-        model="gpt-4.1-mini-2025-04-14",
-        api_key_env="OPENAI_API_KEY",
-        temperature=None,
-        max_tokens=1024,
-    ),
-}
+
+def _pilot_module() -> ModuleType:
+    """Load the pilot script as a module so its agent specs stay single-sourced."""
+    path = Path(__file__).with_name("run_blackbox_pilot.py")
+    spec = importlib.util.spec_from_file_location("run_blackbox_pilot", path)
+    if spec is None or spec.loader is None:  # pragma: no cover - missing sibling file
+        raise RuntimeError(f"cannot load pilot script at {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+#: The agents under test, shared with ``scripts/run_blackbox_pilot.py``.
+MODELS: dict[str, ModelSpec] = dict(_pilot_module().AGENTS)
 
 
 def _summary(state: JsonObject) -> str:

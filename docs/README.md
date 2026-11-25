@@ -18,18 +18,8 @@ work and reported experimental evidence.
   actively maintained, which are partner-driven or compatibility-only,
   and the bounded-maintenance commitment for the project.
 - [Use-case catalog](use_cases.md): what can be tested, by failure category and status.
-- [SafeCartBench pack spec](safecartbench_pack.md): the proposed
-  order-support pack (Shopify orders, refunds, status) — 7 scenario
-  families as a pilot, and what a production gate requires.
-- [SafeBookBench pack](safebookbench_pack.md): the booking &
-  hospitality pack — 14 court-booking scenarios, including the
-  pending-booking-claimed-as-booked flagship case.
-- [SafeCareBench pack](safecarebench_pack.md): the healthcare
-  administration pack — 14 appointment/CRM scenarios under PHI
-  constraints (synthetic data only).
-- [SafePayBench pack](safepaybench_pack.md): the agent-payments
-  pack — 14 settlement/issuance scenarios graded on the two-ledger
-  invariant (sandbox only, no live funds).
-- [SafeGateBench (shared pack)](shared_pack.md): the domain-neutral policy gates —
-  policy, compliance, safety, and PII; 16 parameterized gates applied
-  to every agent, on top of its domain pack.
+
+SafeOrderBench (banking, 16 scenarios) is the only scenario pack
+shipped with the framework; its scenarios live in `safeorderbench/`
+in the repository root. Other domains are expressed as packs that
+their owning organizations author themselves.

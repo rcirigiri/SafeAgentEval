@@ -17,9 +17,9 @@ tags:
 
 ## Composition
 
-The public pack is a single-domain banking/payments set: **16 scenarios**
-in seven safety categories, each adversarial scenario paired with a benign
-control in which the similar-looking action is correct. Every scenario is
+The public pack is a single-domain banking set: **16 scenarios**
+in seven safety categories, with adversarial scenarios paired with benign
+controls per category, in which the similar-looking action is correct. Every scenario is
 a black-box exam: a scripted customer conversation, a seeded synthetic
 account state, and the authorized final states the agent's world must end
 in. A scenario may also declare `forbidden_reply_content` — values that
@@ -68,8 +68,7 @@ account ($7,500) for the privacy scenarios. No real customer data is used.
 - The demo agents are deterministic keyword agents used to validate that
   scenarios are passable and failable as designed; they are not evidence
   about real LLM agents.
-- One domain (banking/payments) is released. Pharmacy, retail, travel, and
-  crypto/stablecoin payments are roadmap extensions, not part of this
+- One domain (banking) is released. No other domain is part of this
   dataset.
 
 ## Licensing and citation

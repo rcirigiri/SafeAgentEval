@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib
 import json
+import re
 from pathlib import Path
 
 import typer
@@ -12,35 +13,81 @@ from agentsafetyrecord.conformance import ConformanceReport
 from agentsafetyrecord.core.models import JsonObject
 from agentsafetyrecord.llm.client import ModelSpec
 
-_DEFAULT_KEY_ENV = {
+# Default credential variable per provider. ``None`` means the provider
+# resolves credentials itself (LiteLLM routes such as Bedrock/Vertex) or
+# needs none (local Ollama). Any other provider name is accepted too and
+# routed through LiteLLM — AgentSafetyRecord is not locked to this list.
+_DEFAULT_KEY_ENV: dict[str, str | None] = {
     "openai": "OPENAI_API_KEY",
     "anthropic": "ANTHROPIC_API_KEY",
     "gemini": "GEMINI_API_KEY",
+    "google": "GEMINI_API_KEY",
+    "azure": "AZURE_OPENAI_API_KEY",
+    "ollama": None,
+    "openai-compatible": None,
+    "litellm": None,
+    "bedrock": None,
+    "vertex_ai": None,
+    "custom": None,
 }
+
+_PROVIDER_NAME = re.compile(r"^[A-Za-z0-9_.\-]+$")
+
+MODEL_SPEC_HELP = (
+    "'provider:model' — built-in: openai, anthropic, gemini, azure, "
+    "ollama (local, no key), openai-compatible (any compatible endpoint "
+    "via --*-base-url); any LiteLLM provider (e.g. bedrock, vertex_ai, "
+    "together_ai) via the [litellm] extra; or custom:package.module:Factory"
+)
+
+
+def parse_model_options(values: list[str]) -> JsonObject:
+    """Parse repeatable ``key=value`` model options (value may be JSON)."""
+    options: JsonObject = {}
+    for entry in values:
+        key, separator, raw = entry.partition("=")
+        if not separator or not key.strip():
+            raise typer.BadParameter(f"expected 'key=value' model option, got {entry!r}")
+        try:
+            parsed = json.loads(raw)
+        except json.JSONDecodeError:
+            parsed = raw
+        options[key.strip()] = parsed
+    return options
 
 
 def parse_model_spec(
-    value: str, api_key_env: str | None = None, base_url: str | None = None
+    value: str,
+    api_key_env: str | None = None,
+    base_url: str | None = None,
+    api_version: str | None = None,
+    options: JsonObject | None = None,
 ) -> ModelSpec:
-    """Parse ``provider:model`` (e.g. ``anthropic:claude-sonnet-5``) into a spec.
+    """Parse ``provider:model`` (e.g. ``anthropic:claude-sonnet-5-5``) into a spec.
 
+    The provider segment is any routing key ``build_client`` understands
+    — built-in, LiteLLM, or custom — never a hard-coded vendor list.
     The API key is never taken on the command line; it is read from the
-    environment variable named by ``api_key_env`` or the provider default.
-    ``base_url`` reaches OpenAI-compatible endpoints (e.g. a hosted
-    open-weight model) whose key lives in a differently named variable.
+    environment variable named by ``api_key_env`` or the provider
+    default (keyless providers such as Ollama need none). ``base_url``
+    reaches OpenAI-compatible endpoints (e.g. a hosted open-weight
+    model) whose key lives in a differently named variable.
     """
     provider, separator, model = value.partition(":")
-    if not separator or provider not in _DEFAULT_KEY_ENV or not model:
+    provider = provider.strip().lower()
+    if not separator or not _PROVIDER_NAME.match(provider) or not model:
         raise typer.BadParameter(
-            f"expected 'provider:model' with provider openai|anthropic|gemini, got {value!r}"
+            f"expected 'provider:model' (see --help for providers), got {value!r}"
         )
     return ModelSpec(
         name=model,
-        provider=provider,  # type: ignore[arg-type]
+        provider=provider,
         model=model,
-        api_key_env=api_key_env or _DEFAULT_KEY_ENV[provider],
+        api_key_env=api_key_env or _DEFAULT_KEY_ENV.get(provider),
         base_url=base_url,
+        api_version=api_version,
         temperature=None,  # current models deprecate/ignore the parameter
+        options=options or {},
     )
 
 
