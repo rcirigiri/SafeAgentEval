@@ -30,7 +30,7 @@
   </g>
   <text x="228" y="118" font-family="Inter, Arial, sans-serif" font-size="41" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">agentic-safety-<tspan fill="#2BD4DA">eval</tspan></text>
   <!-- headline -->
-  <text x="470" y="262" font-family="Inter, Arial, sans-serif" font-size="57" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF"><tspan fill="#2BD4DA">State-verified</tspan> safety evaluation</text>
-  <text x="470" y="332" font-family="Inter, Arial, sans-serif" font-size="57" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">for black-box AI agents.</text>
+  <text x="470" y="262" font-family="Inter, Arial, sans-serif" font-size="57" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF"><tspan fill="#2BD4DA">state-verified</tspan> safety evaluation</text>
+  <text x="470" y="332" font-family="Inter, Arial, sans-serif" font-size="57" font-weight="700" letter-spacing="-0.5" fill="#FFFFFF">for black-box ai agents.</text>
   <text x="470" y="418" font-family="Inter, Arial, sans-serif" font-size="19" fill="#7E97AC">github.com/rcirigiri/agentic-safety-eval</text>
 </svg>
